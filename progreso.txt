@@ -9,7 +9,11 @@ NOS FALTA:
 - Los metodos de cada tipo de usuario
 - Script de informes estadisticos
     - Recaudacion de fondos
-- 
+
+IDEA: barrita de energia del empleado (estructura de datos: pila)
+si no tiene energia no puede finalizar tarea
+si tiene energia, efectua la tarea y le sacas a la pila una barrita de energia
+
 
 
 
