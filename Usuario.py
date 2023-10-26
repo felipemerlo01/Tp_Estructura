@@ -1,6 +1,8 @@
 from datetime import datetime
 from queue import Queue, LifoQueue
 
+#hola
+
 #para mi hay que crear una clase que sea hotel tambien pero creo que en otra hoja para que empiece
 # a quedar un poco más prolijo todo por el tema de generar todo los informes \
 '''class hotel():
