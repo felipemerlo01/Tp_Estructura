@@ -16,23 +16,21 @@ from queue import Queue, LifoQueue
         pass'''
 
 #agarren lo que quieran de aca 
-    
+
 class Hotel():
     def __init__(self, nombre):
         self.nombre = nombre
-        self.empleados = [] # podria ser lista enlazada
+        self.usuarios = []
         self.habitaciones = [] # podria ser lista enlazada
-        self.ingresos = 0 # los gastos de las reservas se suman acá
         self.reservas = LifoQueue(maxsize=0)
         
-    def suma_ingresos(self, reserva: Reserva):
-        self.ingresos += reserva.gastos + reserva.habitacion.precio
-    
     # def calcular_porcentaje_ocupacion():
     #     pass
 
     # def calcular_porcentaje_ocupacion_x_tipo_habitacion():
     #     pass
+    
+    def validar_usuario
     
 #creo una clase de reserva 
 class Reserva:
