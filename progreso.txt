@@ -1,0 +1,14 @@
+26/10:
+
+Hicimos los registros de usuario (tanto cliente como empleado) asi como validaciones del registro de usuario y del inicio de sesion
+
+
+
+
+
+
+
+
+
+
+fecha de entrega: Lunes 13/11
