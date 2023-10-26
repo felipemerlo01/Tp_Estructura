@@ -2,7 +2,14 @@
 
 Hicimos los registros de usuario (tanto cliente como empleado) asi como validaciones del registro de usuario y del inicio de sesion
 
+NOS FALTA:
 
+- Hacer el menu y los menues de cada usuario segun tipo de usuario
+- Hacer los lectores de las bases de datos (CSV): usuarios, reservas, habitacion.
+- Los metodos de cada tipo de usuario
+- Script de informes estadisticos
+    - Recaudacion de fondos
+- 
 
 
 
