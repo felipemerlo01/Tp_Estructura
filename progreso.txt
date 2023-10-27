@@ -10,6 +10,10 @@ NOS FALTA:
 - Script de informes estadisticos
     - Recaudacion de fondos
 
+ARREGLAR:
+- lo del legajo esta mal, porque si el ultimo usuario en la lista es cliente, no tiene legajo, hay que buscar al ultimo empleado:    
+    legajo = int(self.usuarios[-1].legajo) +1 
+
 IDEA: barrita de energia del empleado (estructura de datos: pila)
 si no tiene energia no puede finalizar tarea
 si tiene energia, efectua la tarea y le sacas a la pila una barrita de energia
