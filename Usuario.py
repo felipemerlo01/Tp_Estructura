@@ -52,12 +52,13 @@ class Hotel:
             except:
                 dni = input('Ingrese un DNI valido: ')
     
-    #verificar sexo
+    # verificar sexo
     def verificar_sexo(self, sexo):
         while (sexo not in ['M', 'F']):
             sexo = input('Ingresar un sexo valido: ').upper()
         return sexo
     
+    # verifica formato mail
     def verificar_mail(self, mail):
         formato = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'
         while (fullmatch(formato, mail) == False):
@@ -80,7 +81,7 @@ class Hotel:
             except ValueError:
                 fecha_de_nacimiento = input('Ingrese un formato de fecha valido (dd/mm/YYYY): ')
     
-    # verificar mail
+    # verificar si el mail ya existe
     def verificar_mail_existente(self, mail):
         mail_valido = False
         while (mail_valido == False):
