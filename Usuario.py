@@ -1,25 +1,8 @@
 from datetime import datetime
 from queue import Queue, LifoQueue
+from re import fullmatch
 
-#hola
-
-#para mi hay que crear una clase que sea hotel tambien pero creo que en otra hoja para que empiece
-# a quedar un poco más prolijo todo por el tema de generar todo los informes \
-'''class hotel():
-    def __init__(self,nombre):
-         self.nombre=nombre 
-         #habría que agregar mil cosas mas  
-         pass
-
-    def calcular_porcentaje_ocupacion():
-        pass
-
-    def calcular_porcentaje_ocupacion_x_tipo_habitacion():
-        pass'''
-
-#agarren lo que quieran de aca 
-
-class Hotel():
+class Hotel:
     def __init__(self, nombre):
         self.nombre = nombre
         self.usuarios = []
@@ -33,17 +16,17 @@ class Hotel():
     #     pass
         
     def crear_usuario(self, opcion):
-        nombre = input('Ingrese su nombre: ')
+        nombre = input('Ingrese su nombre: ').capitalize()
         
-        apellido = input('Ingrese su apellido: ')
+        apellido = input('Ingrese su apellido: ').capitalize()
 
         fecha_de_nacimiento = self.verificar_fecha_de_nacimiento(input("Ingrese su fecha de nacimiento (dd/mm/aaaa): "))
         
-        sexo = self.verificar_sexo(input("Ingrese su sexo (F/M): "))
+        sexo = self.verificar_sexo(input("Ingrese su sexo (F/M): ").upper())
         
         dni = self.verificar_dni(input("Ingrese su DNI: "))
         
-        mail = self.verificar_mail(input("Ingrese su mail: "))
+        mail = self.verificar_mail_existente(self.verificar_mail(input("Ingrese su mail: ")))
         
         contrasena = self.verificar_contrasena(input("Ingrese una nueva contraseña. Debe contener al menos 8 caracteres, con un mínimo de 2 mayúsculas y 2 numeros: "))
         
@@ -75,12 +58,18 @@ class Hotel():
             sexo = input('Ingresar un sexo valido: ').upper()
         return sexo
     
+    def verificar_mail(self, mail):
+        formato = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'
+        while (fullmatch(formato, mail) == False):
+            mail = input('Ingrese un mail valido: ')
+        return mail
+    
     # valida fecha nacimiento
     def verificar_fecha_de_nacimiento(self, fecha_de_nacimiento):
         fec_valida = False
         while (fec_valida == False):
             try:
-                fecnac = datetime.datetime.strptime(fecha_de_nacimiento, "%d/%m/%Y")
+                fecnac = datetime.strptime(fecha_de_nacimiento, "%d/%m/%Y")
                 hoy = datetime.date.today()
                 edad = hoy.year - fecnac.year - ((hoy.month, hoy.day) < (fecnac.month, fecnac.day))
 
@@ -88,19 +77,19 @@ class Hotel():
                     fecha_de_nacimiento = input('Ingrese una fecha de nacimiento valida: ')
                 else:
                     return fecha_de_nacimiento
-            except:
+            except ValueError:
                 fecha_de_nacimiento = input('Ingrese un formato de fecha valido (dd/mm/YYYY): ')
     
     # verificar mail
-    def verificar_mail_existente(self,mail):
-        mail_valido= False
+    def verificar_mail_existente(self, mail):
+        mail_valido = False
         while (mail_valido == False):
+            mail_valido = True
             for usuario in self.usuarios:
                 if (usuario.mail == mail):
-                    mail = input('Mail ya existente. Ingrese otro mail: ')
+                    mail_valido = False
+                    mail = self.verificar_mail(input('Mail ya existente. Ingrese otro mail: '))
                     break
-            else:
-                mail_valido = True
         return mail     
 
     # verificar contrasena
@@ -126,10 +115,10 @@ class Hotel():
         return contrasena
     
     # verificar rol 
-    def verificar_rol(self,rol):
-        while rol not in ["personal_administrativo","mantenimiento","limpieza"]:
-            rol=input("Rol invalido. Ingrese un rol valido: ")
-        return rol    
+    def verificar_rol(self, rol):
+        while rol not in ["Administrativo", "Mantenimiento", "Limpieza"]:
+            rol = input("Rol invalido. Ingrese un rol valido: ")
+        return rol
     
     # valido el mail y contrasena al iniciar sesión
     def validar_inicio_sesion(self, mail, contrasena):
@@ -153,15 +142,15 @@ class Reserva:
         self.fecha_reserva = datetime.now()
         self.gastos = 0
 
-class Usuario():
-    def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: int, sexo: str,dni: int, mail, contrasena):
-        self.nombre=nombre
-        self.apellido=apellido
-        self.fecha_de_nacimiento=fecha_de_nacimiento
-        self.sexo=sexo
-        self.dni=dni
-        self.mail=mail
-        self.contrasena=contrasena
+class Usuario:
+    def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: int, sexo: str, dni: int, mail, contrasena):
+        self.nombre = nombre
+        self.apellido = apellido
+        self.fecha_de_nacimiento = fecha_de_nacimiento
+        self.sexo = sexo
+        self.dni = dni
+        self.mail = mail
+        self.contrasena = contrasena
 
 #hay que poner el gasto de la habitacion directamente en la clase de la habitación 
 
