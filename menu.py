@@ -1,15 +1,21 @@
 import csv 
+import pandas as pd
 
 Clientes=[]
 Habitaciones=[]
 Reservas=[]
 
-lector = open("usuarios.csv","r")
+lector_usuario = open("usuarios.csv","r")
+usuarios = pd.read_csv('usuarios.csv')
 
-lector = open("habitaciones.csv","r")
 
-lector = open("reservas.csv","r")
+lector_habitacion = open("habitaciones.csv","r")
+habitaciones = pd.read_csv('habitaciones.csv')
 
+
+lector_reservas = open("reservas.csv","r")
+reservas = pd.read_csv('reservas.csv')
+print
 
 def menu():
     print("1. Iniciar sesión")

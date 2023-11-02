@@ -1,11 +1,11 @@
 class Habitacion():
-    def __init__(self, numero, precio, capacidad, tipo, bano_privado, ventana_balcon):
+    def __init__(self, numero, precio, capacidad, tipo, bano_privado, balcon):
         self.numero = numero #--> numero de habitación que tendría la reserva 
         self.precio = precio
         self.capacidad = capacidad
         self.tipo = tipo
         self.bano_privado = bano_privado
-        self.ventana_balcon = ventana_balcon
+        self.balcon = balcon
         self.ocupada = False
     
     def obtener_tipo(self):
@@ -45,7 +45,7 @@ if criterio.lower() == "sí":
     bano_privado = input("¿Requiere baño privado? (Sí/No): ").lower() == "sí"
     criterios_elegidos['bano_privado'] = bano_privado
 
-criterio = input("¿Desea filtrar por ventana balcón? (Sí/No): ")
+criterio = input("¿Desea filtrar por  balcón? (Sí/No): ")
 if criterio.lower() == "sí":
-    ventana_balcon = input("¿Requiere ventana balcón? (Sí/No): ").lower() == "sí"
-    criterios_elegidos['ventana_balcon'] = ventana_balcon
+    balcon = input("¿Requiere  balcón? (Sí/No): ").lower() == "sí"
+    criterios_elegidos['balcon'] = balcon

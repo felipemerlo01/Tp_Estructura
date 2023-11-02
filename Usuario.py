@@ -1,12 +1,14 @@
 from datetime import datetime
 from queue import Queue, LifoQueue
 from re import fullmatch
+# from habitacion1 import Habitacion
+# llamar a la clase habitacion para que me lo tome 
 
 class Hotel:
     def __init__(self, nombre):
         self.nombre = nombre
         self.usuarios = []
-        self.habitaciones = [] # podria ser lista enlazada
+        self.habitaciones = [] 
         self.reservas = LifoQueue(maxsize=0)
         
     # def calcular_porcentaje_ocupacion():
@@ -35,7 +37,8 @@ class Hotel:
             self.usuarios.append(nuevo_cliente)
         elif (opcion == '2'):
             rol = self.verificar_rol(input("Ingrese su rol: "))
-            legajo = int(self.usuarios[-1].legajo) +1
+            
+            legajo = int(self.crear_legajo)
             
             nuevo_empleado = Empleado(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena, legajo, rol)
             self.usuarios.append(nuevo_empleado)
@@ -120,6 +123,18 @@ class Hotel:
         while rol not in ["Administrativo", "Mantenimiento", "Limpieza"]:
             rol = input("Rol invalido. Ingrese un rol valido: ")
         return rol
+
+    #aca lo que buscmos hacer es buscar al ultimo usuario que tiene legajo y a el nuevo usuario agregarle el siguiente legajo 
+
+    def crear_legajo(self):
+        i = -1
+        while (i > -len(self.usuarios)): #ESTA FORMA DE RECORRER LA LISTA ESTA BUIEN 
+            if hasattr(self.usuarios[i], 'legajo'):
+                nuevo_legajo = self.usuarios[i].legajo + 1
+                return nuevo_legajo
+            i -= 1
+         # Si no se encuentra un usuario con legajo, asigna el primer legajo como 1
+        return 1
     
     # valido el mail y contrasena al iniciar sesión
     def validar_inicio_sesion(self, mail, contrasena):
@@ -136,15 +151,23 @@ class Hotel:
     
 #creo una clase de reserva 
 class Reserva:
-    def __init__(self, habitacion, check_in, check_out):
+    def __init__(self, habitacion: Habitacion, check_in: str, check_out: str):
         self.habitacion = habitacion
         self.check_in = check_in
         self.check_out = check_out
         self.fecha_reserva = datetime.now()
         self.gastos = 0
+        self.gastos_buffet = 0  # Gastos en el buffet relacionados con la reserva
+        self.gastos_minibar = 0 
+
+    def agregar_gastos_buffet(self, costo):
+        self.gastos_buffet += costo
+
+    def agregar_gastos_minibar(self, costo):
+        self.gastos_minibar += costo
 
 class Usuario:
-    def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: int, sexo: str, dni: int, mail, contrasena):
+    def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str):
         self.nombre = nombre
         self.apellido = apellido
         self.fecha_de_nacimiento = fecha_de_nacimiento
@@ -153,20 +176,19 @@ class Usuario:
         self.mail = mail
         self.contrasena = contrasena
 
-#hay que poner el gasto de la habitacion directamente en la clase de la habitación 
-
 class Cliente(Usuario):
-    def __init__(self,nombre: str, apellido: str, fecha_de_nacimiento: int, sexo: str, dni: int, mail, contrasena, gastado ):
-        super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena)
-        self.gastado=gastado #--> puse gastado pq saldo es como el saldo a favor que uno tiene ≠ a gasto
+    def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str):
+        super().__init__(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena)
+        self.gastado = 0 #--> puse gastado pq saldo es como el saldo a favor que uno tiene ≠ a favor 
         self.reservas = [] 
         #si quiero poner los gastos por la habitacion y no por clientes 
         self.gastos_por_habitacion = {}  # Diccionario para llevar un registro de los gastos por habitación
 
-    def hacer_reserva(self, habitacion, check_in, check_out):
-        # calculo el costo y disponibilidad 
+    def hacer_reserva(self, empleado: Empleado, habitacion, check_in, check_out):
+        # calculo el costo y disponibilidad
         if self.verificar_disponibilidad_habitacion(habitacion, check_in, check_out):
             costo_reserva = self.calcular_costo_reserva(habitacion, check_in, check_out)
+            #aca tengo gastado 
             self.gastado -= costo_reserva
             self.registrar_gasto_por_habitacion(habitacion, costo_reserva)  # Registra el gasto por habitación
             # Crear la reserva
@@ -175,54 +197,56 @@ class Cliente(Usuario):
             print(f"Reserva realizada para la habitacion {habitacion} del {check_in} al {check_out}")
         else:
             print("No se pudo realizar la reserva debido a falta de disponibilidad.")
+
     def ver_reservas(self):
         for reserva in self.reservas:
-            print(f"Reserva de habitacion {reserva.habitacion} del {reserva.check_in} al {reserva.check_out}")  
-
-
+            print(f"Reserva de habitación {reserva.habitacion} del {reserva.check_in} al {reserva.check_out}")
+            print(f"Gastos en el buffet: ${reserva.gastos_buffet}")
+            print(f"Gastos en el minibar: ${reserva.gastos_minibar}")
+            print(f"Costo total de la reserva: ${reserva.calcular_costo_total_reserva()}")
 
 
 
  #esta es la parte que quieren que vaya directamente en la clase habitación    
-    def ir_al_buffet(self, habitacion, costo_comida):
-        if costo_comida > 0:
-            print(f"Ha gastado ${costo_comida} en el buffet en la habitacion {habitacion}.")
-            self.gastado += costo_comida
-            self.registrar_gasto_por_habitacion(habitacion, costo_comida)  # Registra el gasto por habitación
-        else:
-            print("No hay gastos en el buffet.")
+    def ir_al_buffet(self, reserva, costo_comida):
+            if costo_comida > 0:
+                reserva.agregar_gastos_buffet(costo_comida)
+                print(f"Ha gastado ${costo_comida} en el buffet en la habitación {reserva.habitacion}.")
+            else:
+                print("No hay gastos en el buffet.")
+
+
 #aca lo que se puede haceer es que se utiliza el costo de cada producto que se consumio o todo junto
-    def usar_el_minibar(self, habitacion, costo_producto):
+    def usar_el_minibar(self, reserva, costo_producto):
         if costo_producto > 0:
-            print(f"Ha gastado ${costo_producto} en el minibar en la habitacion {habitacion}.")
-            self.gastado += costo_producto
-            self.registrar_gasto_por_habitacion(habitacion, costo_producto)  # Registra el gasto por habitación
+            reserva.agregar_gastos_minibar(costo_producto)
+            print(f"Ha gastado ${costo_producto} en el minibar en la habitación {reserva.habitacion}.")
         else:
             print("No hay gastos en el minibar.")
 
-    def registrar_gasto_por_habitacion(self, habitacion, costo):
+    '''def registrar_gasto_por_habitacion(self, habitacion, costo):
         if habitacion in self.gastos_por_habitacion:
             self.gastos_por_habitacion[habitacion] += costo
         else:
-            self.gastos_por_habitacion[habitacion] = costo
+            self.gastos_por_habitacion[habitacion] = costo'''
 
-    def calcular_total_a_pagar(self):
+    '''def calcular_total_a_pagar(self):
         costo_reservas = sum(self.calcular_costo_reserva(reserva.habitacion, reserva.check_in, reserva.check_out) for reserva in self.reservas)
         # Calcular el gasto total en el buffet y minibar
         gasto_buffet = sum(gasto for habitacion, gasto in self.gastos_por_habitacion.items() if "buffet" in habitacion.lower())
         gasto_minibar = sum(gasto for habitacion, gasto in self.gastos_por_habitacion.items() if "minibar" in habitacion.lower())
         
         total_a_pagar = costo_reservas + gasto_buffet + gasto_minibar
-        return total_a_pagar
+        return total_a_pagar'''
 
 
-    def ver_gastos_totales(self):
+    '''def ver_gastos_totales(self):
         total_a_pagar = self.calcular_total_a_pagar()
         gasto_buffet = sum(gasto for habitacion, gasto in self.gastos_por_habitacion.items() if "buffet" in habitacion.lower())
         gasto_minibar = sum(gasto for habitacion, gasto in self.gastos_por_habitacion.items() if "minibar" in habitacion.lower())
         print(f"Total a pagar: ${total_a_pagar}")
         print(f"Gasto en el buffet: ${gasto_buffet}")
-        print(f"Gasto en el minibar: ${gasto_minibar}")
+        print(f"Gasto en el minibar: ${gasto_minibar}")'''
 
 
 
@@ -269,7 +293,7 @@ class Cliente(Usuario):
 #esta parte del administrador esta ok 
 
 class Administrador(Usuario):
-    def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail, contrasena):
+    def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail: str, contrasena: str):
         super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena)
 
    
@@ -292,9 +316,10 @@ class Administrador(Usuario):
     
     
 class Empleado(Usuario):
-    def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail, contrasena, legajo:int):
+    def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail: str, contrasena: str, legajo:int, rol: str):
         super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena)
         self.legajo = legajo
+        self.rol = rol
         self.registro_ingresos = []  # Lista para registrar los ingresos del empleado
         self.registro_egresos = []  # Lista para registrar los egresos del empleado
         # self.tareas = []  # Lista para almacenar las tareas asignadas
@@ -354,24 +379,9 @@ class Empleado(Usuario):
             tarea = self.tareas.get()
             print(f"{self.nombre} {self.apellido} realizando tarea: {tarea}")
 
-    
-    
-class Limpieza(Empleado):
-        def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail, contrasena, legajo:int):
-            super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena, legajo)
-        
-        def finalizar_tarea(self):
-        # Implementar lógica de finalizar tarea de limpieza
-            pass
-       
-    
-class Mantenimiento(Empleado):
-    def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail:str, contrasena: str, legajo:int):
-         super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena, legajo)
-
     def finalizar_tarea(self):
-        # Implementar lógica de finalizar tarea de mantenimiento 
-        pass
+        # Implementar lógica de finalizar tarea de limpieza y mantenimiento
+            pass
 
 
 
