@@ -40,7 +40,7 @@ def menu_Cliente():
 2. Ir al buffet
 3. Usar el minibar
 4. Volver''')
-    
+
 def menu_Administrador(): # REVISAR LO QUE PUEDE HACER EL ADMINSITRADOR !
     print('''
 1. Dar empleado de alta

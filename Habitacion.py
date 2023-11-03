@@ -49,3 +49,12 @@ criterio = input("¿Desea filtrar por  balcón? (Sí/No): ")
 if criterio.lower() == "sí":
     balcon = input("¿Requiere  balcón? (Sí/No): ").lower() == "sí"
     criterios_elegidos['balcon'] = balcon
+    
+    
+"""
+tipo        capacidad    precio    baño privado    jacuzzi   minibar   oficina   balcon
+Simple:         1          15k      no                 no       si        no        no
+Doble:          2          25k      no                 no       si        no        no
+Familiar:       4          40k      si        no       si        no        no
+Suite:          2          90k      si        si       si        si        si
+"""
