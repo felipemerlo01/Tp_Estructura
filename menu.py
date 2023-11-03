@@ -41,12 +41,25 @@ def menu_Cliente():
 3. Usar el minibar
 4. Volver''')
     
-def menu_Administrador():
+def menu_Administrador(): # REVISAR LO QUE PUEDE HACER EL ADMINSITRADOR !
+    print('''
+1. Dar empleado de alta
+2. Dar empleado de baja
+3. Asignar tareas
+4. Volver''')
     
-def menu_Empleado():
+def menu_Empleado(): # REVISAR LO QUE PUEDE HACER EL PERSONAL ADMINISTRATIVO.
+    print('''
+1. Hacer reserva
+2. Ir al buffet
+3. Usar el minibar
+4. Volver''')
+    
+    # NO ENTIENDO SI LOS DE MANTENIMIENTO Y LIMPIEZA TIENEN ACCESO AL MENÚ O NO?
+    # SI NO  TIENEN ACCESO AL MENU PERO SI SON USUARIOS ENTONCES DE QUE SIRVE QUE TENGAN CONTRASEÑA?
+    # SI TIENEN ACCESO AL MENU, LA UNICA OPCION QUE LES APARECE EN EL MENU ES HACER SUS TAREAS O SALIR?
 
 # El menu en si mismo
-
 continuar = True
 cargado = False
 while (continuar == True):
@@ -54,9 +67,6 @@ while (continuar == True):
     if (not cargado):
         POO = Hotel('Patagonia: Oasis y Ocio')
         # FALTA! leer bases de datos csv y cargarlas al objeto POO
-        
-        # TENEMOS QUE HACER QUE CUANDO CLICKEAN "VOLVER" EN LOS MENÚES 
-        # NO SE GENERE TODO EL HOTEL Y SE LEAN LAS BASES DE VUELTA
         cargado = True
     
     menu_principal()
@@ -80,8 +90,10 @@ while (continuar == True):
         registro_opcion = validar_opcion_menu(input("Ingrese una opción de registro: "), 3)
         if (registro_opcion == '1'):
             POO.crear_usuario('1')
+            usuario = POO.usuarios[-1]
         elif (registro_opcion == '2'):
             POO.crear_usuario('2')
+            usuario = POO.usuarios[-1]
     
     else:
         continuar = False

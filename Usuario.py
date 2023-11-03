@@ -126,48 +126,22 @@ class Cliente(Usuario):
 
 #esta parte del administrador esta ok 
 
-class Administrador(Usuario):
-    def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail: str, contrasena: str):
-        super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena)
-
-   
-    def asignar_tareas(self, empleado, tareas):
-            empleado.asignar_tareas(tareas)
-            print(f"Tareas asignadas a {empleado.nombre} {empleado.apellido}: {tareas}")
-
-
-    def dar_empleado_de_alta(self, empleado):
-        self.empleados.append(empleado)
-        empleado.actualizar_estado("Activo")  # Cambiar el estado del empleado a "Activo"
-        print(f"{empleado.nombre} {empleado.apellido} ha sido dado de alta como empleado.")
-
-
-    def dar_empleado_de_baja(self, empleado):
-        empleado.actualizar_estado("Inactivo")  # Cambiar el estado del empleado a "Inactivo"
-        self.empleados.remove(empleado)
-        print(f"{empleado.nombre} {empleado.apellido} ha sido dado de baja como empleado.")
-
-    
-    
 class Empleado(Usuario):
-    def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail: str, contrasena: str, legajo:int, rol: str):
+    def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail: str, contrasena: str, legajo: int, rol: str, estado = 'Activo'):
         super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena)
         self.legajo = legajo
         self.rol = rol
+        self.estado = estado
         self.registro_ingresos = []  # Lista para registrar los ingresos del empleado
         self.registro_egresos = []  # Lista para registrar los egresos del empleado
-        # self.tareas = []  # Lista para almacenar las tareas asignadas
-        self.estado = "Activo"  # Inicialmente, el empleado se encuentra activo
         self.tareas = Queue()  # Usar una cola para almacenar las tareas asignadas
-
-#Esta parte esta bien del codigo 
 
     def registro_ingreso(self):
         # Registrar la fecha y hora actual de ingreso
         fecha_actual = datetime.now()
         ingreso = {
             'fecha': fecha_actual.strftime('%Y-%m-%d'),
-            'hora': fecha_actual.strftime('%H:%M:%S')}
+            'hora': fecha_actual.strftime('%H:%M')}
         self.registro_ingresos.append(ingreso)
 
     def registro_egreso(self):
@@ -175,7 +149,7 @@ class Empleado(Usuario):
         fecha_actual = datetime.now()
         egreso = {
             'fecha': fecha_actual.strftime('%Y-%m-%d'),
-            'hora': fecha_actual.strftime('%H:%M:%S')}
+            'hora': fecha_actual.strftime('%H:%M')}
         self.registro_egresos.append(egreso)
     
     def realizar_check_in(self, habitacion):
@@ -217,6 +191,31 @@ class Empleado(Usuario):
         # Implementar lógica de finalizar tarea de limpieza y mantenimiento
             pass
 
+class Administrador(Usuario):
+    def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail: str, contrasena: str):
+        super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena)
+
+   
+    def asignar_tareas(self, empleado: Empleado, tareas: Queue):
+            empleado.asignar_tareas(tareas)
+            print(f"Tareas asignadas a {empleado.nombre} {empleado.apellido}: {tareas}")
+
+
+    def dar_empleado_de_alta(self, empleado):
+        self.empleados.append(empleado)
+        empleado.actualizar_estado("Activo")  # Cambiar el estado del empleado a "Activo"
+        print(f"{empleado.nombre} {empleado.apellido} ha sido dado de alta como empleado.")
+
+
+    def dar_empleado_de_baja(self, empleado):
+        empleado.actualizar_estado("Inactivo")  # Cambiar el estado del empleado a "Inactivo"
+        self.empleados.remove(empleado)
+        print(f"{empleado.nombre} {empleado.apellido} ha sido dado de baja como empleado.")
+
+    
+    
+
+
 
 
 """ 
@@ -231,7 +230,7 @@ Cliente -> hacer_reserva, ir_al_buffet, usar_el_minibar
 
 Administrativo -> check_in, check_out, hacer_reserva, asignar_tareas, ver_inventario_personal
 
-Administrador -> dar_empleado_de_alta, dar_empleado_de_baja, sacar_la_basura xd
+Administrador -> dar_empleado_de_alta, dar_empleado_de_baja
 
 """
 '''# Ejemplo de uso
