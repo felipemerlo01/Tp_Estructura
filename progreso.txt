@@ -29,3 +29,10 @@ NOS FALTA:
     - Recaudacion de fondos
 
 fecha de entrega: Lunes 13/11
+
+
+PREGUNTAS CAMILO:
+- Si hay 3 usuarios que acceden al menu: Admin, person de admin y clientes, 
+creo que los empelados comunes no administrativos como mantenimiento y limpieza
+no acceden al sistema informatico, si no que realizan sus tareas y hacen sus cosas en modo background
+(PERO NI IDEA, ES DE NOCHE EMPECÉ A FLASHEAR LEYENDO LA CONSIGNA)
