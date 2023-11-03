@@ -12,6 +12,8 @@ class Cliente(Usuario):
         self.gastos_por_habitacion = {}  # Diccionario para llevar un registro de los gastos por habitación
 
     def criterios_interes(self):
+        # Hay que pedirle baño privado, capacidad, precio, y balcon
+        # Asimismo hay que validarlos
         
     
     # NUESTRO CHECK-IN 15:00, CHECK-OUT 11:00
@@ -22,6 +24,7 @@ class Cliente(Usuario):
         check_out = validar_check_out(validar_fecha(input('Ingrese la fecha deseada de check-out: '))) + ' 11:00'
         
         # Pregunto criterios de interes
+            # 
         
         
         # Calculo el costo y disponibilidad

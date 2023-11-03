@@ -1,6 +1,3 @@
-from datetime import datetime
-from queue import Queue
-
 class Usuario:
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str):
         self.nombre = nombre
@@ -10,19 +7,6 @@ class Usuario:
         self.dni = dni
         self.mail = mail
         self.contrasena = contrasena
-
-
-
-
-
-
-
-
-    
-    
-
-
-
 
 """ 
 Usuario -> Cliente
