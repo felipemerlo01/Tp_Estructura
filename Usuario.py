@@ -133,8 +133,6 @@ class Hotel:
                 nuevo_legajo = self.usuarios[i].legajo + 1
                 return nuevo_legajo
             i -= 1
-         # Si no se encuentra un usuario con legajo, asigna el primer legajo como 1
-        return 1
     
     # valido el mail y contrasena al iniciar sesión
     def validar_inicio_sesion(self, mail, contrasena):
