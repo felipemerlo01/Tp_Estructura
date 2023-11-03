@@ -1,7 +1,9 @@
 from Usuario import Usuario
 from Empleado import Empleado
 from Reserva import Reserva
-
+from datetime import datetime
+from Validaciones import validar_fecha, validar_check_out
+    
 class Cliente(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str):
         super().__init__(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena)
@@ -9,8 +11,35 @@ class Cliente(Usuario):
         self.reservas = [] 
         self.gastos_por_habitacion = {}  # Diccionario para llevar un registro de los gastos por habitación
 
+    def criterios_interes(self):
+        
+    
+    # NUESTRO CHECK-IN 15:00, CHECK-OUT 11:00
+    def hacer_reserva(self, empleado: Empleado):
+        
+        # Pregunto al cliente fecha check-in, fecha check-out
+        check_in = validar_fecha(input('Ingrese la fecha deseada de check-in: ')) + ' 15:00'
+        check_out = validar_check_out(validar_fecha(input('Ingrese la fecha deseada de check-out: '))) + ' 11:00'
+        
+        # Pregunto criterios de interes
+        
+        
+        # Calculo el costo y disponibilidad
+        if self.verificar_disponibilidad_habitacion(habitacion, check_in, check_out):
+            costo_reserva = self.calcular_costo_reserva(habitacion, check_in, check_out)
+            #aca tengo gastado 
+            self.gastado -= costo_reserva
+            self.registrar_gasto_por_habitacion(habitacion, costo_reserva)  # Registra el gasto por habitación
+            # Crear la reserva
+            reserva = Reserva(habitacion, check_in, check_out)
+            self.reservas.append(reserva)
+            print(f"Reserva realizada para la habitacion {habitacion} del {check_in} al {check_out}")
+        else:
+            print("No se pudo realizar la reserva debido a falta de disponibilidad.")
+
     def hacer_reserva(self, empleado: Empleado, habitacion, check_in, check_out):
-        # calculo el costo y disponibilidad
+        
+        # Calculo el costo y disponibilidad
         if self.verificar_disponibilidad_habitacion(habitacion, check_in, check_out):
             costo_reserva = self.calcular_costo_reserva(habitacion, check_in, check_out)
             #aca tengo gastado 

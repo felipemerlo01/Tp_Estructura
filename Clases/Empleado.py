@@ -66,3 +66,5 @@ class Empleado(Usuario):
     def finalizar_tarea(self):
         # Implementar lógica de finalizar tarea de limpieza y mantenimiento
             pass
+        
+    def verificar_disponibilidad_habitacion

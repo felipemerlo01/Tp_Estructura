@@ -12,7 +12,7 @@ class Usuario:
         self.contrasena = contrasena
 
 
-#esta parte del administrador esta ok 
+
 
 
 
