@@ -1,6 +1,8 @@
 from datetime import datetime
 from re import fullmatch
 from queue import LifoQueue
+from Cliente import Cliente
+from Empleado import Empleado
 
 class Hotel:
     def __init__(self, nombre):
