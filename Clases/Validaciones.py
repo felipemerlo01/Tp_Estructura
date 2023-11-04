@@ -36,17 +36,15 @@ def verificar_fecha_de_nacimiento(fecha_de_nacimiento):
             fecha_de_nacimiento = validar_fecha(input('Ingrese una fecha de nacimiento valida: '))
         else:
             return fecha_de_nacimiento
-        
+
 # verificar DNI
 def verificar_dni(dni):
-    dni_valido = False
-    while (dni_valido == False):
+    while (True):
         try:
-            int(dni)
-            while (dni > 99999999 or dni < 10000000):
-                dni = int(input('Ingrese un DNI valido: '))
+            while (int(dni) > 99999999 or int(dni) < 10000000):
+                dni = input('Ingrese un DNI valido: ')
             return dni
-        except:
+        except ValueError:
             dni = input('Ingrese un DNI valido: ')
             
 # verificar sexo
@@ -83,3 +81,27 @@ def verificar_contrasena(contrasena):
             valida = True
             
     return contrasena
+
+def validar_si_no(opcion):
+    while (opcion not in ['Si', 'No']):
+        opcion = input('Ingrese una opción valida (Si/No): ').capitalize()
+    return opcion
+
+def validar_precio(precio):
+    while (True):
+        try:
+            while (int(precio) < 1):
+                precio = input('Ingrese un precio máximo valido: ')
+            return precio
+        except ValueError:
+            precio = input('Ingrese un precio máximo valido: ')
+    
+def validar_capacidad_min(capacidad):
+    while (True):
+        try:
+            while (int(capacidad) < 1  or int(capacidad) > 4):
+                dni = input('Ingrese una de las capacidades disponibles: ')
+            return capacidad
+        except ValueError:
+            capacidad = input('Ingrese una capacidad válida: ')
+            

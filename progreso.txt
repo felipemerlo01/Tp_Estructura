@@ -39,3 +39,10 @@ no acceden al sistema informatico, si no que realizan sus tareas y hacen sus cos
 
 - NO ENTIENDO. ¿ que es lo que hace el adminsitrador y que es lo que hace el personal de administracion?
 en que se diferencian
+
+
+Notas Camilo:
+
+Usuarios: diccionario. key: mail, value: objecto(cliente/empleado)
+Habitaciones: key: numero_habitacion, value: objeto habitacion
+Rservas: lista con objetos reserva

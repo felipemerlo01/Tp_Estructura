@@ -2,7 +2,7 @@ from Usuario import Usuario
 from Empleado import Empleado
 from Reserva import Reserva
 from datetime import datetime
-from Validaciones import validar_fecha, validar_check_out
+from Validaciones import validar_fecha, validar_check_out, validar_si_no, validar_capacidad_min, validar_precio
     
 class Cliente(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str):
@@ -11,49 +11,82 @@ class Cliente(Usuario):
         self.reservas = [] 
         self.gastos_por_habitacion = {}  # Diccionario para llevar un registro de los gastos por habitación
 
-    def criterios_interes(self):
+    def recolectar_criterios_interes(self):
+        criterios_elegidos = {}
         # Hay que pedirle baño privado, capacidad, precio, y balcon
         # Asimismo hay que validarlos
+            
+        criterio = validar_si_no(input("¿Desea filtrar por capacidad? (Si/No): ").capitalize())
+        if (criterio == "Si"):
+            capacidad_minima = int(validar_capacidad_min(input("Capacidad mínima deseada: ")))
+            criterios_elegidos['Capacidad'] = capacidad_minima
+
+        criterio = validar_si_no(input("¿Desea filtrar por precio? (Si/No): ").capitalize())
+        if (criterio == "Si"):
+            precio_maximo = int(validar_precio(input("Precio maximo deseado: ")))
+            criterios_elegidos['Precio'] = precio_maximo
+
+        criterio = validar_si_no(input("¿Desea filtrar por baño privado? (Si/No): ").capitalize())
+        if (criterio == "Si"):
+            bano_privado = validar_si_no(input("¿Requiere baño privado? (Si/No): ").capitalize()) == "Si"
+            criterios_elegidos['Banio'] = bano_privado
+
+        criterio = validar_si_no(input("¿Desea filtrar por  balcón? (Si/No): ").capitalize())
+        if (criterio == "Si"):
+            balcon = validar_si_no(input("¿Requiere  balcón? (Si/No): ").capitalize()) == "Si"
+            criterios_elegidos['Balcon'] = balcon
         
+        # ¡¡ NOTA !!: si quieren agregamos otro criterio
+        return criterios_elegidos
     
     # NUESTRO CHECK-IN 15:00, CHECK-OUT 11:00
     def hacer_reserva(self, empleado: Empleado):
         
-        # Pregunto al cliente fecha check-in, fecha check-out
+        # 1) Pregunto al cliente fecha check-in, fecha check-out
         check_in = validar_fecha(input('Ingrese la fecha deseada de check-in: ')) + ' 15:00'
         check_out = validar_check_out(validar_fecha(input('Ingrese la fecha deseada de check-out: '))) + ' 11:00'
         
-        # Pregunto criterios de interes
-            # 
+        # 2) Pregunto criterios de interes
+        criterios_elegidos = self.recolectar_criterios_interes()
+        
+        # 3) ¡¡¡ Chequear disponibilidad y asignacion de cuarto lo hace el persoal administrativo !!
+        # El tema aca es a que empleado ???, el que tenga la menor cantidad de tareas en su queue?
+        # el primero de personal administrativo que encuentre cuando recorra la base?
         
         
-        # Calculo el costo y disponibilidad
-        if self.verificar_disponibilidad_habitacion(habitacion, check_in, check_out):
-            costo_reserva = self.calcular_costo_reserva(habitacion, check_in, check_out)
-            #aca tengo gastado 
-            self.gastado -= costo_reserva
-            self.registrar_gasto_por_habitacion(habitacion, costo_reserva)  # Registra el gasto por habitación
-            # Crear la reserva
-            reserva = Reserva(habitacion, check_in, check_out)
-            self.reservas.append(reserva)
-            print(f"Reserva realizada para la habitacion {habitacion} del {check_in} al {check_out}")
-        else:
-            print("No se pudo realizar la reserva debido a falta de disponibilidad.")
+        
+        nueva_reserva = Reserva(habitacion, check_in, check_out)
+        
+        
+        # # Calculo el costo y disponibilidad
+        # if self.verificar_disponibilidad_habitacion(habitacion, check_in, check_out):
+        #     costo_reserva = self.calcular_costo_reserva(habitacion, check_in, check_out)
+        #     #aca tengo gastado 
+        #     self.gastado -= costo_reserva
+        #     self.registrar_gasto_por_habitacion(habitacion, costo_reserva)  # Registra el gasto por habitación
+        #     # Crear la reserva
+        #     reserva = Reserva(habitacion, check_in, check_out)
+        #     self.reservas.append(reserva)
+        #     print(f"Reserva realizada para la habitacion {habitacion} del {check_in} al {check_out}")
+        # else:
+        #     print("No se pudo realizar la reserva debido a falta de disponibilidad.")
 
-    def hacer_reserva(self, empleado: Empleado, habitacion, check_in, check_out):
+
+
+    # def hacer_reserva(self, empleado: Empleado, habitacion, check_in, check_out):
         
-        # Calculo el costo y disponibilidad
-        if self.verificar_disponibilidad_habitacion(habitacion, check_in, check_out):
-            costo_reserva = self.calcular_costo_reserva(habitacion, check_in, check_out)
-            #aca tengo gastado 
-            self.gastado -= costo_reserva
-            self.registrar_gasto_por_habitacion(habitacion, costo_reserva)  # Registra el gasto por habitación
-            # Crear la reserva
-            reserva = Reserva(habitacion, check_in, check_out)
-            self.reservas.append(reserva)
-            print(f"Reserva realizada para la habitacion {habitacion} del {check_in} al {check_out}")
-        else:
-            print("No se pudo realizar la reserva debido a falta de disponibilidad.")
+    #     # Calculo el costo y disponibilidad
+    #     if self.verificar_disponibilidad_habitacion(habitacion, check_in, check_out):
+    #         costo_reserva = self.calcular_costo_reserva(habitacion, check_in, check_out)
+    #         #aca tengo gastado 
+    #         self.gastado -= costo_reserva
+    #         self.registrar_gasto_por_habitacion(habitacion, costo_reserva)  # Registra el gasto por habitación
+    #         # Crear la reserva
+    #         reserva = Reserva(habitacion, check_in, check_out)
+    #         self.reservas.append(reserva)
+    #         print(f"Reserva realizada para la habitacion {habitacion} del {check_in} al {check_out}")
+    #     else:
+    #         print("No se pudo realizar la reserva debido a falta de disponibilidad.")
 
     def ver_reservas(self):
         for reserva in self.reservas:
