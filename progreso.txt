@@ -47,8 +47,6 @@ FALTA:
 - cheqeuar ir al minibar
 - lo que esta escrito antes que esto en el 4/11
 
-Notas Camilo:
-
 Usuarios: diccionario. key: mail, value: objecto(cliente/empleado)
 Habitaciones: key: numero_habitacion, value: objeto habitacion
 Rservas: lista con objetos reserva
