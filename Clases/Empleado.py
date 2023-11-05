@@ -3,7 +3,7 @@ from queue import Queue
 from Usuario import Usuario
 
 class Empleado(Usuario):
-    def __init__(self,nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail: str, contrasena: str, legajo: int, rol: str, estado = 'Activo'):
+    def __init__(self, nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail: str, contrasena: str, legajo: int, rol: str, estado = 'Activo'):
         super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena)
         self.legajo = legajo
         self.rol = rol
@@ -101,5 +101,3 @@ class Empleado(Usuario):
     def finalizar_tarea(self):
         # Implementar lógica de finalizar tarea de limpieza y mantenimiento
             pass
-        
-    def verificar_disponibilidad_habitacion

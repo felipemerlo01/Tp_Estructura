@@ -21,9 +21,8 @@ Convertimos reservas y usuarios de csv a dataframes, y hicimos los lectores para
 
 Arreglamos lo del legajo
 
-NOS FALTA:
 
-
+04/11:
 
 - Script de informes estadisticos
     - Recaudacion de fondos
@@ -32,8 +31,20 @@ NOS FALTA:
 - Ver tema menu xq el administrativo no va a tener el mismo que el de el personal de limpiaza/ mantenimiento 
 - si estas inactivo no podes directamente ingresar al menu 
 
+ARREGLAR: Eliminar Columna "Duracion" de la base reservas
 
-Eliminar Duracion de la base
+- Al ejecutar el menu, se leen las bases y crea el hotel con sus objetos.
+Pero como las bases estan desactualizadas, hay que actualizar con la fecha de hoy (en el momento que se ejecuta el menu):
+        - sumar gastos de reservas (ocupacion + minibar + buffet) que hayan hecho checkout a los resepctivos usuarios
+        - estado de ocupación de habitación en ese momento (debido a los check outs)
+
+En el checkout se suma todo a gastado
+
+A CAMBIAR:
+- Agregar a la base de habitaciones la columna 'ocupada', ya que tambien hay que improtarla
+- Escribir el/los metodo/s de HOTEL de escribir en las bases csv los cambios nuevos antes de cerrar el menu (y aplicarla en metodo 'hacer reserva' del cliente)
+
+        
 
 
 Notas Camilo:

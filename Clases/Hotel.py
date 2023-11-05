@@ -1,19 +1,13 @@
 from Cliente import Cliente
 from Empleado import Empleado
-from Validaciones import verificar_fecha_de_nacimiento, validar_fecha, verificar_dni, verificar_sexo, verificar_mail, verificar_contrasena
+from Funciones_extra import verificar_fecha_de_nacimiento, validar_fecha, verificar_dni, verificar_sexo, verificar_mail, verificar_contrasena
 
 class Hotel:
     def __init__(self, nombre):
         self.nombre = nombre
-        self.usuarios = [] #--> que sea diccionario en donde la key sea el mail 
-        self.habitaciones = [] 
+        self.usuarios = {}
+        self.habitaciones = {}
         self.reservas = []
-        
-    # def calcular_porcentaje_ocupacion():
-    #     pass
-
-    # def calcular_porcentaje_ocupacion_x_tipo_habitacion():
-    #     pass
         
     def crear_usuario(self, opcion):
         nombre = input('Ingrese su nombre: ').capitalize()
@@ -31,26 +25,20 @@ class Hotel:
         contrasena = verificar_contrasena(input("Ingrese una nueva contraseña. Debe contener al menos 8 caracteres, con un mínimo de 2 mayúsculas y 2 numeros: "))
         
         if (opcion == '1'):
-            nuevo_cliente = Cliente(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena)
-            self.usuarios.append(nuevo_cliente)
+            nuevo_cliente = Cliente(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena)
+            self.usuarios[nuevo_cliente.mail] = nuevo_cliente
         elif (opcion == '2'):
             rol = self.verificar_rol(input("Ingrese su rol: "))
-            legajo = int(self.crear_legajo)
+            legajo = self.crear_legajo
             
-            nuevo_empleado = Empleado(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena, legajo, rol)
-            self.usuarios.append(nuevo_empleado)
+            nuevo_empleado = Empleado(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena, int(legajo), rol)
+            self.usuarios[nuevo_empleado.mail] = nuevo_empleado
     
     # verificar si el mail ya existe
     def verificar_mail_existente(self, mail: str):
-        mail_valido = False
-        while (mail_valido == False):
-            mail_valido = True
-            for usuario in self.usuarios:
-                if (usuario.mail == mail):
-                    mail_valido = False
-                    mail = self.verificar_mail(input('Mail ya existente. Ingrese otro mail: '))
-                    break
-        return mail     
+        while (mail in self.usuarios): 
+            mail = self.verificar_mail(input('Mail ya existente. Ingrese otro mail: '))
+        return mail
     
     # verificar rol 
     def verificar_rol(self, rol: str):
@@ -59,14 +47,12 @@ class Hotel:
         return rol
 
     # Buscar al ultimo usuario que tiene legajo y al nuevo usuario agregarle el siguiente legajo 
-    def crear_legajo(self):
-        i = -1
-        while (i > -len(self.usuarios)): 
-            if hasattr(self.usuarios[i], 'legajo'):
-                nuevo_legajo = self.usuarios[i].legajo + 1
+    def crear_legajo(self): 
+        for usuario in reversed(self.usuarios.values()):
+            if hasattr(usuario, 'legajo'):
+                nuevo_legajo = usuario.legajo + 1
                 return nuevo_legajo
-            i -= 1
-    
+            
     # valido el mail y contrasena al iniciar sesión
     def validar_inicio_sesion(self, mail: str, contrasena: str):
         while (True):
@@ -78,12 +64,24 @@ class Hotel:
                         else:
                             contrasena = input('Contraseña incorrecta. Ingrese nuevamente: ')
             mail = verificar_mail(input('Mail no encontrado. Ingrese un mail registrado: '))
+            
+        while (mail not in self.usuarios):
+            mail = verificar_mail(input('Mail no encontrado. Ingrese un mail registrado: '))
+            
+        
+            
     
     def iniciar_sesion(self):
         mail = verificar_mail(input('Ingrese su mail: '))
         contrasena = input('Ingrese su contraseña: ')
         
         return self.validar_inicio_sesion(mail, contrasena)
+    
+    # def calcular_porcentaje_ocupacion():
+    #     pass
+
+    # def calcular_porcentaje_ocupacion_x_tipo_habitacion():
+    #     pass
 
     def actualizar_base_reservas():
         pass

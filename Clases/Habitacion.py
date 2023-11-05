@@ -1,34 +1,22 @@
 class Habitacion():
-    def __init__(self, numero, precio, capacidad, tipo, banio_privado, balcon):
-        self.numero = numero #--> numero de habitación que tendría la reserva 
+    def __init__(self, numero: int, precio: int, capacidad: int, tipo, banio_privado: str, balcon: str, ocupada: str):
+        self.numero = numero
         self.precio = precio
         self.capacidad = capacidad
         self.tipo = tipo
         self.banio_privado = banio_privado
         self.balcon = balcon
-        self.ocupada = False
-    
-    ''' def obtener_tipo(self):
-        return self.tipo'''
-    
-    #aca se usan los diccionarios 
-    '''def calcular_precio(self):
-        precios = {
-            'Simple': 15000,
-            'Doble': 25000,
-            'Familiar': 40000,
-            'Suite': 90000}
-        return precios.get(self.tipo, 0)'''
+        self.ocupada = ocupada
 
-    # método que se actualice el atributo ocupada según como se ejecut el menu 
+    # método que se actualice el atributo ocupada cada vez que se abra el menu --> fecha de hoy
+  
 
-
-    
-    
 """
-tipo        capacidad    precio    baño privado    jacuzzi   minibar   oficina   balcon
-Simple:         1          15k      no                 no       si        no        no
-Doble:          2          25k      no                 no       si        no        no
-Familiar:       4          40k      si        no       si        no        no
-Suite:          2          90k      si        si       si        si        si
+Informacion de habitaciones:
+
+tipo        capacidad    precio    baño privado      balcon
+Simple:         1          15k          no             no
+Doble:          2          25k          no             no
+Familiar:       4          40k          si             no
+Suite:          2          90k          si             si
 """

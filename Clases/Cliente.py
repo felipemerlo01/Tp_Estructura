@@ -3,7 +3,7 @@ from Empleado import Empleado
 from Reserva import Reserva
 from datetime import datetime
 from Hotel import Hotel
-from Validaciones import validar_fecha, validar_check_out, validar_si_no, validar_capacidad_min, validar_precio
+from Funciones_extra import validar_fecha, validar_fecha_posteriori, validar_si_no, validar_capacidad_min, validar_precio
     
 class Cliente(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str):
@@ -42,10 +42,11 @@ class Cliente(Usuario):
     
     # NUESTRO CHECK-IN 15:00, CHECK-OUT 11:00
     def hacer_reserva(self, diccionario_habitaciones, lista_reservas, empleado: Empleado):
+        hoy = datetime.date.today().strftime("%d/%m/%Y")
         
         # 1) Pregunto al cliente fecha check-in, fecha check-out
-        check_in = validar_fecha(input('Ingrese la fecha deseada de check-in: '))
-        check_out = validar_check_out(validar_fecha(input('Ingrese la fecha deseada de check-out: ')))
+        check_in = validar_fecha_posteriori(validar_fecha(input('Ingrese la fecha deseada de check-in: ')), hoy)
+        check_out = validar_fecha_posteriori(validar_fecha(input('Ingrese la fecha deseada de check-out: ')), check_in)
         
         # 2) Pregunto criterios de interes
         criterios_elegidos = self.recolectar_criterios_interes()
@@ -59,17 +60,14 @@ class Cliente(Usuario):
         if (habitacion == None):
             print('No hay habitaciones disponibles en las fechas y criterios especificados')
         else:
-            nueva_reserva = Reserva(habitacion, check_in, check_out, datetime.date.today())
-            print('Se creó la reserva correctamente!')
+            nueva_reserva = Reserva(self.mail, habitacion, check_in, check_out, hoy)
+            print(f"Reserva realizada para la habitacion {habitacion.numero} del {check_in} al {check_out}")
             
             # Agregarlo a la lista de reservas del hotel reservas
             lista_reservas.append(nueva_reserva)
             
             # ¡¡¡ IMPORTANTE !!! Agregar a base de datos?
             # Metodo de HOTEL escribir a base csv Reservas
-            
-            # Agrega costo de reserva a los gastos totales del cliente
-            self.gastado += nueva_reserva.calcular_costo_reserva()
             
             # Agregar reserva a la lista reservas del cliente
             self.reservas.append(nueva_reserva)
@@ -82,7 +80,7 @@ class Cliente(Usuario):
                 print(f"Reserva de habitación {reserva.habitacion.numero} del {reserva.check_in} al {reserva.check_out}\n"
                       f"Gastos en el buffet: ${reserva.gastos_buffet}\n"
                       f"Gastos en el minibar: ${reserva.gastos_minibar}\n"
-                      f"Costo total de la reserva: ${reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos}") # reserva.gastos convendria que venga inicializada con el precio*dias creo
+                      f"Costo total de la reserva: ${reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}") # reserva.gastos convendria que venga inicializada con el precio*dias creo
                 print()
                 
     #esta es la parte que quieren que vaya directamente en la clase habitación    
