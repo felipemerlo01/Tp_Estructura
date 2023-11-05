@@ -54,22 +54,14 @@ class Hotel:
                 return nuevo_legajo
             
     # valido el mail y contrasena al iniciar sesión
-    def validar_inicio_sesion(self, mail: str, contrasena: str):
-        while (True):
-            for usuario in self.usuarios:
-                if (usuario.mail == mail):
-                    while (True):
-                        if (usuario.contrasena == contrasena):
-                            return usuario
-                        else:
-                            contrasena = input('Contraseña incorrecta. Ingrese nuevamente: ')
-            mail = verificar_mail(input('Mail no encontrado. Ingrese un mail registrado: '))
-            
+    def validar_inicio_sesion(self, mail: str, contrasena: str): 
         while (mail not in self.usuarios):
             mail = verificar_mail(input('Mail no encontrado. Ingrese un mail registrado: '))
-            
         
-            
+        while (contrasena != self.usuarios[mail].contrasena):
+            contrasena = input('Contraseña incorrecta. Ingrese nuevamente: ')
+        
+        return self.usuarios[mail]
     
     def iniciar_sesion(self):
         mail = verificar_mail(input('Ingrese su mail: '))
