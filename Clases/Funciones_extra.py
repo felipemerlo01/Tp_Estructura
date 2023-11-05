@@ -167,9 +167,14 @@ def menu_registro():
 3. Volver''')
     
 def validar_opcion_menu(opcion, cantidad_opciones):
-    while (opcion not in range(1, cantidad_opciones+1)):
-        opcion = input('Opcion invalida. Ingrese una de las opciones del menú: ')
-    return opcion
+    while (True):
+        try:
+            while (not (1 <= int(opcion) <= cantidad_opciones)):
+                opcion = input('Opcion invalida. Ingrese una de las opciones del menú: ')
+            return opcion
+        except ValueError:
+            opcion = input('Opcion invalida. Ingrese una de las opciones del menú: ')
+        
 
 def menu_Cliente():
     print('''
@@ -208,4 +213,5 @@ def menu_Mant_Limp():
 1. Registro ingreso
 2. Registro egreso
 3. Visualización de las tareas activas
-4. Volver''')
+4. Realizar tarea pendiente
+5. Volver''')

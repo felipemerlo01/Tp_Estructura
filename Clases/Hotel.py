@@ -27,12 +27,16 @@ class Hotel:
         if (opcion == '1'):
             nuevo_cliente = Cliente(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena)
             self.usuarios[nuevo_cliente.mail] = nuevo_cliente
+            print(f'Se ha creado el usuario de {nuevo_cliente.nombre} {nuevo_cliente.apellido} correctamente')
+            return nuevo_cliente
         elif (opcion == '2'):
             rol = self.verificar_rol(input("Ingrese su rol: "))
             legajo = self.crear_legajo
             
             nuevo_empleado = Empleado(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena, int(legajo), rol)
             self.usuarios[nuevo_empleado.mail] = nuevo_empleado
+            print(f'Se ha creado el usuario de {nuevo_empleado.nombre} {nuevo_empleado.apellido} correctamente')
+            return nuevo_empleado
     
     # verificar si el mail ya existe
     def verificar_mail_existente(self, mail: str):
