@@ -2,7 +2,6 @@ from Usuario import Usuario
 from Empleado import Empleado
 from Reserva import Reserva
 from datetime import datetime
-from Hotel import Hotel
 from Funciones_extra import validar_fecha, validar_fecha_posteriori, validar_si_no, validar_capacidad_min, validar_precio
     
 class Cliente(Usuario):
