@@ -1,6 +1,6 @@
 import csv 
 import pandas as pd
-from Hotel import Hotel
+from Clases.Hotel import Hotel
 
 Clientes=[]
 Habitaciones=[]
@@ -36,29 +36,48 @@ def validar_opcion_menu(opcion, cantidad_opciones):
 
 def menu_Cliente():
     print('''
-1. Hacer reserva
+1. Hacer reserva 
 2. Ir al buffet
 3. Usar el minibar
-4. Volver''')
+4. Ver gastos  
+5. Volver''')
 
-def menu_Administrador(): # REVISAR LO QUE PUEDE HACER EL ADMINSITRADOR !
+def menu_Administrador(): 
     print('''
 1. Dar empleado de alta
 2. Dar empleado de baja
 3. Asignar tareas
+4. Control de ingreso y egreso
+5. Inventario del Personal: Administrativo, Mantenimiento y Limpieza
+6. Recaudación diaria
+7. Volver''')
+    
+def menu_Personal_Administrativo():
+    print('''
+1. Historial de sus reservas
+2. Nomina de clientes del hotel
+3. Informes estadísticos
 4. Volver''')
     
-def menu_Empleado(): # REVISAR LO QUE PUEDE HACER EL PERSONAL ADMINISTRATIVO.
+def menu_Informe_estadístico(): 
     print('''
-1. Hacer reserva
-2. Ir al buffet
-3. Usar el minibar
+1. Porcentaje de ocupación del hotel
+2. Porcentaje de ocupacion de acuerdo al tipo de habitación
+3. Cantidad de clientes por tipo
+4. Volver''')
+    
+def menu_Mant_Limp(): 
+    print('''
+1. Registro ingreso
+2. Registro egreso
+3. Visualización de las tareas activas
 4. Volver''')
     
     # NO ENTIENDO SI LOS DE MANTENIMIENTO Y LIMPIEZA TIENEN ACCESO AL MENÚ O NO?
     # SI NO  TIENEN ACCESO AL MENU PERO SI SON USUARIOS ENTONCES DE QUE SIRVE QUE TENGAN CONTRASEÑA?
     # SI TIENEN ACCESO AL MENU, LA UNICA OPCION QUE LES APARECE EN EL MENU ES HACER SUS TAREAS O SALIR?
 
+#faltan todos los cosos 
 # El menu en si mismo
 continuar = True
 cargado = False
@@ -67,6 +86,7 @@ while (continuar == True):
     if (not cargado):
         POO = Hotel('Patagonia: Oasis y Ocio')
         # FALTA! leer bases de datos csv y cargarlas al objeto POO
+        
         cargado = True
     
     menu_principal()
@@ -75,15 +95,49 @@ while (continuar == True):
         usuario = POO.iniciar_sesion()
         if (hasattr(usuario, 'legajo')):
             if (usuario.legajo == 1):
-                # mostrar menu administrador
+                menu_Cliente()
+                opcion_admin= validar_opcion_menu(input("Ingrese una opción: "),7)
+                if opcion_admin == '1':
+                    pass
+                elif opcion_admin == '2': 
+                    pass
+                elif opcion_admin == '3':
+                    pass
+                elif opcion_admin == '4':
+                    pass
+                elif opcion_admin == '5':
+                    pass
+                elif opcion_admin == '6':
+                    pass
+                elif opcion_admin == '7':
+                    pass
+                else: 
+                    coninuar=False
             else:
+                menu_Personal_Administrativo()
+                opcion_personal_admin= validar_opcion_menu(input("Ingrese una opción: "),3)
+                if  opcion_personal_admin== '1':
+                    pass
+                elif opcion_personal_admin== '2':
+                    pass
+                else:
+                    continuar = False
+        
                 # mostrar menu para personal administrativo (y mant y limpieza ?¿)
         else:
             menu_Cliente()
-            opcion_Cliente = validar_opcion_menu(input('Ingrese una opción: '), 4)
-            if (opcion_Cliente == '1'):
-            elif (opcion_Cliente == '2'):
-            elif (opcion_Cliente == '3'):
+            opcion_cliente = validar_opcion_menu(input('Ingrese una opción: '), 6)
+            if opcion_cliente == '1':
+                pass
+            elif opcion_cliente == '2':
+                pass
+
+            elif (opcion_cliente == '3'):
+                pass
+            elif (opcion_cliente == '4'):
+                pass
+            elif (opcion_cliente == '5'):
+                pass
             
     elif (opcion == '2'):
         menu_registro()
@@ -94,6 +148,7 @@ while (continuar == True):
         elif (registro_opcion == '2'):
             POO.crear_usuario('2')
             usuario = POO.usuarios[-1]
+
     
     else:
         continuar = False

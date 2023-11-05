@@ -1,4 +1,3 @@
-from queue import LifoQueue
 from Cliente import Cliente
 from Empleado import Empleado
 from Validaciones import verificar_fecha_de_nacimiento, validar_fecha, verificar_dni, verificar_sexo, verificar_mail, verificar_contrasena
@@ -6,9 +5,9 @@ from Validaciones import verificar_fecha_de_nacimiento, validar_fecha, verificar
 class Hotel:
     def __init__(self, nombre):
         self.nombre = nombre
-        self.usuarios = []
+        self.usuarios = [] #--> que sea diccionario en donde la key sea el mail 
         self.habitaciones = [] 
-        self.reservas = LifoQueue(maxsize=0)
+        self.reservas = []
         
     # def calcular_porcentaje_ocupacion():
     #     pass
@@ -85,7 +84,11 @@ class Hotel:
         contrasena = input('Ingrese su contraseña: ')
         
         return self.validar_inicio_sesion(mail, contrasena)
-            
+
+    def actualizar_base_reservas():
+        pass
+    def actualizar_base_usuarios():
+        pass
             
 
     

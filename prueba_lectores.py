@@ -157,10 +157,14 @@ reservas= pd.read_csv('reservas.csv')
 
 hotel_prueba=Hotel("Los Pollos Hermanos")
 
+#Habitaciones 1ro
+
+#Reservas 2ndo
 for _, row in reservas.iterrows():
         nueva_reserva = Reserva(int(row["id"]),int(row["dni_cliente"]),int(row["numero_hab"]),row["Fecha_inicio"],row["Fecha_fin"],int(row["Duracion"]))
         hotel_prueba.reservas.append(nueva_reserva)
 
+#Usuarios
 for _, row in usuarios.iterrows():
     if row["Rol"] == "Cliente":
         nuevo_usuario = Cliente(row["Nombre"],row["Apellido"],row["Fecha de Nacimiento"],row["Sexo"],row["dni"],row["mail"],row["contraseña"])
@@ -170,7 +174,9 @@ for _, row in usuarios.iterrows():
         hotel_prueba.usuarios.append(nuevo_empleado)
     elif row["Rol"] == "Administrador":
         administrador = Administrador(row["Nombre"],row["Apellido"],row["Fecha de Nacimiento"],row["Sexo"],row["dni"],row["mail"],row["contraseña"])
-        
+""" Hacer que verifique si el mail esta en la base de reservas y lo agregue a su lista interna de reservas ´propias"""
+
+
 #se
 #todo ok. joya anda bien genial, queda habitaciones
  

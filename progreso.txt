@@ -13,7 +13,7 @@ NOS FALTA:
 IDEA: barrita de energia del empleado (estructura de datos: pila)
 si no tiene energia no puede finalizar tarea
 si tiene energia, efectua la tarea y le sacas a la pila una barrita de energia
-
+---------------------------------------------------------------------------------------------------------------------
 
 02/11:
 Terminamos de armar la base
@@ -28,17 +28,12 @@ NOS FALTA:
 - Script de informes estadisticos
     - Recaudacion de fondos
 
-fecha de entrega: Lunes 13/11
+- Al final hay que ver si nos conviene poner en los gastos del bar y del buffet cn listas enlazadas 
+- Ver tema menu xq el administrativo no va a tener el mismo que el de el personal de limpiaza/ mantenimiento 
+- si estas inactivo no podes directamente ingresar al menu 
 
 
-PREGUNTAS CAMILO:
-- Si hay 3 usuarios que acceden al menu: Admin, person de admin y clientes, 
-creo que los empelados comunes no administrativos como mantenimiento y limpieza
-no acceden al sistema informatico, si no que realizan sus tareas y hacen sus cosas en modo background
-(PERO NI IDEA, ES DE NOCHE EMPECÉ A FLASHEAR LEYENDO LA CONSIGNA)
-
-- NO ENTIENDO. ¿ que es lo que hace el adminsitrador y que es lo que hace el personal de administracion?
-en que se diferencian
+Eliminar Duracion de la base
 
 
 Notas Camilo:
@@ -46,3 +41,6 @@ Notas Camilo:
 Usuarios: diccionario. key: mail, value: objecto(cliente/empleado)
 Habitaciones: key: numero_habitacion, value: objeto habitacion
 Rservas: lista con objetos reserva
+
+---------------------------------------------------------------------------------------------------------------------
+fecha de entrega: Lunes 13/11
