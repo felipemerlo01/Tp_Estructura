@@ -42,7 +42,10 @@ A CAMBIAR:
 - Agregar a la base de habitaciones la columna 'ocupada', ya que tambien hay que improtarla
 - Escribir el/los metodo/s de HOTEL de escribir en las bases csv los cambios nuevos antes de cerrar el menu (y aplicarla en metodo 'hacer reserva' del cliente)
 
-
+FALTA:
+- chequear ir al buffet
+- cheqeuar ir al minibar
+- lo que esta escrito antes que esto en el 4/11
 
 Notas Camilo:
 
