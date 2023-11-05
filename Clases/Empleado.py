@@ -46,49 +46,18 @@ class Empleado(Usuario):
         
         # si itera todas las habitaciones y ninguna cumple con las condiciones, termina el metodo, retorna None
         return
-
-    def registro_ingreso(self):
-        # Registrar la fecha y hora actual de ingreso
-        fecha_actual = datetime.now()
-        ingreso = {
-            'fecha': fecha_actual.strftime('%Y-%m-%d'),
-            'hora': fecha_actual.strftime('%H:%M')}
-        self.registro_ingresos.append(ingreso)
-
-    def registro_egreso(self):
-        # Registrar la fecha y hora actual de egreso
-        fecha_actual = datetime.now()
-        egreso = {
-            'fecha': fecha_actual.strftime('%Y-%m-%d'),
-            'hora': fecha_actual.strftime('%H:%M')}
-        self.registro_egresos.append(egreso)
     
-    def realizar_check_in(self, habitacion):
-        # Implementar lógica para realizar el check-in
-        # Actualizar el estado de la habitación a "Ocupada"
-        if habitacion.estado == "Disponible":
-            fecha_actual = datetime.now()
-            habitacion.estado = "Ocupada"
-            habitacion.fecha_check_in = fecha_actual
-            self.registro_ingreso()
-            print(f"Check-in realizado en la habitacion {habitacion.numero} el {fecha_actual.strftime('%Y-%m-%d %H:%M:%S')}")
-
-    def realizar_check_out(self, habitacion):
-        # Implementar lógica para realizar el check-out
-        # Actualizar el estado de la habitación a "Disponible"
-        if habitacion.estado == "Ocupada":
-            fecha_actual = datetime.now()
-            habitacion.estado = "Disponible"
-            habitacion.fecha_check_out = fecha_actual
-            self.registro_egreso()
-            print(f"Check-out realizado en la habitacion {habitacion.numero} el {fecha_actual.strftime('%Y-%m-%d %H:%M:%S')}")
-    
-    #aca va a aparecer el estado que tiene el empleado dependiendo de lo que decide el administrativo 
-
-    def actualizar_estado(self, nuevo_estado):
-        self.estado = nuevo_estado
+    def agregar_tarea_automatica(self, num_habitacion, buffet=False):
+        if (self.rol == 'Mantenimiento'):
+            self.tareas.put(f'Reponer minibar en {num_habitacion}')
+        elif (self.rol == 'Limpieza'):
+            if (buffet):
+                self.tareas.put(f'Limpieza en el buffet de {num_habitacion}')
+            else:
+                self.tareas.put(f'Preparacion de la habitacion en {num_habitacion}')
 
     #aca se va a ver la tarea que tiene asiganda ese empleado
+
     def asignar_tareas(self, tareas):
         for tarea in tareas:
             self.tareas.put(tarea) #el empleado tiene un cola de tareas 
@@ -98,6 +67,58 @@ class Empleado(Usuario):
             tarea = self.tareas.get()
             print(f"{self.nombre} {self.apellido} realizando tarea: {tarea}")
 
-    def finalizar_tarea(self):
-        # Implementar lógica de finalizar tarea de limpieza y mantenimiento
-            pass
+    def finalizar_tarea(self, tipo_tarea):
+        if self.tareas.qsize() > 0:
+            tarea = self.tareas.get()
+            if tarea['tipo'] == tipo_tarea:
+                print(f"Tarea de {tipo_tarea} '{tarea['nombre']}' completada por {self.nombre} {self.apellido}")
+            else:
+                print(f"No hay tareas de {tipo_tarea} pendientes para finalizar.")
+        else:
+            print("No hay tareas pendientes para finalizar.")
+
+    #el empleado podría visualizar las tareas pendientes que tiene 
+
+
+
+# # Al empleado se le va a asignar automaticamnete un turno y en base a ese turno debería aparece cuales son las
+# # horas de ingreso y egreso 
+#     '''def registro_ingreso(self):
+#         # Registrar la fecha y hora actual de ingreso
+#         fecha_actual = datetime.now()
+#         ingreso = {
+#             'fecha': fecha_actual.strftime('%Y-%m-%d'),
+#             'hora': fecha_actual.strftime('%H:%M')}
+#         self.registro_ingresos.append(ingreso)
+
+#     def registro_egreso(self):
+#         # Registrar la fecha y hora actual de egreso
+#         fecha_actual = datetime.now()
+#         egreso = {
+#             'fecha': fecha_actual.strftime('%Y-%m-%d'),
+#             'hora': fecha_actual.strftime('%H:%M')}
+#         self.registro_egresos.append(egreso)'''
+
+
+# #estos metodos puede llegar a quedar pero en realidad se hacen automáticamnte     
+#     def realizar_check_in(self, habitacion):
+#         # Implementar lógica para realizar el check-in
+#         # Actualizar el estado de la habitación a "Ocupada"
+#         # se tiene que hacer automaticamente 
+#         if habitacion.ocupada == True:
+#             fecha_actual = datetime.now()
+#             habitacion.ocupada = False
+#             habitacion.fecha_check_in = fecha_actual
+#             self.registro_ingreso()
+#             print(f"Check-in realizado en la habitacion {habitacion.numero} el {fecha_actual.strftime('%Y-%m-%d %H:%M:%S')}")
+
+#     def realizar_check_out(self, habitacion):
+#         # Implementar lógica para realizar el check-out
+#         # Actualizar el estado de la habitación a "Disponible"
+#         #se tiene que hacer automaticamente 
+#         if habitacion.estado == "Ocupada":
+#             fecha_actual = datetime.now()
+#             habitacion.estado = "Disponible"
+#             habitacion.fecha_check_out = fecha_actual
+#             self.registro_egreso()
+#             print(f"Check-out realizado en la habitacion {habitacion.numero} el {fecha_actual.strftime('%Y-%m-%d %H:%M:%S')}")

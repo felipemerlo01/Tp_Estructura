@@ -1,6 +1,8 @@
 from Clases.Hotel import Hotel
-from Clases.Funciones_extra import leer_Usuarios, leer_Habitaciones, leer_Reservas, menu_principal, menu_registro, validar_opcion_menu, menu_Cliente, menu_Administrador, menu_Personal_Administrativo, menu_Informe_estadístico, menu_Mant_Limp
-
+from Clases.Funciones_extra import menu_principal, menu_registro, validar_opcion_menu, menu_Cliente, menu_Administrador, menu_Personal_Administrativo, menu_Informe_estadístico, menu_Mant_Limp
+from Clases.Empleado import Empleado
+from Clases.Funciones_lectores import leer_Usuarios, leer_Habitaciones, leer_Reservas
+from Clases.Administrador import Administrador
 # El menu en si mismo
 continuar = True
 cargado = False
@@ -14,20 +16,23 @@ while (continuar == True):
         leer_Usuarios(path+'db_Usuarios.csv', POO)
         cargado = True
     
+    POO.actualizar_datos_totales()
+    
     menu_principal()
     opcion = validar_opcion_menu(input('Ingrese una opción: '), 3)
     if (opcion == '1'):
         usuario = POO.iniciar_sesion()
         print(f'Se inició sesión correctamente. Bienvenido.')
-        if (hasattr(usuario, 'rol')):
+        if (hasattr(usuario, 'legajo')):
             if (usuario.legajo == 1):
                 menu_Administrador()
-                opcion_admin = validar_opcion_menu(input("Ingrese una opción: "), 7)
-                if opcion_admin == '1':
-                    pass
-                elif opcion_admin == '2': 
-                    pass
+                opcion_admin = validar_opcion_menu(input(" Ingrese una opción: "), 7)
+                if opcion_admin == '1': # Dar empleado de alta
+                    usuario.dar_empleado_de_alta() 
+                elif opcion_admin == '2': # Dar empleado de baja
+                       usuario.dar_empleado_de_baja()          
                 elif opcion_admin == '3':
+
                     pass
                 elif opcion_admin == '4':
                     pass
@@ -47,9 +52,11 @@ while (continuar == True):
                     menu_Mant_Limp()
                     opcion_mant_limp = validar_opcion_menu(input("Ingrese una opción: "), 5)
                     if (opcion_mant_limp == '1'):
-                        pass
+                        Empleado.registro_ingreso()
+                        print ("Registro de ingreso realizado")
                     elif (opcion_mant_limp == '2'):
-                        pass
+                        Empleado.registro_egreso()
+                        print ("Registro de egreso realizado")
                     elif (opcion_mant_limp == '3'):
                         pass
                     elif (opcion_mant_limp == '4'):

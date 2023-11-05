@@ -33,23 +33,49 @@ Arreglamos lo del legajo
 
 - Al ejecutar el menu, se leen las bases y crea el hotel con sus objetos.
 Pero como las bases estan desactualizadas, hay que actualizar con la fecha de hoy (en el momento que se ejecuta el menu):
-        - sumar gastos de reservas (ocupacion + minibar + buffet) que hayan hecho checkout a los resepctivos usuarios
+        - sumar gastos de reservas (ocupacion + minibar + buffet) que hayan hecho checkout a los resepctivos usuarios (usuario.gastado)
         - estado de ocupación de habitación en ese momento (debido a los check outs)
 
 En el checkout se suma todo a gastado
 
 A CAMBIAR:
-- Agregar a la base de habitaciones la columna 'ocupada', ya que tambien hay que improtarla
+- Agregar a la base de usuarios la columna 'Estado' para los empleados (modificar funcion leer_Usuario para empleados también)
+    - Si estas inactivo como empleado no tendrias que poder iniciar sesion (arreglar en inicio de sesion)
 - Escribir el/los metodo/s de HOTEL de escribir en las bases csv los cambios nuevos antes de cerrar el menu (y aplicarla en metodo 'hacer reserva' del cliente)
 
 FALTA:
-- chequear ir al buffet
 - cheqeuar ir al minibar
 - lo que esta escrito antes que esto en el 4/11
 
 Usuarios: diccionario. key: mail, value: objecto(cliente/empleado)
 Habitaciones: key: numero_habitacion, value: objeto habitacion
 Rservas: lista con objetos reserva
+
+05/11:
+
+FALTA:
+- rever minibar
+- si estas inactivo en el sistema que validacion de inicio de sesion no te deje entrar
+- ver funciones de actualizar_bases:
+        - ver bien que para empleados se guarde el atributo Estado en la base
+        - funcion de usuarios debe combinar empleados y clientes en una (ver ya que dependen los atributos)
+            - sexo esta dos veces
+        - donde se ejecutan estas funciones a todo esto?
+        - chequear bien el orden (que coordinen bien columnas y atributos)
+- Informe estadístico (Hotel): 
+        O Definir si hacemos uno o varios archivos, y si va a ser o no historico
+        O Definir si la clasifiación de clientes se hace o no con criterio histórico (acumulación de gastos en varias reservas)
+- Rever en empelado lo de realizar/completar tareas (metodos cande)
+- Personal Administrativo --> HISTORIAL DE RESERVAS (falta metodo creo)
+- Personal Adminsitrativo --> NOMINA DE CLIENTES DEL HOTEL (falta metodo creo)
+- Administrador --> INVENTARIO DEL PERSONAL (por tipo)
+        - fijarse de cuando las hagas de combinarlo con otras que ya hiciste donde buscas empleados
+- Administrador --> Rever control de ingreso y egreso (metodo cande)
+        - IDEA: que los ingresos y egresos sean automaticos para los empleados (osea no lo hacen manual desde el menu)
+            pero usamos random la funcionn ?¿ para que difieran en el ingreso y egreso 
+            para ingreso entre 8am y 9am un rango de aleatorio
+            para engreso entre 8pm y 9pm un rango de aleatorio
+- Rever funcion de asignar tarea (en la clase Empleado)
 
 ---------------------------------------------------------------------------------------------------------------------
 fecha de entrega: Lunes 13/11

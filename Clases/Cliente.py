@@ -2,7 +2,8 @@ from Usuario import Usuario
 from Empleado import Empleado
 from Reserva import Reserva
 from datetime import datetime
-from Funciones_extra import validar_fecha, validar_fecha_posteriori, validar_si_no, validar_capacidad_min, validar_precio
+from Funciones_extra import validar_fecha, validar_fecha_posteriori, validar_si_no, validar_capacidad_min, validar_precio, validar_opcion
+from queue import LifoQueue
     
 class Cliente(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str):
@@ -13,9 +14,8 @@ class Cliente(Usuario):
 
     def recolectar_criterios_interes(self):
         criterios_elegidos = {}
-        # Hay que pedirle baño privado, capacidad, precio, y balcon
         # Asimismo hay que validarlos
-            
+        
         criterio = validar_si_no(input("¿Desea filtrar por capacidad? (Si/No): ").capitalize())
         if (criterio == "Si"):
             capacidad_minima = int(validar_capacidad_min(input("Capacidad mínima deseada: ")))
@@ -82,28 +82,60 @@ class Cliente(Usuario):
                       f"Costo total de la reserva: ${reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}") # reserva.gastos convendria que venga inicializada con el precio*dias creo
                 print()
                 
-    #esta es la parte que quieren que vaya directamente en la clase habitación    
-    def ir_al_buffet(self, reserva, costo_comida):
-            if costo_comida > 0:
-                reserva.agregar_gastos_buffet(costo_comida)
-                print(f"Ha gastado ${costo_comida} en el buffet en la habitación {reserva.habitacion.numero}.")
-            else:
-                print("No hay gastos en el buffet.")
+    
+    def ir_al_buffet(self, reserva, Hotel):
+        # 1) Crear pila con elecciones de buffet: tiene que elegir un desayuno, bebida, refrigerio
+        
+        opciones_comida = {
+        'Desayuno': {'Huevos con tostadas': 900, 'Sandwhich': 1200, 'Cereales': 600},
+        'Bebida': {'Agua': 600, 'Jugo': 700, 'Café': 800},
+        'Refrigerio': {'Barrita': 300, 'Fruta': 300, 'Yogur': 500, 'Galleta': 400}}
 
+        elecciones_comida = LifoQueue()
+        
+        for categoria, opciones in opciones_comida.items():
+            preferencia = validar_opcion(input(f'Eliga una opcion de {categoria.lower()}: ').capitalize(), opciones)
+            eleccion = opciones[preferencia]
+            elecciones_comida.put(eleccion)
+            
+        print('Orden efectuada correctamente')
+        
+        gastos = 0
+        while (not elecciones_comida.empty()):
+            precio = elecciones_comida.get()
+            gastos += precio
+        
+        reserva.gastos_buffet += gastos
+        
+        # 2) asigno un empleado random de limpieza que haga limpieza en el buffet
+        admin = Hotel.obtener_admin()
+        empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Limpieza')
+        empleado.agregar_tarea_automatica(reserva.habitacion.numero, False)
 
-    #aca lo que se puede haceer es que se utiliza el costo de cada producto que se consumio o todo junto
     def usar_el_minibar(self, reserva, costo_producto):
         if costo_producto > 0:
             reserva.agregar_gastos_minibar(costo_producto)
             print(f"Ha gastado ${costo_producto} en el minibar en la habitación {reserva.habitacion}.")
+           
+            
         else:
             print("No hay gastos en el minibar.")
-
+        #si se consume en el minbar el administrador debe mandar a uno de mantenimiento a que lo reponga 
+    
+    def actualizar_gastado(self):
+        self.gastado = 0
+        hoy = datetime.now()
+        for reserva in self.reservas:
+            check_out_dt = datetime.strptime(reserva.check_out + ' 11:00', "%d/%m/%Y %H:%M")
+            if (check_out_dt <= hoy):
+                self.gastado += reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
+            
     #hay que crear una tipo de categoria dependiendo del gasto del cliente pero puede que convenga hacer 
     def tipo_cliente(self):
         pass
 
-
+#esto de abajo vuela? ok
+# nos parecieron medio innecesarias, quedarn en comentarios x las dudas ni idea
 
 #gastos asociados a un cliente 
 '''def ir_al_buffet(self, costo_comida):
