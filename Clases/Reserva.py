@@ -13,11 +13,5 @@ class Reserva:
         self.gastos_ocupacion = (datetime.strptime(self.check_out, "%d/%m/%Y")-datetime.strptime(self.check_in, "%d/%m/%Y")).days * self.habitacion.precio
         self.gastos_buffet = gastos_buffet
         self.gastos_minibar = gastos_minibar
-
-    def agregar_gastos_buffet(self, costo):
-        self.gastos_buffet += costo
-
-    def agregar_gastos_minibar(self, costo):
-        self.gastos_minibar += costo
         
     

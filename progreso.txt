@@ -101,6 +101,7 @@ FALTA:
         - Agregar hora para solucionar eso
 - Fijarse porque lo de actualizar el estado de la habitacion, a pesar de hacerse de forma automatica a todas las habitaciones
     podria ser un metodo del empleado que accede a info del hotel y la actualiza en vez de que sea un metodo del hotel (para mas realismo)
+- Al menu falta agregar todo lo que es el submenu de informe estadistico
 
 ---------------------------------------------------------------------------------------------------------------------
 fecha de entrega: Lunes 13/11
