@@ -1,7 +1,7 @@
 from Cliente import Cliente
 from Empleado import Empleado
 from Funciones_extra import verificar_fecha_de_nacimiento, validar_fecha, verificar_dni, verificar_sexo, verificar_mail, verificar_contrasena
-from datetime import datetime, date
+from datetime import datetime
 
 class Hotel:
     def __init__(self, nombre):
@@ -47,7 +47,7 @@ class Hotel:
     
     # verificar rol 
     def verificar_rol(self, rol: str):
-        while rol not in ["Administrativo", "Mantenimiento", "Limpieza"]:
+        while rol not in ("Administrativo", "Mantenimiento", "Limpieza"):
             rol = input("Rol invalido. Ingrese un rol valido: ")
         return rol
 
@@ -60,13 +60,16 @@ class Hotel:
             
     # valido el mail y contrasena al iniciar sesión
     def validar_inicio_sesion(self, mail: str, contrasena: str): 
-        while (mail not in self.usuarios):
-            mail = verificar_mail(input('Mail no encontrado. Ingrese un mail registrado: '))
-        
-        while (contrasena != self.usuarios[mail].contrasena):
-            contrasena = input('Contraseña incorrecta. Ingrese nuevamente: ')
-        
-        return self.usuarios[mail]
+        while (True):
+            if (mail not in self.usuarios):
+                mail = verificar_mail(input('Mail no encontrado. Ingrese un mail registrado: '))
+            else:
+                if (hasattr(self.usuarios[mail], 'estado') and self.usuarios[mail].estado == 'Inactivo'):
+                    mail = verificar_mail(input('Usuario inactivo. Ingrese el mail de un usuario activo: '))
+                else:
+                    while (contrasena != self.usuarios[mail].contrasena):
+                            contrasena = input('Contraseña incorrecta. Ingrese nuevamente: ')
+                    return self.usuarios[mail]
     
     def iniciar_sesion(self):
         mail = verificar_mail(input('Ingrese su mail: '))
@@ -79,6 +82,7 @@ class Hotel:
             if (hasattr(usuario, 'legajo') and usuario.legajo == 1):
                 return usuario
     
+    # Calcular porcentaje de ocupacion del hotel
     def procentaje_de_ocupacion(self):
         capacidad_total = len(self.habitaciones)
         capacidad_ocupada = 0
@@ -90,13 +94,13 @@ class Hotel:
         return
 
     def procentaje_de_ocupacion_por_tipo_de_habitación(self):   #hacemos que el admin pregunte el tipo?
-        capacidad_total=len(self.habitaciones)
-        tipos=["Simple","Doble","Familiar","Suite"]
+        capacidad_total = len(self.habitaciones)
+        tipos = ("Simple", "Doble", "Familiar", "Suite")
         for tipo in tipos:
-            ocupacion_del_tipo=0
+            ocupacion_del_tipo = 0
             for habitacion in self.habitaciones.values():
-                if habitacion.ocupada == True and habitacion.tipo == tipo:
-                    ocupacion_del_tipo+=1
+                if (habitacion.ocupada == True and habitacion.tipo == tipo):
+                    ocupacion_del_tipo += 1
         # actualizar txt
             print(f"La ocupación de las habitaciones de tipo {tipo} es del {(ocupacion_del_tipo/capacidad_total)*100}% \n")
         return
@@ -116,30 +120,25 @@ class Hotel:
         
     #     xd
 
+    # Buscar un empleado en la base por su nombre y apellido, si no lo encuentra no se lo vuelve a pedir
     def buscar_empleado(self, nombre, apellido):
         for usuario in self.usuarios:
             if (hasattr(usuario, 'legajo') and nombre == usuario.nombre and apellido == usuario.apellido):
                 return usuario
         return
 
-    def validar_inicio_sesion(self, mail: str, contrasena: str): 
-        while (mail not in self.usuarios):
-            mail = verificar_mail(input('Mail no encontrado. Ingrese un mail registrado: '))
-        
-        while (contrasena != self.usuarios[mail].contrasena):
-            contrasena = input('Contraseña incorrecta. Ingrese nuevamente: ')
-        
-        return self.usuarios[mail]
-
-    #Actualizo el CSV de reservas con una nueva linea con la nueva reserva
-    def actualizar_base_reservas(reserva, path):
-        info_reserva = f"{reserva.mail_usuario},{reserva.habitacion.numero},{reserva.check_in},{reserva.check_out},{reserva.fecha_reserva}\n"
+    # Actualizo el CSV de reservas con una nueva linea con la nueva reserva
+    def actualizar_base_reservas(self, reserva, path):
+        info_reserva = f"{reserva.mail_usuario},{reserva.habitacion.numero},{reserva.check_in},{reserva.check_out},{reserva.fecha_reserva},{reserva.gastos_ocupacion},{reserva.gastos_buffet},{reserva.gastos_minibar}\n"
         with open(path,"a",newline='') as archivo_reservas:
             archivo_reservas.write(info_reserva)
 
-    #Actualizo el CSV de usuarios con una nueva linea con el nuevo usuario
-    def actualizar_base_usuarios(usuario, path):
-        info_usuarios = f"{usuario.nombre},{usuario.apellido},{usuario.fecha_de_nacimiento},{usuario.sexo},{usuario.dni},{usuario.mail},{usuario.contrasena}\n"
+    # Actualizo el CSV de usuarios con una nueva linea con el nuevo usuario
+    def actualizar_base_usuarios(self, usuario, path):
+        if (hasattr(usuario, 'legajo')):
+            info_usuarios = f"{usuario.nombre},{usuario.apellido},{usuario.fecha_de_nacimiento},{usuario.sexo},{usuario.dni},{usuario.mail},{usuario.contrasena},{usuario.legajo},{usuario.rol},{usuario.estado},{usuario.tareas}\n"
+        else:
+            info_usuarios = f"{usuario.nombre},{usuario.apellido},{usuario.fecha_de_nacimiento},{usuario.sexo},{usuario.dni},{usuario.mail},{usuario.contrasena}\n"
         with open(path,"a",newline='') as archivo_usuarios:
             archivo_usuarios.write(info_usuarios)
 

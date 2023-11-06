@@ -3,8 +3,8 @@ from queue import Queue
 from Usuario import Usuario
 
 class Empleado(Usuario):
-    def __init__(self, nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail: str, contrasena: str, legajo: int, rol: str, estado = 'Activo'):
-        super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena)
+    def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str, legajo: int, rol: str, estado = 'Activo'):
+        super().__init__(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena)
         self.legajo = legajo
         self.rol = rol
         self.estado = estado
@@ -55,8 +55,6 @@ class Empleado(Usuario):
                 self.tareas.put(f'Limpieza en el buffet de {num_habitacion}')
             else:
                 self.tareas.put(f'Preparacion de la habitacion en {num_habitacion}')
-
-    #aca se va a ver la tarea que tiene asiganda ese empleado
 
     def asignar_tareas(self, tareas):
         for tarea in tareas:

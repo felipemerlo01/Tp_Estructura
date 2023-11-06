@@ -10,7 +10,6 @@ class Cliente(Usuario):
         super().__init__(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena)
         self.gastado = 0 
         self.reservas = []
-        # self.gastos_por_habitacion = {}  # Diccionario para llevar un registro de los gastos por habitación
 
     def recolectar_criterios_interes(self):
         criterios_elegidos = {}

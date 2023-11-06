@@ -1,8 +1,7 @@
 from Clases.Hotel import Hotel
 from Clases.Funciones_extra import menu_principal, menu_registro, validar_opcion_menu, menu_Cliente, menu_Administrador, menu_Personal_Administrativo, menu_Informe_estadístico, menu_Mant_Limp
-from Clases.Empleado import Empleado
 from Clases.Funciones_lectores import leer_Usuarios, leer_Habitaciones, leer_Reservas
-from Clases.Administrador import Administrador
+
 # El menu en si mismo
 continuar = True
 cargado = False
@@ -30,9 +29,8 @@ while (continuar == True):
                 if opcion_admin == '1': # Dar empleado de alta
                     usuario.dar_empleado_de_alta() 
                 elif opcion_admin == '2': # Dar empleado de baja
-                       usuario.dar_empleado_de_baja()          
+                    usuario.dar_empleado_de_baja()          
                 elif opcion_admin == '3':
-
                     pass
                 elif opcion_admin == '4':
                     pass
@@ -52,10 +50,10 @@ while (continuar == True):
                     menu_Mant_Limp()
                     opcion_mant_limp = validar_opcion_menu(input("Ingrese una opción: "), 5)
                     if (opcion_mant_limp == '1'):
-                        Empleado.registro_ingreso()
+                        usuario.registro_ingreso()
                         print ("Registro de ingreso realizado")
                     elif (opcion_mant_limp == '2'):
-                        Empleado.registro_egreso()
+                        usuario.registro_egreso()
                         print ("Registro de egreso realizado")
                     elif (opcion_mant_limp == '3'):
                         pass
@@ -64,24 +62,20 @@ while (continuar == True):
         else:
             menu_Cliente()
             opcion_cliente = validar_opcion_menu(input('Ingrese una opción: '), 5)
-            if opcion_cliente == '1':
+            if (opcion_cliente == '1'):
                 pass
-            elif opcion_cliente == '2':
+            elif (opcion_cliente == '2'):
                 pass
-
             elif (opcion_cliente == '3'):
                 pass
             elif (opcion_cliente == '4'):
                 pass
-            
     elif (opcion == '2'):
         menu_registro()
         registro_opcion = validar_opcion_menu(input("Ingrese una opción de registro: "), 3)
         if (registro_opcion == '1'):
-            usuario = POO.crear_usuario('1')
+            usuario = POO.crear_usuario(registro_opcion)
         elif (registro_opcion == '2'):
-            usuario = POO.crear_usuario('2')
-
-    
+            usuario = POO.crear_usuario(registro_opcion)
     else:
         continuar = False

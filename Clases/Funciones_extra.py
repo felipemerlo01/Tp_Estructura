@@ -47,7 +47,7 @@ def verificar_dni(dni):
             
 # verificar sexo
 def verificar_sexo(sexo):
-    while (sexo not in ['M', 'F']):
+    while (sexo not in ('M', 'F')):
         sexo = input('Ingresar un sexo valido: ').upper()
     return sexo
 
@@ -81,7 +81,7 @@ def verificar_contrasena(contrasena):
     return contrasena
 
 def validar_si_no(opcion):
-    while (opcion not in ['Si', 'No']):
+    while (opcion not in ('Si', 'No')):
         opcion = input('Ingrese una opción valida (Si/No): ').capitalize()
     return opcion
 
@@ -166,6 +166,6 @@ def menu_Informe_estadístico():
     
 def menu_Mant_Limp(): 
     print('''
-1. Visualización de las tareas activas
+1. Visualización de las tareas pendientes
 2. Realizar tarea pendiente
 3. Volver''')

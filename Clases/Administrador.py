@@ -2,8 +2,8 @@ from Usuario import Usuario
 from queue import Queue
 
 class Administrador(Usuario):
-    def __init__(self, nombre: str, apellido: str, edad: int, sexo: str, dni: int, mail: str, contrasena: str, legajo: int):
-        super().__init__(nombre, apellido, edad, sexo, dni, mail, contrasena)
+    def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str, legajo: int):
+        super().__init__(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena)
         self.legajo = legajo
     
     def asignar_tareas(self, empleado, tareas: Queue):
@@ -13,7 +13,6 @@ class Administrador(Usuario):
     def dar_empleado_de_alta(self, hotel):
         empleado = hotel.crear_usuario('2')
         hotel.usuarios[empleado.mail] = empleado
-        empleado.estado = 'Activo'  # Cambiar el estado del empleado a "Activo"
         print(f"{empleado.nombre} {empleado.apellido} ha sido dado de alta como empleado.")
     
     def dar_empleado_de_baja(self, hotel):

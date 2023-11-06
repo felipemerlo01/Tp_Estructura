@@ -16,10 +16,10 @@ def leer_Usuarios(path, Hotel):
             nuevo_usuario = Cliente(row["Nombre"], row["Apellido"], row["Fecha de nacimiento"], row["Sexo"], int(row["DNI"]), row["Mail"], row["Contrasenia"])
             Hotel.usuarios[nuevo_usuario.mail] = nuevo_usuario
             for reserva in Hotel.reservas:
-                if (reserva.mail == nuevo_usuario.mail):
+                if (reserva.mail_usuario == nuevo_usuario.mail):
                     nuevo_usuario.reservas.append(reserva)
-        elif (row["Rol"] in ["Mantenimiento", "Administrativo", "Limpieza"]):
-            nuevo_empleado = Empleado(row["Nombre"], row["Apellido"], row["Fecha de nacimiento"], row["Sexo"], int(row["DNI"]), row["Mail"], row["Contrasenia"], int(row["Legajo"]), row["Rol"],row["Estado"])
+        elif (row["Rol"] in ("Mantenimiento", "Administrativo", "Limpieza")):
+            nuevo_empleado = Empleado(row["Nombre"], row["Apellido"], row["Fecha de nacimiento"], row["Sexo"], int(row["DNI"]), row["Mail"], row["Contrasenia"], int(row["Legajo"]), row["Rol"], row["Estado"])
             Hotel.usuarios[nuevo_empleado.mail] = nuevo_empleado
             tasks = row['Tareas'].split(', ')
             for task in tasks:
@@ -42,6 +42,6 @@ def leer_Reservas(path, Hotel):
     reservas = pd.read_csv(path)
 
     for _, row in reservas.iterrows():
-        nueva_reserva = Reserva(row["mail"], row["numero_hab"], row["Fecha_inicio"], row["Fecha_fin"], row['Fecha_reserva'])
+        nueva_reserva = Reserva(row["Mail"], int(row["Numero de habitacion"]), row["Check-in"], row["Check-out"], row['Fecha reserva'], int(row['Gastos buffet']), int(row['Gastos minibar']))
         Hotel.reservas.append(nueva_reserva)
         
