@@ -96,6 +96,8 @@ FALTA:
             pero usamos random la funcionn ?¿ para que difieran en el ingreso y egreso 
             para ingreso entre 8am y 9am un rango de aleatorio
             para engreso entre 8pm y 9pm un rango de aleatorio
+        - Cuando encaremos lo de ingresos y egresos hay que ver porque cande puso como atributo de los empleados una lista de ingreso y otra de egreso. 
+                - Hay que agregar a los csv esas columnas, agregarlo en lsa funciones de actualziar bases y en los lectores
 - Corregir metodo de Cliente "ver reservas activas":
     - Esta cheqeuando que el rango de la reserva este en el dia de hoy pero hay que ver que si la reserva termina hoy y ya son pasadas las 11 no esta activa
         - Agregar hora para solucionar eso
