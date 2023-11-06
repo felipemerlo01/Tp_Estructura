@@ -56,31 +56,31 @@ class Empleado(Usuario):
             else:
                 self.tareas.put(f'Preparacion de la habitacion en {num_habitacion}')
 
-    def asignar_tareas(self, tareas):
-        for tarea in tareas:
-            self.tareas.put(tarea) #el empleado tiene un cola de tareas 
-
+    # Realizar tarea siguiente
     def realizar_siguiente_tarea(self):
-        if not self.tareas.empty():
+        if (not self.tareas.empty()):
             tarea = self.tareas.get()
             print(f"{self.nombre} {self.apellido} realizando tarea: {tarea}")
-
-    def finalizar_tarea(self, tipo_tarea):
-        if self.tareas.qsize() > 0:
-            tarea = self.tareas.get()
-            if tarea['tipo'] == tipo_tarea:
-                print(f"Tarea de {tipo_tarea} '{tarea['nombre']}' completada por {self.nombre} {self.apellido}")
-            else:
-                print(f"No hay tareas de {tipo_tarea} pendientes para finalizar.")
         else:
-            print("No hay tareas pendientes para finalizar.")
+            print("Usted no tiene tareas pendientes para realizar.")
 
-    #el empleado podría visualizar las tareas pendientes que tiene 
+    # Visualizar tareas pendientes del empleado
+    def visualizar_tareas_pendientes(self):
+        if (not self.tareas.empty()):
+            tupla_tareas = tuple(self.tareas)
+            num = 1
+            for tarea in tupla_tareas:
+                print(f'{num}. {tarea}')
+                num += 1
+        else:
+            print("Enhorabuena! Usted no tiene tareas pendientes.")
+            
 
 
 
 # # Al empleado se le va a asignar automaticamnete un turno y en base a ese turno debería aparece cuales son las
 # # horas de ingreso y egreso 
+
 #     '''def registro_ingreso(self):
 #         # Registrar la fecha y hora actual de ingreso
 #         fecha_actual = datetime.now()
@@ -99,6 +99,7 @@ class Empleado(Usuario):
 
 
 # #estos metodos puede llegar a quedar pero en realidad se hacen automáticamnte     
+
 #     def realizar_check_in(self, habitacion):
 #         # Implementar lógica para realizar el check-in
 #         # Actualizar el estado de la habitación a "Ocupada"

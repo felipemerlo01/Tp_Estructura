@@ -53,8 +53,17 @@ Rservas: lista con objetos reserva
 
 05/11:
 
-FALTA:
-- rever minibar
+FALTA: 
+- Rever metodo del cliente ir al buffet:
+    - Falta imprimir por terminal las opciones del buffet (osea el menu)
+    - uno de los parametros es el objeto reserva
+    - que reserva deberia usar? (obviamente una activa), le preguntamos que reserva? (ya que puede tener mas de una reserva activa)
+- rever minibar:
+    - falta imprimir por terminal las opciones del minibar
+   - Lo mismo que para buffet acerca de la reserva
+- Rever en empelado lo de realizar/completar tareas (metodos cande)  COMPLETADO
+- Rever funcion de asignar tarea (en la clase Empleado) COMPLETADO
+    - itera por una queue de tareas pero esta mal creo  COMPLETADO
 - si estas inactivo en el sistema que validacion de inicio de sesion no te deje entrar COMPLETADO
 - ver funciones de actualizar_bases: 
         - ver bien que para empleados se guarde el atributo Estado en la base COMPLETADO
@@ -66,28 +75,32 @@ FALTA:
             - hay que modificarlas creo porque cuando el Administrador da a alguien de baja tiene que actualizarse en el csv
             - DOS OPCIONES: (REVISAR CONCENSO DE ESTO CON LOS CHICOS)
                 1. que se rescriban todas la bases al final del menu agregando todo lo nuevo, haciendo que se actualice una vez sola (LO MAS CONVENIENTE ME PA)
+                    - modificar las existentes para que en vez de un objeto tome toda la lista/diccionario
                 2. que se agregue a la base con cada cosa puntual (osea cuando se agregue una nueva reserva, cuando se agrege un nuevo usuario o se de de baja un empleado) (MENOS CONVENIENTE)
+                    - habria que agregar una funcion que actulice en la base de usuarios la columna estado cuando se da de baja un empleado
+
 - Agregar a las BASE RESERVAS las columnas: gastos buffet, gastos minibar COMPLETADO
 - Agregar a funcion leer reservas columnas: gastos buffet, gastos minibar COMPLETADO
 - Cambiar a la BASE USUARIOS las columnas Tareas y Estado de lugar (invertir su orden) COMPLETADO                           
 - Informe estadístico (Hotel): 
         O Definir si hacemos uno o varios archivos, y si va a ser o no historico
         O Definir si la clasifiación de clientes se hace o no con criterio histórico (acumulación de gastos en varias reservas)
-- Rever en empelado lo de realizar/completar tareas (metodos cande)
 - Personal Administrativo --> HISTORIAL DE RESERVAS (falta metodo creo)
+    - NO ENTIENDO SI ES PEDIR UN CLIENTE Y MOSTRAR LAS DE ÉL O VER TODAS LAS RESERVAS DEL HOTEL? O PODRIAMOS DAR LAS 2 OPCIONES?
 - Personal Adminsitrativo --> NOMINA DE CLIENTES DEL HOTEL (falta metodo creo)
+    - NO ENTIENDO SI ES CLIENTES HOSPEDADOS ACTUALMENTE O CLIENTES REGISTRADOS COMO CLIENTES
 - Administrador --> INVENTARIO DEL PERSONAL (por tipo)
-        - fijarse de cuando las hagas de combinarlo con otras que ya hiciste donde buscas empleados
+    - Los nombres por tipo o la cantidad de empleados por tipo?
 - Administrador --> Rever control de ingreso y egreso (metodo cande)
         - IDEA: que los ingresos y egresos sean automaticos para los empleados (osea no lo hacen manual desde el menu)
             pero usamos random la funcionn ?¿ para que difieran en el ingreso y egreso 
             para ingreso entre 8am y 9am un rango de aleatorio
             para engreso entre 8pm y 9pm un rango de aleatorio
-- Rever funcion de asignar tarea (en la clase Empleado)
-    - itera por una queue de tareas pero esta mal creo
 - Corregir metodo de Cliente "ver reservas activas":
-    - Esta cheqeuando que el rango de la reserva este en el dia de hoy pero hay que ver que si la reserva termina hoy y ya son pasadas las 11 no esta activas
-    - Agregar hora para solucionar eso
+    - Esta cheqeuando que el rango de la reserva este en el dia de hoy pero hay que ver que si la reserva termina hoy y ya son pasadas las 11 no esta activa
+        - Agregar hora para solucionar eso
+- Fijarse porque lo de actualizar el estado de la habitacion, a pesar de hacerse de forma automatica a todas las habitaciones
+    podria ser un metodo del empleado que accede a info del hotel y la actualiza en vez de que sea un metodo del hotel (para mas realismo)
 
 ---------------------------------------------------------------------------------------------------------------------
 fecha de entrega: Lunes 13/11

@@ -27,11 +27,11 @@ while (continuar == True):
                 menu_Administrador()
                 opcion_admin = validar_opcion_menu(input(" Ingrese una opción: "), 7)
                 if opcion_admin == '1': # Dar empleado de alta
-                    usuario.dar_empleado_de_alta() 
+                    usuario.dar_empleado_de_alta(POO) 
                 elif opcion_admin == '2': # Dar empleado de baja
-                    usuario.dar_empleado_de_baja()          
+                    usuario.dar_empleado_de_baja(POO)          
                 elif opcion_admin == '3':
-                    pass
+                    usuario.asignar_tareas(POO)
                 elif opcion_admin == '4':
                     pass
                 elif opcion_admin == '5':
@@ -50,26 +50,29 @@ while (continuar == True):
                     menu_Mant_Limp()
                     opcion_mant_limp = validar_opcion_menu(input("Ingrese una opción: "), 5)
                     if (opcion_mant_limp == '1'):
-                        usuario.registro_ingreso()
-                        print ("Registro de ingreso realizado")
+                        usuario.realizar_siguiente_tarea()
                     elif (opcion_mant_limp == '2'):
-                        usuario.registro_egreso()
-                        print ("Registro de egreso realizado")
+                        usuario.visualizar_tareas_pendientes()
                     elif (opcion_mant_limp == '3'):
                         pass
+                        # usuario.registro_ingreso()
+                        # print ("Registro de ingreso realizado")
                     elif (opcion_mant_limp == '4'):
                         pass
+                        # usuario.registro_egreso()
+                        # print ("Registro de egreso realizado")
         else:
             menu_Cliente()
             opcion_cliente = validar_opcion_menu(input('Ingrese una opción: '), 5)
             if (opcion_cliente == '1'):
-                pass
+                usuario.hacer_reserva(POO.habitaciones, POO.reservas)
             elif (opcion_cliente == '2'):
-                pass
+                # REVISAR con que reserva va al buffet, le preguntas con que reserva asociarlo?
+                usuario.ir_al_buffet('reserva???', POO) 
             elif (opcion_cliente == '3'):
-                pass
+                usuario.usar_el_minibar('reserva???', POO) 
             elif (opcion_cliente == '4'):
-                pass
+                usuario.ver_reservas_activas()
     elif (opcion == '2'):
         menu_registro()
         registro_opcion = validar_opcion_menu(input("Ingrese una opción de registro: "), 3)

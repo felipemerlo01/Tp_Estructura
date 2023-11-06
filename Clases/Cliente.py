@@ -12,8 +12,7 @@ class Cliente(Usuario):
         self.reservas = []
 
     def recolectar_criterios_interes(self):
-        criterios_elegidos = {}
-        # Asimismo hay que validarlos
+        criterios_elegidos = {} # Asimismo hay que validarlos
         
         criterio = validar_si_no(input("¿Desea filtrar por capacidad? (Si/No): ").capitalize())
         if (criterio == "Si"):
@@ -78,27 +77,28 @@ class Cliente(Usuario):
                 print(f"Reserva de habitación {reserva.habitacion.numero} del {reserva.check_in} al {reserva.check_out}\n"
                       f"Gastos en el buffet: ${reserva.gastos_buffet}\n"
                       f"Gastos en el minibar: ${reserva.gastos_minibar}\n"
-                      f"Costo total de la reserva: ${reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}") # reserva.gastos convendria que venga inicializada con el precio*dias creo
+                      f"Costo total de la reserva: ${reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}")
                 print()
-                
     
     def ir_al_buffet(self, reserva, Hotel):
-        # 1) Crear pila con elecciones de buffet: tiene que elegir un desayuno, bebida, refrigerio
-        
         opciones_comida = {
         'Desayuno': {'Huevos con tostadas': 900, 'Sandwhich': 1200, 'Cereales': 600},
         'Bebida': {'Agua': 600, 'Jugo': 700, 'Café': 800},
         'Refrigerio': {'Barrita': 300, 'Fruta': 300, 'Yogur': 500, 'Galleta': 400}}
 
+        # 1) Crear pila con elecciones de buffet: tiene que elegir un desayuno, bebida, refrigerio en orden
         elecciones_comida = LifoQueue()
         
         for categoria, opciones in opciones_comida.items():
             preferencia = validar_opcion(input(f'Eliga una opcion de {categoria.lower()}: ').capitalize(), opciones)
-            eleccion = opciones[preferencia]
+            eleccion = (preferencia, opciones[preferencia])
             elecciones_comida.put(eleccion)
-            
-        print('Orden efectuada correctamente')
         
+        # Le muestro su orden
+        orden = ', '.join([f'{elemento[0]} (${elemento[1]})' for elemento in tuple(elecciones_comida)])
+        print(f'Su orden de: {orden} fue efectuada correctamente')
+        
+        # Cobro la orden desde lo ultimo que agarro
         gastos = 0
         while (not elecciones_comida.empty()):
             precio = elecciones_comida.get()
@@ -109,17 +109,19 @@ class Cliente(Usuario):
         # 2) asigno un empleado random de limpieza que haga limpieza en el buffet
         admin = Hotel.obtener_admin()
         empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Limpieza')
-        empleado.agregar_tarea_automatica(reserva.habitacion.numero, False)
+        empleado.agregar_tarea_automatica(reserva.habitacion.numero, True)
 
-    def usar_el_minibar(self, reserva, costo_producto):
-        if costo_producto > 0:
-            reserva.agregar_gastos_minibar(costo_producto)
-            print(f"Ha gastado ${costo_producto} en el minibar en la habitación {reserva.habitacion}.")
-           
-            
-        else:
-            print("No hay gastos en el minibar.")
-        #si se consume en el minbar el administrador debe mandar a uno de mantenimiento a que lo reponga 
+    def usar_el_minibar(self, reserva, Hotel):
+        opciones_minibar = {'Coca-cola': 1000, 'Agua': 900, 'Alcohol': 2500, 'Snack': 300}
+        
+        preferencia = validar_opcion(input(f'Eliga una de las opciones del minibar: '), opciones_minibar.keys())
+        
+        reserva.gastos_minibar += opciones_minibar[preferencia]
+        
+        # 2) asigno un empleado random de mantenimiento que reponga el minibar
+        admin = Hotel.obtener_admin()
+        empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Mantenimiento')
+        empleado.agregar_tarea_automatica(reserva.habitacion.numero)
     
     def actualizar_gastado(self):
         self.gastado = 0
@@ -132,63 +134,3 @@ class Cliente(Usuario):
     #hay que crear una tipo de categoria dependiendo del gasto del cliente pero puede que convenga hacer 
     def tipo_cliente(self):
         pass
-
-#esto de abajo vuela? ok
-# nos parecieron medio innecesarias, quedarn en comentarios x las dudas ni idea
-
-#gastos asociados a un cliente 
-'''def ir_al_buffet(self, costo_comida):
-        # Implementar lógica de ir al buffet y gastar
-        if costo_comida > 0:
-            print(f"Ha gastado ${costo_comida} en el buffet.")
-            self.gastado += costo_comida
-        else:
-            print("No hay gastos en el buffet.")
-
-    def usar_el_minibar(self, costo_producto):
-        # Implementar lógica de usar el minibar y gastar
-        if costo_producto > 0:
-            print(f"Ha gastado ${costo_producto} en el minibar.")
-            self.gastado += costo_producto
-        else:
-            print("No hay gastos.")
-'''
-
-# def hacer_reserva(self, empleado: Empleado, habitacion, check_in, check_out):
-        
-    #     # Calculo el costo y disponibilidad
-    #     if self.verificar_disponibilidad_habitacion(habitacion, check_in, check_out):
-    #         costo_reserva = self.calcular_costo_reserva(habitacion, check_in, check_out)
-    #         #aca tengo gastado 
-    #         self.gastado -= costo_reserva
-    #         self.registrar_gasto_por_habitacion(habitacion, costo_reserva)  # Registra el gasto por habitación
-    #         # Crear la reserva
-    #         reserva = Reserva(habitacion, check_in, check_out)
-    #         self.reservas.append(reserva)
-    #         print(f"Reserva realizada para la habitacion {habitacion} del {check_in} al {check_out}")
-    #     else:
-    #         print("No se pudo realizar la reserva debido a falta de disponibilidad.")
-
-'''def registrar_gasto_por_habitacion(self, habitacion, costo):
-    if habitacion in self.gastos_por_habitacion:
-        self.gastos_por_habitacion[habitacion] += costo
-    else:
-        self.gastos_por_habitacion[habitacion] = costo'''
-
-'''def calcular_total_a_pagar(self):
-    costo_reservas = sum(self.calcular_costo_reserva(reserva.habitacion, reserva.check_in, reserva.check_out) for reserva in self.reservas)
-    # Calcular el gasto total en el buffet y minibar
-    gasto_buffet = sum(gasto for habitacion, gasto in self.gastos_por_habitacion.items() if "buffet" in habitacion.lower())
-    gasto_minibar = sum(gasto for habitacion, gasto in self.gastos_por_habitacion.items() if "minibar" in habitacion.lower())
-    
-    total_a_pagar = costo_reservas + gasto_buffet + gasto_minibar
-    return total_a_pagar'''
-
-
-'''def ver_gastos_totales(self):
-    total_a_pagar = self.calcular_total_a_pagar()
-    gasto_buffet = sum(gasto for habitacion, gasto in self.gastos_por_habitacion.items() if "buffet" in habitacion.lower())
-    gasto_minibar = sum(gasto for habitacion, gasto in self.gastos_por_habitacion.items() if "minibar" in habitacion.lower())
-    print(f"Total a pagar: ${total_a_pagar}")
-    print(f"Gasto en el buffet: ${gasto_buffet}")
-    print(f"Gasto en el minibar: ${gasto_minibar}")'''
