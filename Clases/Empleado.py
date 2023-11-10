@@ -3,7 +3,6 @@ from queue import Queue
 from Usuario import Usuario
 from random import randint
 from Funciones_extra import verificar_mail
-
 class Empleado(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str, legajo: int, rol: str, estado = 'Activo'):
         super().__init__(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena)

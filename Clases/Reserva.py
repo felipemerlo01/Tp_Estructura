@@ -1,4 +1,4 @@
-from Habitacion import Habitacion
+from Habitacion import *
 from datetime import datetime
 
 class Reserva:
