@@ -54,24 +54,28 @@ Rservas: lista con objetos reserva
 05/11:
 
 FALTA: 
-- Rever metodo del cliente ir al buffet:
+- Rever metodo del cliente ir al buffet:                    
     - Falta imprimir por terminal las opciones del buffet (osea el menu)
-    - uno de los parametros es el objeto reserva
-    - que reserva deberia usar? (obviamente una activa), le preguntamos que reserva? (ya que puede tener mas de una reserva activa)
+    - uno de los parametros es el objeto reserva COMPLETADO
+    - que reserva deberia usar? (obviamente una activa), le preguntamos que reserva? (ya que puede tener mas de una reserva activa) COMPLETADO
 - rever minibar:
     - falta imprimir por terminal las opciones del minibar
-   - Lo mismo que para buffet acerca de la reserva
+    - Lo mismo que para buffet acerca de la reserva COMPLETADO
+
+- Agregar a las BASE RESERVAS las columnas: gastos buffet, gastos minibar COMPLETADO
+- Agregar a funcion leer reservas columnas: gastos buffet, gastos minibar COMPLETADO
+- Cambiar a la BASE USUARIOS las columnas Tareas y Estado de lugar (invertir su orden) COMPLETADO   
 - Rever en empelado lo de realizar/completar tareas (metodos cande)  COMPLETADO
 - Rever funcion de asignar tarea (en la clase Empleado) COMPLETADO
     - itera por una queue de tareas pero esta mal creo  COMPLETADO
 - si estas inactivo en el sistema que validacion de inicio de sesion no te deje entrar COMPLETADO
+
 - ver funciones de actualizar_bases: 
         - ver bien que para empleados se guarde el atributo Estado en la base COMPLETADO
         - funcion de usuarios debe combinar empleados y clientes en una (ver ya que dependen los atributos) COMPLETADO
             - sexo esta dos veces COMPLETADO
         - chequear bien el orden (que coordinen bien columnas y atributos) COMPLETADO
-
-        - donde se ejecutan estas funciones a todo esto?
+        - donde se ejecutan estas funciones a todo esto? # COMPLETADO
             - hay que modificarlas creo porque cuando el Administrador da a alguien de baja tiene que actualizarse en el csv
             - DOS OPCIONES: (REVISAR CONCENSO DE ESTO CON LOS CHICOS)
                 1. que se rescriban todas la bases al final del menu agregando todo lo nuevo, haciendo que se actualice una vez sola (LO MAS CONVENIENTE ME PA)
@@ -79,31 +83,81 @@ FALTA:
                 2. que se agregue a la base con cada cosa puntual (osea cuando se agregue una nueva reserva, cuando se agrege un nuevo usuario o se de de baja un empleado) (MENOS CONVENIENTE)
                     - habria que agregar una funcion que actulice en la base de usuarios la columna estado cuando se da de baja un empleado
 
-- Agregar a las BASE RESERVAS las columnas: gastos buffet, gastos minibar COMPLETADO
-- Agregar a funcion leer reservas columnas: gastos buffet, gastos minibar COMPLETADO
-- Cambiar a la BASE USUARIOS las columnas Tareas y Estado de lugar (invertir su orden) COMPLETADO                           
-- Informe estadístico (Hotel): 
+- Administrador --> Rever control de ingreso y egreso (metodo cande)
+        - IDEA: que los ingresos y egresos sean automaticos para los empleados (osea no lo hacen manual desde el menu)
+            pero usamos random la funcionn ?¿ para que difieran en el ingreso y egreso COMPLETADO
+            para ingreso entre 8am y 9am un rango de aleatorio COMPLETADO
+            para engreso entre 8pm y 9pm un rango de aleatorio COMPLETADO
+
+            Se tienen que crear un csv 
+
+        - Cuando encaremos lo de ingresos y egresos hay que ver porque cande puso como atributo de los empleados una lista de ingreso y otra de egreso. 
+                - Hay que agregar a los csv esas columnas, agregarlo en lsa funciones de actualziar bases y en los lectores
+                - conviene tenerlo como atributo ? y si quiero que se actualice cada vez que se realice un random pero que ademas se guarden en la o objeto?
+                
+
+- Informe estadístico (Hotel):  COMPLETADO( no chequeado )
         O Definir si hacemos uno o varios archivos, y si va a ser o no historico
         O Definir si la clasifiación de clientes se hace o no con criterio histórico (acumulación de gastos en varias reservas)
 - Personal Administrativo --> HISTORIAL DE RESERVAS (falta metodo creo)
-    - NO ENTIENDO SI ES PEDIR UN CLIENTE Y MOSTRAR LAS DE ÉL O VER TODAS LAS RESERVAS DEL HOTEL? O PODRIAMOS DAR LAS 2 OPCIONES?
 - Personal Adminsitrativo --> NOMINA DE CLIENTES DEL HOTEL (falta metodo creo)
     - NO ENTIENDO SI ES CLIENTES HOSPEDADOS ACTUALMENTE O CLIENTES REGISTRADOS COMO CLIENTES
 - Administrador --> INVENTARIO DEL PERSONAL (por tipo)
     - Los nombres por tipo o la cantidad de empleados por tipo?
-- Administrador --> Rever control de ingreso y egreso (metodo cande)
-        - IDEA: que los ingresos y egresos sean automaticos para los empleados (osea no lo hacen manual desde el menu)
-            pero usamos random la funcionn ?¿ para que difieran en el ingreso y egreso 
-            para ingreso entre 8am y 9am un rango de aleatorio
-            para engreso entre 8pm y 9pm un rango de aleatorio
-        - Cuando encaremos lo de ingresos y egresos hay que ver porque cande puso como atributo de los empleados una lista de ingreso y otra de egreso. 
-                - Hay que agregar a los csv esas columnas, agregarlo en lsa funciones de actualziar bases y en los lectores
+
 - Corregir metodo de Cliente "ver reservas activas":
     - Esta cheqeuando que el rango de la reserva este en el dia de hoy pero hay que ver que si la reserva termina hoy y ya son pasadas las 11 no esta activa
         - Agregar hora para solucionar eso
 - Fijarse porque lo de actualizar el estado de la habitacion, a pesar de hacerse de forma automatica a todas las habitaciones
     podria ser un metodo del empleado que accede a info del hotel y la actualiza en vez de que sea un metodo del hotel (para mas realismo)
 - Al menu falta agregar todo lo que es el submenu de informe estadistico
+
+------------------------------------
+
+9/11:
+
+FALTA:
+- Agregar en ir al buffet para que se visualice el menu de opciones de comida
+- Agregar en usar el minibar para que se visualice el menu de opciones del minibar
+- Al Programa.py falta agregar todo lo que es el submenu de informe estadistico
+- Fijarse porque lo de actualizar el estado de la habitacion, a pesar de hacerse de forma automatica a todas las habitaciones
+    podria ser un metodo del empleado que accede a info del hotel y la actualiza en vez de que sea un metodo del hotel (para mas realismo)
+- Corregir metodo de Cliente "buscar reservas activas":
+    - Esta cheqeuando que el rango de la reserva este en el dia de hoy pero hay que ver que si la reserva termina hoy y ya son pasadas las 11 no esta activa
+        - Agregar hora para solucionar eso
+- Administrador --> INVENTARIO DEL PERSONAL (por tipo)
+    - Los nombres por tipo o la cantidad de empleados por tipo?
+- Personal Administrativo --> HISTORIAL DE RESERVAS (falta metodo creo)
+- Personal Adminsitrativo --> NOMINA DE CLIENTES DEL HOTEL (falta metodo creo)
+- Administrador --> VER TODO EL TEMA DE EGRESOS Y EGRESOS (que contesta bruno)
+        - IDEA: que los ingresos y egresos sean automaticos para los empleados (osea no lo hacen manual desde el menu)
+            pero usamos random la funcionn ?¿ para que difieran en el ingreso y egreso COMPLETADO
+            para ingreso entre 8am y 9am un rango de aleatorio COMPLETADO
+            para engreso entre 8pm y 9pm un rango de aleatorio COMPLETADO
+
+            Se tienen que crear un csv 
+
+        - Cuando encaremos lo de ingresos y egresos hay que ver porque cande puso como atributo de los empleados una lista de ingreso y otra de egreso. 
+                - Hay que agregar a los csv esas columnas, agregarlo en lsa funciones de actualziar bases y en los lectores
+                - conviene tenerlo como atributo ? y si quiero que se actualice cada vez que se realice un random pero que ademas se guarden en la o objeto?
+
+ARREGLAR:
+- Hotel > cantidad_de_clientes_por_tipo: Estas tomando como que cada reserva es un cliente y esta mal. 
+    tenes que usar el atributo cliente.gastado para categorizar a los clientes
+    - Habria que recorrer usuarios y segun su usuario.gastado categorizar
+
+
+COMENTARIO CAMILO (actualizar bases):
+Chicos me di cuenta que conviene reescribir todas las bases cada vez que cerras el programa porque se agregan y modifican muchas cosas:
+
+hacer reserva --> agrega a la base reservas
+crear usuario --> agrega a la base usuarios
+realizar siguiente tarea --> modifica la columna tareas del empleado en la base usuarios
+dar empleado de baja --> modifica la columna Estado de la base usuarios 
+ir al buffet --> le suma un gasto a la columna Gatos buffet de la reserva en cuesiton en la base reservas
+usar el minibar --> le suma un gasto a la columna Gatos minibar de la reserva en cuesiton en la base reservas
+
+Como hacer una funcion para cada uno es un laburo. conviene hacer una sola funcion que reescriba todos los csv !
 
 ---------------------------------------------------------------------------------------------------------------------
 fecha de entrega: Lunes 13/11

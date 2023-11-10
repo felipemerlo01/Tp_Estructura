@@ -1,13 +1,29 @@
-from Clases.Cliente import Cliente
-from Clases.Empleado import Empleado
 from Clases.Funciones_extra import *
 from Clases.Reserva import Reserva
+from Clases.Hotel import Hotel 
+from Clases.Funciones_lectores import leer_Usuarios, leer_Habitaciones, leer_Reservas
+from Clases.Funciones_extra import *
+from datetime import datetime
 
-# Testear cosas por acá
-def actualizar_base_reservas(reserva):
-    info_reserva = f"{reserva.mail_usuario},{reserva.habitacion.numero},{reserva.check_in},{reserva.check_out}\n"
-    with open("D:\Downloads\Estructura de datos y programacion\TP\Tp_Estructura\Bases de datos\db_Reservas copy.csv","a",newline='') as archivo_reservas:
-        archivo_reservas.write(info_reserva)
+
+path='Tp_Estructura-1/Bases de datos/'
+POO = Hotel('Patagonia: Oasis y Ocio')
+leer_Habitaciones(path+'db_Habitaciones.csv', POO)
+leer_Reservas(path+'db_Reservas.csv', POO)
+leer_Usuarios(path+'db_Usuarios.csv', POO)
+
+POO.crear_informe_estadistico()
+
+
+'''
+MacBook-Air-de-Camilo:TP Grupo 5 camilobarbero$ python3 "/Users/camilobarbero/Documents/ITBA/2Q2023/Estructura de Datos y Programación/TP Grupo 5/Tp_Estructura-1/TESTEOS.py"
+Traceback (most recent call last):
+  File "/Users/camilobarbero/Documents/ITBA/2Q2023/Estructura de Datos y Programación/TP Grupo 5/Tp_Estructura-1/TESTEOS.py", line 1, in <module>
+    from Clases.Cliente import Cliente
+  File "/Users/camilobarbero/Documents/ITBA/2Q2023/Estructura de Datos y Programación/TP Grupo 5/Tp_Estructura-1/Clases/Cliente.py", line 1, in <module>
+    from Usuario import Usuario
+ModuleNotFoundError: No module named 'Usuario'
+'''
 
 
 

@@ -80,6 +80,14 @@ def verificar_contrasena(contrasena):
             
     return contrasena
 
+def validar_num(numero):
+    while (True):
+        try:
+            int(numero)
+            return numero
+        except:
+            numero = input('Por favor, ingrese un número: ')
+
 def validar_si_no(opcion):
     while (opcion not in ('Si', 'No')):
         opcion = input('Ingrese una opción valida (Si/No): ').capitalize()

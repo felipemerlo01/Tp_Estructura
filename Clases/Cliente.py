@@ -1,8 +1,7 @@
 from Usuario import Usuario
-from Empleado import Empleado
 from Reserva import Reserva
 from datetime import datetime
-from Funciones_extra import validar_fecha, validar_fecha_posteriori, validar_si_no, validar_capacidad_min, validar_precio, validar_opcion
+from Funciones_extra import validar_fecha, validar_fecha_posteriori, validar_si_no, validar_capacidad_min, validar_precio, validar_opcion, validar_num
 from queue import LifoQueue
     
 class Cliente(Usuario):
@@ -33,12 +32,11 @@ class Cliente(Usuario):
         if (criterio == "Si"):
             balcon = validar_si_no(input("¿Requiere  balcón? (Si/No): ").capitalize()) == "Si"
             criterios_elegidos['Balcon'] = balcon
-        
-        # ¡¡ NOTA !!: si quieren agregamos otro criterio
+    
         return criterios_elegidos
     
     # NUESTRO CHECK-IN 15:00, CHECK-OUT 11:00
-    def hacer_reserva(self, diccionario_habitaciones, lista_reservas, empleado: Empleado):
+    def hacer_reserva(self, Hotel):
         hoy = datetime.date.today().strftime("%d/%m/%Y")
         
         # 1) Pregunto al cliente fecha check-in, fecha check-out
@@ -48,11 +46,12 @@ class Cliente(Usuario):
         # 2) Pregunto criterios de interes
         criterios_elegidos = self.recolectar_criterios_interes()
         
-        # 3) ¡¡¡ Chequear disponibilidad y asignacion de cuarto lo hace el persoal administrativo !!
-        # El tema aca es a que empleado ???, el que tenga la menor cantidad de tareas en su queue?
-        # el primero de personal administrativo que encuentre cuando recorra la base?
+        # 3) Busco al empleado administrativo menos ocupado
+        admin = Hotel.buscar_empleado(1)
+        empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Administrativo')
         
-        habitacion = empleado.disponibilidad_habitacion(diccionario_habitaciones, lista_reservas, check_in, check_out, criterios_elegidos)
+        # 4) ¡¡¡ Chequear disponibilidad y asignacion de cuarto lo hace el personal administrativo !!
+        habitacion = empleado.disponibilidad_habitacion(Hotel.habitaciones, Hotel.reservas, check_in, check_out, criterios_elegidos)
         
         if (habitacion == None):
             print('No hay habitaciones disponibles en las fechas y criterios especificados')
@@ -61,67 +60,65 @@ class Cliente(Usuario):
             print(f"Reserva realizada para la habitacion {habitacion.numero} del {check_in} al {check_out}")
             
             # Agregarlo a la lista de reservas del hotel reservas
-            lista_reservas.append(nueva_reserva)
-            
-            # ¡¡¡ IMPORTANTE !!! Agregar a base de datos?
-            # Metodo de HOTEL escribir a base csv Reservas
+            Hotel.reservas.append(nueva_reserva)
             
             # Agregar reserva a la lista reservas del cliente
             self.reservas.append(nueva_reserva)
-
-    def ver_reservas_activas(self):
-        for reserva in self.reservas:
-            fecha_in = datetime.strptime(reserva.check_in, "%d/%m/%Y")
-            fecha_out = datetime.strptime(reserva.check_out, "%d/%m/%Y")
-            if (fecha_in <= datetime.date.today() <= fecha_out):
-                print(f"Reserva de habitación {reserva.habitacion.numero} del {reserva.check_in} al {reserva.check_out}\n"
-                      f"Gastos en el buffet: ${reserva.gastos_buffet}\n"
-                      f"Gastos en el minibar: ${reserva.gastos_minibar}\n"
-                      f"Costo total de la reserva: ${reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}")
-                print()
     
-    def ir_al_buffet(self, reserva, Hotel):
-        opciones_comida = {
-        'Desayuno': {'Huevos con tostadas': 900, 'Sandwhich': 1200, 'Cereales': 600},
-        'Bebida': {'Agua': 600, 'Jugo': 700, 'Café': 800},
-        'Refrigerio': {'Barrita': 300, 'Fruta': 300, 'Yogur': 500, 'Galleta': 400}}
+    def ir_al_buffet(self, Hotel):
+        reservas_activas = self.buscar_reservas_activas()
+        if (len(reservas_activas) > 0):
+            reserva = self.elegir_habitacion_activa(reservas_activas)
+            
+            opciones_comida = {
+            'Desayuno': {'Huevos con tostadas': 900, 'Sandwhich': 1200, 'Cereales': 600},
+            'Bebida': {'Agua': 600, 'Jugo': 700, 'Café': 800},
+            'Refrigerio': {'Barrita': 300, 'Fruta': 300, 'Yogur': 500, 'Galleta': 400}}
 
-        # 1) Crear pila con elecciones de buffet: tiene que elegir un desayuno, bebida, refrigerio en orden
-        elecciones_comida = LifoQueue()
-        
-        for categoria, opciones in opciones_comida.items():
-            preferencia = validar_opcion(input(f'Eliga una opcion de {categoria.lower()}: ').capitalize(), opciones)
-            eleccion = (preferencia, opciones[preferencia])
-            elecciones_comida.put(eleccion)
-        
-        # Le muestro su orden
-        orden = ', '.join([f'{elemento[0]} (${elemento[1]})' for elemento in tuple(elecciones_comida)])
-        print(f'Su orden de: {orden} fue efectuada correctamente')
-        
-        # Cobro la orden desde lo ultimo que agarro
-        gastos = 0
-        while (not elecciones_comida.empty()):
-            precio = elecciones_comida.get()
-            gastos += precio
-        
-        reserva.gastos_buffet += gastos
-        
-        # 2) asigno un empleado random de limpieza que haga limpieza en el buffet
-        admin = Hotel.obtener_admin()
-        empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Limpieza')
-        empleado.agregar_tarea_automatica(reserva.habitacion.numero, True)
+            # 1) Crear pila con elecciones de buffet: tiene que elegir un desayuno, bebida, refrigerio en orden
+            elecciones_comida = LifoQueue()
+            
+            for categoria, opciones in opciones_comida.items():
+                preferencia = validar_opcion(input(f'Eliga una opcion de {categoria.lower()}: ').capitalize(), opciones)
+                eleccion = (preferencia, opciones[preferencia])
+                elecciones_comida.put(eleccion)
+            
+            # Le muestro su orden
+            orden = ', '.join([f'{elemento[0]} (${elemento[1]})' for elemento in tuple(elecciones_comida)])
+            print(f'Su orden de: {orden} fue efectuada correctamente')
+            
+            # Cobro la orden desde lo ultimo que agarro
+            gastos = 0
+            while (not elecciones_comida.empty()):
+                precio = elecciones_comida.get()
+                gastos += precio
+            
+            reserva.gastos_buffet += gastos
+            
+            # 2) asigno un empleado random de limpieza que haga limpieza en el buffet
+            admin = Hotel.buscar_empleado(1)
+            empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Limpieza')
+            empleado.agregar_tarea_automatica(reserva.habitacion.numero, True)
+        else:
+            print('No esta permitido ir al buffet ya que no está hospedado en el hotel actualmente')
 
-    def usar_el_minibar(self, reserva, Hotel):
-        opciones_minibar = {'Coca-cola': 1000, 'Agua': 900, 'Alcohol': 2500, 'Snack': 300}
-        
-        preferencia = validar_opcion(input(f'Eliga una de las opciones del minibar: '), opciones_minibar.keys())
-        
-        reserva.gastos_minibar += opciones_minibar[preferencia]
-        
-        # 2) asigno un empleado random de mantenimiento que reponga el minibar
-        admin = Hotel.obtener_admin()
-        empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Mantenimiento')
-        empleado.agregar_tarea_automatica(reserva.habitacion.numero)
+    def usar_el_minibar(self, Hotel):
+        reservas_activas = self.buscar_reservas_activas()
+        if (len(reservas_activas) > 0):
+            reserva = self.elegir_habitacion_activa(reservas_activas)
+            
+            opciones_minibar = {'Coca-cola': 1000, 'Agua': 900, 'Alcohol': 2500, 'Snack': 300}
+            
+            preferencia = validar_opcion(input(f'Eliga una de las opciones del minibar: '), opciones_minibar.keys())
+            
+            reserva.gastos_minibar += opciones_minibar[preferencia]
+            
+            # 2) asigno un empleado de mantenimiento poco ocupado que reponga el minibar
+            admin = Hotel.buscar_empleado(1)
+            empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Mantenimiento')
+            empleado.agregar_tarea_automatica(reserva.habitacion.numero)
+        else:
+            print('No esta permitido usar el minibar ya que no está hospedado en el hotel actualmente')
     
     def actualizar_gastado(self):
         self.gastado = 0
@@ -130,7 +127,37 @@ class Cliente(Usuario):
             check_out_dt = datetime.strptime(reserva.check_out + ' 11:00', "%d/%m/%Y %H:%M")
             if (check_out_dt <= hoy):
                 self.gastado += reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
+                
+    def buscar_reservas_activas(self):
+        reservas_activas = []
+        for reserva in self.reservas:
+            fecha_in = datetime.strptime(reserva.check_in, "%d/%m/%Y")
+            fecha_out = datetime.strptime(reserva.check_out, "%d/%m/%Y")
+            if (fecha_in <= datetime.date.today() <= fecha_out):
+                reservas_activas.append(reserva)
+        return reservas_activas
+    
+    def ver_reservas_activas(self):
+        reservas_activas = self.buscar_reservas_activas()
+        
+        for reserva in reservas_activas:
+            print(f"Reserva de habitación {reserva.habitacion.numero} del {reserva.check_in} al {reserva.check_out}\n"
+                  f"Gastos en el buffet: ${reserva.gastos_buffet}\n"
+                  f"Gastos en el minibar: ${reserva.gastos_minibar}\n"
+                  f"Costo total de la reserva: ${reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}")
+            print()
             
-    #hay que crear una tipo de categoria dependiendo del gasto del cliente pero puede que convenga hacer 
-    def tipo_cliente(self):
-        pass
+    def elegir_habitacion_activa(self, reservas_activas):
+        if (len(reservas_activas) > 1):
+            habitaciones = []
+            print(f'Usted tiene {len(reservas_activas)} reservas activas:')
+            for reserva in reservas_activas:
+                num = reserva.habitacion.numero
+                habitaciones.append(num)
+                print(f'Habitación: {num}')
+            habitacion = int(validar_opcion(validar_num(input('Ingrese el numero de habitación para asociar el gasto: ')), habitaciones))
+            for reserva in reservas_activas:
+                if (reserva.habitacion.numero == habitacion):
+                    return reserva
+        else:
+            return reservas_activas[0]

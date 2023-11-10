@@ -2,6 +2,7 @@ from Cliente import Cliente
 from Empleado import Empleado
 from Funciones_extra import verificar_fecha_de_nacimiento, validar_fecha, verificar_dni, verificar_sexo, verificar_mail, verificar_contrasena
 from datetime import datetime
+import csv
 
 class Hotel:
     def __init__(self, nombre):
@@ -26,18 +27,17 @@ class Hotel:
         contrasena = verificar_contrasena(input("Ingrese una nueva contraseña. Debe contener al menos 8 caracteres, con un mínimo de 2 mayúsculas y 2 numeros: "))
         
         if (opcion == '1'):
-            nuevo_cliente = Cliente(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena)
-            self.usuarios[nuevo_cliente.mail] = nuevo_cliente
-            print(f'Se ha creado el usuario de {nuevo_cliente.nombre} {nuevo_cliente.apellido} correctamente')
-            return nuevo_cliente
+            nuevo_usuario = Cliente(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena)
+            self.usuarios[nuevo_usuario.mail] = nuevo_usuario
+        
         elif (opcion == '2'):
             rol = self.verificar_rol(input("Ingrese su rol: "))
             legajo = self.crear_legajo
             
-            nuevo_empleado = Empleado(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena, int(legajo), rol)
-            self.usuarios[nuevo_empleado.mail] = nuevo_empleado
-            print(f'Se ha creado el usuario de {nuevo_empleado.nombre} {nuevo_empleado.apellido} correctamente')
-            return nuevo_empleado
+            nuevo_usuario = Empleado(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena, int(legajo), rol)
+            self.usuarios[nuevo_usuario.mail] = nuevo_usuario
+        
+        print(f'Se ha creado el usuario de {nuevo_usuario.nombre} {nuevo_usuario.apellido} correctamente')
     
     # verificar si el mail ya existe
     def verificar_mail_existente(self, mail: str):
@@ -71,19 +71,26 @@ class Hotel:
                             contrasena = input('Contraseña incorrecta. Ingrese nuevamente: ')
                     return self.usuarios[mail]
     
+    # Iniciar sesion
     def iniciar_sesion(self):
         mail = verificar_mail(input('Ingrese su mail: '))
         contrasena = input('Ingrese su contraseña: ')
         
         return self.validar_inicio_sesion(mail, contrasena)
     
-    def obtener_admin(self):
+    # Buscar un empleado en la base por su legajo, si no lo encuentra no se lo vuelve a pedir
+    def buscar_empleado(self, legajo):
         for usuario in self.usuarios.values():
-            if (hasattr(usuario, 'legajo') and usuario.legajo == 1):
+            if (hasattr(usuario, 'legajo') and usuario.legajo == legajo):
                 return usuario
+        return
     
     # Calcular porcentaje de ocupacion del hotel
     def procentaje_de_ocupacion(self):
+        # Antes que nada, hay que actualizar el atributo ocupada de las habitaciones
+        self.actualizar_estado_habitaciones()
+        
+        # Ahora, ya si hago lo otro
         capacidad_total = len(self.habitaciones)
         capacidad_ocupada = 0
         for habitacion in self.habitaciones.values():
@@ -92,7 +99,12 @@ class Hotel:
         porcentaje_ocupacion=round((capacidad_ocupada/capacidad_total)*100,2)
         return porcentaje_ocupacion
 
+    # Calcular porcentaje de ocupacion del hotel por tipo de habitacion ("Simple", "Doble", "Familiar", "Suite")
     def procentaje_de_ocupacion_por_tipo_de_habitación(self):
+        # Antes que nada, hay que actualizar el atributo ocupada de las habitaciones
+        self.actualizar_estado_habitaciones()
+        
+        # Ahora, ya si hago lo otro
         tipos = ("Simple", "Doble", "Familiar", "Suite")
         procentaje_ocupacion_por_tipo=[]
         for tipo in tipos:
@@ -107,27 +119,40 @@ class Hotel:
             procentaje_ocupacion_por_tipo.append(procentaje_ocupacion_del_tipo)
         return procentaje_ocupacion_por_tipo
     
-    def calcular_ganacia_del_dia(self):
+    # Calculo de recaudacion diaria del hotel
+    def recaudacion_diaria(self):
         ingreso_del_dia = 0
+        hoy = datetime.date.today()
         for reserva in self.reservas:
-            if reserva.check_out == datetime.today():
+            check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
+            if (check_out_dt == hoy):
                 ingreso_del_dia += (reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar)
         return ingreso_del_dia
     
-    def cantidad_de_clientes_por_tipo(self):
-        topes_de_categoria = {'1':250000,'2':600000}
-        Cant_clientes_por_cat=[0,0,0]
-        for reserva in self.reservas:
-            gastos= reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
-            if reserva.check_out >= datetime.today():
-                if gastos <= topes_de_categoria['1']:
-                    Cant_clientes_por_cat[0]+=1
-                elif topes_de_categoria['1'] < gastos <= topes_de_categoria['2']:
-                    Cant_clientes_por_cat[1]+=1
-                elif topes_de_categoria['2'] < gastos:
-                    Cant_clientes_por_cat[2]+=1
-        return topes_de_categoria,Cant_clientes_por_cat
+    # Cantidad de clientes por tipo
+    # def cantidad_de_clientes_por_tipo(self):
+    #     topes_de_categoria = {'1':250000,'2':600000}
+    #     Cant_clientes_por_cat=[0,0,0]
+    #     for reserva in self.reservas:
+    #         gastos= reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
+    #         if reserva.check_out >= datetime.today():
+    #             if gastos <= topes_de_categoria['1']:
+    #                 Cant_clientes_por_cat[0]+=1
+    #             elif topes_de_categoria['1'] < gastos <= topes_de_categoria['2']:
+    #                 Cant_clientes_por_cat[1]+=1
+    #             elif topes_de_categoria['2'] < gastos:
+    #                 Cant_clientes_por_cat[2]+=1
+    #     return topes_de_categoria,Cant_clientes_por_cat
     
+    # Cantidad de clientes por tipo (NEW !!)
+    def cantidad_de_clientes_por_tipo(self):
+        # Antes que nada, hay que actualizar el atributo gastado de los clientes
+        self.actualizar_gasto_clientes()
+        
+        # Ahora, ya si hago lo otro
+        # FALTA !
+        pass
+        
     def crear_informe_estadístico(self):
         fecha=datetime.today()
         procentaje_ocupacion = self.procentaje_de_ocupacion() 
@@ -136,7 +161,7 @@ class Hotel:
         cantidad_de_clientes_por_tipo= self.cantidad_de_clientes_por_tipo()
 
         with open('Informe_estadístico.txt','w') as informe:
-            informe.write(f"\t\t\t\tInforme estadístico del Hotel \n Fecha: \t{fecha}")
+            informe.write(f"\t\t\t\tInforme estadístico del Hotel \n Fecha: \t{fecha}\n")
             informe.write(f"Porcentaje de ocupación general: \t{procentaje_ocupacion}% \n")
             informe.write(f"Porcentajes De ocupación por tipo de habitación: \n")
             informe.write(f"\t\tSimple: {porcentajes_parciales_de_ocupacion[0]}% \n")
@@ -148,31 +173,7 @@ class Hotel:
             informe.write(f"\t\t Clase 1 (inversión menor a {cantidad_de_clientes_por_tipo[0]['1']}): {cantidad_de_clientes_por_tipo[1][0]} \n")
             informe.write(f"\t\t Clase 2 (inversión entre {cantidad_de_clientes_por_tipo[0]['1']}) y {cantidad_de_clientes_por_tipo[0]['2']}: {cantidad_de_clientes_por_tipo[1][1]} \n")
             informe.write(f"\t\t Clase 1 (inversión mayor a {cantidad_de_clientes_por_tipo[0]['2']}): {cantidad_de_clientes_por_tipo[1][2]} \n")
-            
-        
-
-    # Buscar un empleado en la base por su nombre y apellido, si no lo encuentra no se lo vuelve a pedir
-    def buscar_empleado(self, nombre, apellido):
-        for usuario in self.usuarios:
-            if (hasattr(usuario, 'legajo') and nombre == usuario.nombre and apellido == usuario.apellido):
-                return usuario
-        return
-
-    # Actualizo el CSV de reservas con una nueva linea con la nueva reserva
-    def actualizar_base_reservas(self, reserva, path):
-        info_reserva = f"{reserva.mail_usuario},{reserva.habitacion.numero},{reserva.check_in},{reserva.check_out},{reserva.fecha_reserva},{reserva.gastos_ocupacion},{reserva.gastos_buffet},{reserva.gastos_minibar}\n"
-        with open(path,"a",newline='') as archivo_reservas:
-            archivo_reservas.write(info_reserva)
-
-    # Actualizo el CSV de usuarios con una nueva linea con el nuevo usuario
-    def actualizar_base_usuarios(self, usuario, path):
-        if (hasattr(usuario, 'legajo')):
-            info_usuarios = f"{usuario.nombre},{usuario.apellido},{usuario.fecha_de_nacimiento},{usuario.sexo},{usuario.dni},{usuario.mail},{usuario.contrasena},{usuario.legajo},{usuario.rol},{usuario.estado},{usuario.tareas}\n"
-        else:
-            info_usuarios = f"{usuario.nombre},{usuario.apellido},{usuario.fecha_de_nacimiento},{usuario.sexo},{usuario.dni},{usuario.mail},{usuario.contrasena}\n"
-        with open(path,"a",newline='') as archivo_usuarios:
-            archivo_usuarios.write(info_usuarios)
-
+    
     def actualizar_estado_habitaciones(self):
         for habitacion in self.habitaciones.values():
             habitacion.actualizar_estado_ocupacion(self.reservas)
@@ -182,13 +183,68 @@ class Hotel:
             #Entra solo si es cliente, que no tiene el atributo legajo
             if (not hasattr(usuario, 'legajo')):
                 usuario.actualizar_gastado()
-    
-    def actualizar_datos_totales(self):
-        #Ejecuta todos los metodos de actualizaciones
-        self.actualizar_estado_habitaciones()
-        self.actualizar_gasto_clientes()
-        
-    
+
+######################### ACTUALIZACION DE BASES DE DATOS
+
+    # Actualizar todas las bases
+    def actualizar_bases_de_datos(self, path):
+        try:
+            self.actualizar_base_reservas(path+'db_Reservas.csv')
+            self.actualizar_base_usuarios(path+'db_Usuarios.csv')
+            print('Se guardo la información correctamente')
+        except:
+            print('Ha habido un error en el guardado.')
             
+    # Metodo actualizar base usuarios
+    def actualizar_base_usuarios(self, path):
+        columnas = ('Nombre','Apellido','Fecha de nacimiento','Sexo','DNI','Mail','Contrasenia','Legajo','Rol','Estado','Tareas')
+        with open(path, 'w', newline='') as csv_usuarios:
+            csv_writer = csv.writer(csv_usuarios)
+            csv_writer.writerow(columnas)
+            
+            for usuario in self.usuarios.values():
+                if (isinstance(usuario, Cliente)):
+                    fila = (usuario.nombre, usuario.apellido, usuario.fecha_de_nacimiento, usuario.sexo, str(usuario.dni), usuario.mail, usuario.contrasena, '', 'Cliente', '', '')
+                elif (isinstance(usuario, Empleado)):
+                    tareas = list(usuario.tareas.queue) if usuario.tareas else []
+                    tareas_string = ', '.join(tareas) if tareas else ''
+                    fila = (usuario.nombre, usuario.apellido, usuario.fecha_de_nacimiento, usuario.sexo, str(usuario.dni), usuario.mail, usuario.contrasena, str(usuario.legajo), usuario.rol, usuario.estado, tareas_string)
+                else:
+                    fila = (usuario.nombre, usuario.apellido, usuario.fecha_de_nacimiento, usuario.sexo, str(usuario.dni), usuario.mail, usuario.contrasena, str(usuario.legajo), 'admin', '', '')
+                csv_writer.writerow(fila)
+        
+    # Metodo actualizar base reservas
+    def actualizar_base_reservas(self, path):
+        columnas = ('Mail','Numero de habitacion','Check-in','Check-out','Fecha reserva','Gastos buffet','Gastos minibar')
+        with open(path, 'w', newline='') as csv_reservas:
+            csv_writer = csv.writer(csv_reservas)
+            csv_writer.writerow(columnas)
+            
+            for reserva in self.reservas:
+                fila = (reserva.mail_usuario, str(reserva.habitacion), reserva.check_in, reserva.check_out, reserva.fecha_reserva, str(reserva.gastos_buffet), str(reserva.gastos_minibar))
+                csv_writer.writerow(fila)
+        
+
+    # # Actualizo el CSV de reservas con una nueva linea con la nueva reserva
+    # def actualizar_base_reservas(self, reserva, path):
+    #     info_reserva = f"{reserva.mail_usuario},{reserva.habitacion.numero},{reserva.check_in},{reserva.check_out},{reserva.fecha_reserva},{reserva.gastos_ocupacion},{reserva.gastos_buffet},{reserva.gastos_minibar}\n"
+    #     with open(path,"a",newline='') as archivo_reservas:
+    #         archivo_reservas.write(info_reserva)
+
+    # # Actualizo el CSV de usuarios con una nueva linea con el nuevo usuario
+    # def actualizar_base_usuarios(self, usuario, path):
+    #     if (hasattr(usuario, 'legajo')):
+    #         info_usuarios = f"{usuario.nombre},{usuario.apellido},{usuario.fecha_de_nacimiento},{usuario.sexo},{usuario.dni},{usuario.mail},{usuario.contrasena},{usuario.legajo},{usuario.rol},{usuario.estado},{usuario.tareas}\n"
+    #     else:
+    #         info_usuarios = f"{usuario.nombre},{usuario.apellido},{usuario.fecha_de_nacimiento},{usuario.sexo},{usuario.dni},{usuario.mail},{usuario.contrasena}\n"
+    #     with open(path,"a",newline='') as archivo_usuarios:
+    #         archivo_usuarios.write(info_usuarios)
+    
+    # # Al dar de baja un empleado hay que modificar su estado en el csv        
+    # def modificar_estado_empleado_csv(self, path, empleado):
+    #     base = pd.read_csv(path)
+    #     base.loc[base['Legajo'] == empleado.legajo,'Estado'] = 'Inactivo'
+    #     base.to_csv(path, index=False)
+    #     return
 
     

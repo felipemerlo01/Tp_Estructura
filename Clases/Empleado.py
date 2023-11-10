@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from queue import Queue
 from Usuario import Usuario
+from random import randint
+from Funciones_extra import verificar_mail
 
 class Empleado(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str, legajo: int, rol: str, estado = 'Activo'):
@@ -11,6 +13,7 @@ class Empleado(Usuario):
         self.registro_ingresos = []  # Lista para registrar los ingresos del empleado
         self.registro_egresos = []  # Lista para registrar los egresos del empleado
         self.tareas = Queue()  # Usar una cola para almacenar las tareas asignadas
+        # self.presente= None
 
     def disponibilidad_habitacion(diccionario_habitaciones, lista_reservas, check_in, check_out, criterios):
         # creo un diccionario con sets de las fechas en las que esta ocupada la habitacion
@@ -74,28 +77,42 @@ class Empleado(Usuario):
                 num += 1
         else:
             print("Enhorabuena! Usted no tiene tareas pendientes.")
-            
+    
+    # Buscar todas las reservas hechas por un cliente, al cual buscas por su mail
+    def historial_de_reservas(self):
+        mail_cliente = verificar_mail(input("Ingrese el mail del cliente: "))
+        if mail_cliente in self.usuarios:
+            if len(self.usuarios[mail_cliente].reservas) > 0:
+                print("Se listan las siguientes Reservas: ")
+                for reserva in self.usuarios[mail_cliente].reservas:
+                    print(f'Fecha reserva: {reserva.fecha_reserva}\n Número de Habitación: {reserva.habitacion.numero}  \n Check-in: {reserva.check_in}\n Check-out: {reserva.check_out}\n Gastos Total: {reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}  \n\n')
+            else:
+                print("El cliente seleccionado no tiene reservas registradas")
+        else:
+            print('No existe el cliente en el sistema.')
 
+    # METODO NOMINA DE CLIENTES DEL HOTEL (clientes actualmente hospedados en el hotel)
+    # 1. recorrer lista de reservas del hotel --> buscar las reservas activas al dia de hoy
+    # 2. agarrar los mails de usuario de esas reservas, guardar en una lista
+    # 3. iterar por hotel.usuarios y agarrar a los usuarios que tengan algguno de estos mails
+    # 4. imprimir la informacion de cada uno de esos usuarios (nombre, apellido, mail)
+    
+    # El empleado hace el ingreso manualmente
+    def registro_ingreso(self):
+        #se hace el ingreso de forma automática entre las 8-9 am 
+        hora_ingresada = (datetime.strptime("08:00", "%H:%M") + timedelta(minutes=randint(0,59))).strftime("%H:%M")
+        hoy = datetime.date.today().strftime('%d/%m/%Y')
+       
+        ingreso = (hoy, hora_ingresada)
+        self.registro_ingresos.append(ingreso)
 
-
-# # Al empleado se le va a asignar automaticamnete un turno y en base a ese turno debería aparece cuales son las
-# # horas de ingreso y egreso 
-
-#     '''def registro_ingreso(self):
-#         # Registrar la fecha y hora actual de ingreso
-#         fecha_actual = datetime.now()
-#         ingreso = {
-#             'fecha': fecha_actual.strftime('%Y-%m-%d'),
-#             'hora': fecha_actual.strftime('%H:%M')}
-#         self.registro_ingresos.append(ingreso)
-
-#     def registro_egreso(self):
-#         # Registrar la fecha y hora actual de egreso
-#         fecha_actual = datetime.now()
-#         egreso = {
-#             'fecha': fecha_actual.strftime('%Y-%m-%d'),
-#             'hora': fecha_actual.strftime('%H:%M')}
-#         self.registro_egresos.append(egreso)'''
+    # El empleado hace el egreso manualmente
+    def registro_egreso(self):
+        hora_egreso = (datetime.strptime("20:00", "%H:%M") + timedelta(minutes=randint(0,59))).strftime("%H:%M")
+        hoy = datetime.date.today().strftime('%d/%m/%Y')
+        
+        egreso = (hoy, hora_egreso)
+        self.registro_egresos.append(egreso)
 
 
 # #estos metodos puede llegar a quedar pero en realidad se hacen automáticamnte     
