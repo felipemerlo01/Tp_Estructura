@@ -72,10 +72,10 @@ while (continuar):
                     while (not volver):
                         menu_Mant_Limp()
                         opcion_mant_limp = validar_opcion_menu(input("Ingrese una opción: "), 3)
-                        if (opcion_mant_limp == '1'):
-                            usuario.realizar_siguiente_tarea()
-                        elif (opcion_mant_limp == '2'):
+                        if (opcion_mant_limp == '1'): # Visualización de las tareas pendientes
                             usuario.visualizar_tareas_pendientes()
+                        elif (opcion_mant_limp == '2'): # Realizar tarea pendiente
+                            usuario.realizar_siguiente_tarea()
                         else:
                             volver = True
         else: # Menu para clientes

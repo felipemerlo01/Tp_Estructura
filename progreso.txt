@@ -119,12 +119,9 @@ FALTA:
 FALTA:
 - Agregar en ir al buffet para que se visualice el menu de opciones de comida
 - Agregar en usar el minibar para que se visualice el menu de opciones del minibar
-- Al Programa.py falta agregar todo lo que es el submenu de informe estadistico
+- Al Programa.py falta agregar todo lo que es el submenu de informe estadistico COMPLETADO
 - Fijarse porque lo de actualizar el estado de la habitacion, a pesar de hacerse de forma automatica a todas las habitaciones
     podria ser un metodo del empleado que accede a info del hotel y la actualiza en vez de que sea un metodo del hotel (para mas realismo)
-- Corregir metodo de Cliente "buscar reservas activas":
-    - Esta cheqeuando que el rango de la reserva este en el dia de hoy pero hay que ver que si la reserva termina hoy y ya son pasadas las 11 no esta activa
-        - Agregar hora para solucionar eso
 - Administrador --> INVENTARIO DEL PERSONAL (por tipo)
     - Los nombres por tipo o la cantidad de empleados por tipo?
 - Personal Administrativo --> HISTORIAL DE RESERVAS (falta metodo creo)
@@ -145,6 +142,9 @@ ARREGLAR:
 - Hotel > cantidad_de_clientes_por_tipo: Estas tomando como que cada reserva es un cliente y esta mal. 
     tenes que usar el atributo cliente.gastado para categorizar a los clientes
     - Habria que recorrer usuarios y segun su usuario.gastado categorizar
+- Corregir metodo de Cliente "buscar reservas activas":
+    - Esta cheqeuando que el rango de la reserva este en el dia de hoy pero hay que ver que si la reserva termina hoy y ya son pasadas las 11 no esta activa
+        - Agregar hora para solucionar eso
 
 
 COMENTARIO CAMILO (actualizar bases):
