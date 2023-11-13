@@ -1,7 +1,7 @@
 from Cliente import Cliente
 from Empleado import Empleado
 from Funciones_extra import verificar_fecha_de_nacimiento, validar_fecha, verificar_dni, verificar_sexo, verificar_mail, verificar_contrasena
-from datetime import datetime
+from datetime import datetime, date
 import csv
 
 class Hotel:
@@ -115,12 +115,8 @@ class Hotel:
                     capacidad_parcial += 1
                     if habitacion.ocupada == True:
                         ocupacion_del_tipo += 1
-            if ocupacion_del_tipo != 0:
-                procentaje_ocupacion_del_tipo=round((capacidad_parcial/ocupacion_del_tipo)*100,2)
-                procentaje_ocupacion_por_tipo.append(procentaje_ocupacion_del_tipo)
-            else: 
-                ocupacion_del_tipo=0
-                procentaje_ocupacion_por_tipo.append(procentaje_ocupacion_del_tipo)
+            procentaje_ocupacion_del_tipo=round((ocupacion_del_tipo/capacidad_parcial)*100,2)
+            procentaje_ocupacion_por_tipo.append(procentaje_ocupacion_del_tipo)
         return procentaje_ocupacion_por_tipo
     
     # Calculo de recaudacion diaria del hotel
@@ -151,46 +147,45 @@ class Hotel:
     # Cantidad de clientes por tipo (NEW !!)
 
     def cantidad_de_clientes_por_tipo(self):
-        # Antes que nada, hay que actualizar el atributo gastado de los clientes
         self.actualizar_gasto_clientes()
+        self.actualizar_estado_habitaciones()
         topes_de_categoria = {'1':250000,'2':600000}
         Cant_clientes_por_cat=[0,0,0]
         hoy=datetime.today()
         for reserva in self.reservas:
-            gastos= reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
-            print(type(reserva.check_out))
-            check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
-            if check_out_dt >= hoy:
-                if gastos <= topes_de_categoria['1']:
-                    Cant_clientes_por_cat[0]+=1
-                elif topes_de_categoria['1'] < gastos <= topes_de_categoria['2']:
-                    Cant_clientes_por_cat[1]+=1
-                elif topes_de_categoria['2'] < gastos:
-                    Cant_clientes_por_cat[2]+=1
-        return topes_de_categoria,Cant_clientes_por_cat
-        # FALTA !
+            if reserva.habitacion.ocupada == True:
+                gastos= reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
+                check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
+                if check_out_dt >= hoy:
+                    if gastos <= topes_de_categoria['1']:
+                        Cant_clientes_por_cat[0]+=1
+                    elif topes_de_categoria['1'] < gastos <= topes_de_categoria['2']:
+                        Cant_clientes_por_cat[1]+=1
+                    elif topes_de_categoria['2'] < gastos:
+                        Cant_clientes_por_cat[2]+=1
+            return topes_de_categoria,Cant_clientes_por_cat
         pass
         
     def crear_informe_estadistico(self):
-        fecha=datetime.today()
+        fecha=date.today()
         procentaje_ocupacion = self.procentaje_de_ocupacion() 
         porcentajes_parciales_de_ocupacion = self.procentaje_de_ocupacion_por_tipo_de_habitación()
         ganancia_del_dia= self.recaudacion_diaria()
         cantidad_de_clientes_por_tipo= self.cantidad_de_clientes_por_tipo()
 
         with open('Informe_estadístico.txt','w') as informe:
-            informe.write(f"\t\t\t\tInforme estadístico del Hotel \n Fecha: \t{fecha}\n")
-            informe.write(f"Porcentaje de ocupación general: \t{procentaje_ocupacion}% \n")
-            informe.write(f"Porcentajes De ocupación por tipo de habitación: \n")
+            informe.write(f"\t\t\t\tInforme estadistico del Hotel \n\n Fecha: \t{fecha}\n\n\n\n")
+            informe.write(f"Porcentaje de ocupacion general: \t{procentaje_ocupacion}% \n\n")
+            informe.write(f"Porcentajes De ocupacion por tipo de habitacion: \n")
             informe.write(f"\t\tSimple: {porcentajes_parciales_de_ocupacion[0]}% \n")
             informe.write(f"\t\tDoble: {porcentajes_parciales_de_ocupacion[1]}% \n")
             informe.write(f"\t\tFamiliar: {porcentajes_parciales_de_ocupacion[2]}% \n")
-            informe.write(f"\t\tSuite: {porcentajes_parciales_de_ocupacion[3]}% \n")
-            informe.write(f"Ganancia del día: {ganancia_del_dia} \n")
-            informe.write(f"Cantidad de Clientes, clasificados por nivel de inversión:\n")
-            informe.write(f"\t\t Clase 1 (inversión menor a {cantidad_de_clientes_por_tipo[0]['1']}): {cantidad_de_clientes_por_tipo[1][0]} \n")
-            informe.write(f"\t\t Clase 2 (inversión entre {cantidad_de_clientes_por_tipo[0]['1']}) y {cantidad_de_clientes_por_tipo[0]['2']}: {cantidad_de_clientes_por_tipo[1][1]} \n")
-            informe.write(f"\t\t Clase 1 (inversión mayor a {cantidad_de_clientes_por_tipo[0]['2']}): {cantidad_de_clientes_por_tipo[1][2]} \n")
+            informe.write(f"\t\tSuite: {porcentajes_parciales_de_ocupacion[3]}% \n\n\n")
+            informe.write(f"Ganancia del dia: {ganancia_del_dia} \n\n")
+            informe.write(f"Cantidad de Clientes, clasificados por nivel de inversion:\n")
+            informe.write(f"\t\t Clase 1 (inversion menor a {cantidad_de_clientes_por_tipo[0]['1']}): {cantidad_de_clientes_por_tipo[1][0]} \n")
+            informe.write(f"\t\t Clase 2 (inversion entre {cantidad_de_clientes_por_tipo[0]['1']}) y {cantidad_de_clientes_por_tipo[0]['2']}): {cantidad_de_clientes_por_tipo[1][1]} \n")
+            informe.write(f"\t\t Clase 1 (inversion mayor a {cantidad_de_clientes_por_tipo[0]['2']}): {cantidad_de_clientes_por_tipo[1][2]} \n")
     
     def actualizar_estado_habitaciones(self):
         for habitacion in self.habitaciones.values():

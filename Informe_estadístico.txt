@@ -1,13 +1,21 @@
-				Informe estadístico del Hotel 
- Fecha: 	2023-11-13 11:11:19.110489
-Porcentaje de ocupación general: 	4.44% 
-Porcentajes De ocupación por tipo de habitación: 
-		Simple: 1500.0% 
-		Doble: 1500.0% 
-		Familiar: 1200.0% 
-		Suite: 1200.0% 
-Ganancia del día: 0 
-Cantidad de Clientes, clasificados por nivel de inversión:
-		 Clase 1 (inversión menor a 250000): 10 
-		 Clase 2 (inversión entre 250000) y 600000: 9 
-		 Clase 1 (inversión mayor a 600000): 10 
+				Informe estadistico del Hotel 
+
+ Fecha: 	2023-11-13
+
+
+
+Porcentaje de ocupacion general: 	4.44% 
+
+Porcentajes De ocupacion por tipo de habitacion: 
+		Simple: 6.67% 
+		Doble: 0.0% 
+		Familiar: 8.33% 
+		Suite: 0.0% 
+
+
+Ganancia del dia: 0 
+
+Cantidad de Clientes, clasificados por nivel de inversion:
+		 Clase 1 (inversion menor a 250000): 0 
+		 Clase 2 (inversion entre 250000) y 600000): 0 
+		 Clase 1 (inversion mayor a 600000): 0 
