@@ -36,7 +36,7 @@ while (continuar):
                     elif opcion_admin == '4': # Control de ingreso y egreso
                         pass
                     elif opcion_admin == '5': # Ver inventario del personal
-                        pass
+                        usuario.ver_inventario_personal
                     elif opcion_admin == '6': # Recaudacion diaria
                         pass
                     else:

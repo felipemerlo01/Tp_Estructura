@@ -57,10 +57,32 @@ class Administrador(Usuario):
     
     
     # METODO DE CONTROL DE INGRESO y EGRESO
-    
+    # Ni idea muy bien que pide tbh
+    def control_ingresos_egresos(self, hotel):
+        ingresos = []
+        egresos = []
+        for mail, usuario in hotel.usuarios.items():
+            if hasattr(usuario,"rol"):
+                ingreso = usuario.registrar_ingreso()
+                ingresos.append(ingreso)
+                egreso = usuario.registrar_egreso()
+                egresos.append(egreso)
 
     # METODO DE INVENTARIO DEL PERSONAL
-    
+    def ver_inventario_personal(self, hotel):
+        categorias = {}
+        #Primero agrupamos por rol
+        for mail, usuario in hotel.usuarios.items():
+            if hasattr(usuario,"rol"): # Solo entra si tiene el atributo rol, asi que no afecta a los clientes
+                if usuario.rol in categorias:
+                    categorias[usuario.rol].append(usuario)
+                else:
+                    categorias[usuario.rol] = [usuario]
+        #Printeamos la información
+        for rol, usuarios in categorias.items():
+            print(f"\nInventario del personal con rol {rol}:")
+            for usuario in usuarios:
+                print(f"Nombre: {usuario.nombre} {usuario.apellido}, Mail: {usuario.mail}, Estado: {usuario.estado}")
 
     
     

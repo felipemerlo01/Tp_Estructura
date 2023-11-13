@@ -12,7 +12,7 @@ leer_Usuarios(path+'db_Usuarios.csv', POO)
 leer_Habitaciones(path+'db_Habitaciones.csv', POO)
 leer_Reservas(path+'db_Reservas.csv', POO)
     
-POO.crear_informe_estadistico()
+POO.crear_informe_estadistico()   
 
 
 '''
