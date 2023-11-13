@@ -119,19 +119,20 @@ FALTA:
 FALTA:
 - Agregar en ir al buffet para que se visualice el menu de opciones de comida
 - Agregar en usar el minibar para que se visualice el menu de opciones del minibar
-- Al Programa.py falta agregar todo lo que es el submenu de informe estadistico COMPLETADO
 - Fijarse porque lo de actualizar el estado de la habitacion, a pesar de hacerse de forma automatica a todas las habitaciones
     podria ser un metodo del empleado que accede a info del hotel y la actualiza en vez de que sea un metodo del hotel (para mas realismo)
 - Administrador --> INVENTARIO DEL PERSONAL (por tipo)
     - Los nombres por tipo o la cantidad de empleados por tipo?
 - Personal Administrativo --> HISTORIAL DE RESERVAS (falta metodo creo)
 - Personal Adminsitrativo --> NOMINA DE CLIENTES DEL HOTEL (falta metodo creo)
+
+##ya está hecho esto??
 - Administrador --> VER TODO EL TEMA DE EGRESOS Y EGRESOS (que contesta bruno)
         - IDEA: que los ingresos y egresos sean automaticos para los empleados (osea no lo hacen manual desde el menu)
             pero usamos random la funcionn ?¿ para que difieran en el ingreso y egreso COMPLETADO
             para ingreso entre 8am y 9am un rango de aleatorio COMPLETADO
             para engreso entre 8pm y 9pm un rango de aleatorio COMPLETADO
-
+##
             Se tienen que crear un csv 
 
         - Cuando encaremos lo de ingresos y egresos hay que ver porque cande puso como atributo de los empleados una lista de ingreso y otra de egreso. 
@@ -139,9 +140,6 @@ FALTA:
                 - conviene tenerlo como atributo ? y si quiero que se actualice cada vez que se realice un random pero que ademas se guarden en la o objeto?
 
 ARREGLAR:
-- Hotel > cantidad_de_clientes_por_tipo: Estas tomando como que cada reserva es un cliente y esta mal. 
-    tenes que usar el atributo cliente.gastado para categorizar a los clientes
-    - Habria que recorrer usuarios y segun su usuario.gastado categorizar
 - Corregir metodo de Cliente "buscar reservas activas":
     - Esta cheqeuando que el rango de la reserva este en el dia de hoy pero hay que ver que si la reserva termina hoy y ya son pasadas las 11 no esta activa
         - Agregar hora para solucionar eso
