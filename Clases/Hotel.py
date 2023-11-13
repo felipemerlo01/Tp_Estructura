@@ -3,6 +3,7 @@ from Empleado import Empleado
 from Funciones_extra import verificar_fecha_de_nacimiento, validar_fecha, verificar_dni, verificar_sexo, verificar_mail, verificar_contrasena
 from datetime import datetime, date
 import csv
+import pandas as pd
 
 class Hotel:
     def __init__(self, nombre):
@@ -81,8 +82,9 @@ class Hotel:
     # Buscar un empleado en la base por su legajo, si no lo encuentra no se lo vuelve a pedir
     def buscar_empleado(self, legajo):
         for usuario in self.usuarios.values():
-            if (hasattr(usuario, 'legajo') and usuario.legajo == legajo):
-                return usuario
+            if hasattr(usuario, 'legajo'):  
+                if (usuario.legajo == legajo):
+                    return usuario
         return
     
     # Calcular porcentaje de ocupacion del hotel
@@ -212,7 +214,7 @@ class Hotel:
         columnas = ('Nombre','Apellido','Fecha de nacimiento','Sexo','DNI','Mail','Contrasenia','Legajo','Rol','Estado','Tareas')
         with open(path, 'w', newline='') as csv_usuarios:
             csv_writer = csv.writer(csv_usuarios)
-            csv_writer.writerow(columnas)
+            csv_writer.writerow(columnas)           
             
             for usuario in self.usuarios.values():
                 if (isinstance(usuario, Cliente)):
@@ -231,11 +233,17 @@ class Hotel:
         with open(path, 'w', newline='') as csv_reservas:
             csv_writer = csv.writer(csv_reservas)
             csv_writer.writerow(columnas)
-            
+
             for reserva in self.reservas:
                 fila = (reserva.mail_usuario, str(reserva.habitacion), reserva.check_in, reserva.check_out, reserva.fecha_reserva, str(reserva.gastos_buffet), str(reserva.gastos_minibar))
                 csv_writer.writerow(fila)
-        
+
+    # # Al dar de baja un empleado hay que modificar su estado en el csv        
+    # def modificar_estado_empleado_csv(self, path, empleado):
+    #     base = pd.read_csv(path)
+    #     base.loc[base['Legajo'] == empleado.legajo,'Estado'] = 'Inactivo'
+    #     base.to_csv(path, index=False)
+    #     return
 
     # # Actualizo el CSV de reservas con una nueva linea con la nueva reserva
     # def actualizar_base_reservas(self, reserva, path):
@@ -252,11 +260,5 @@ class Hotel:
     #     with open(path,"a",newline='') as archivo_usuarios:
     #         archivo_usuarios.write(info_usuarios)
     
-    # # Al dar de baja un empleado hay que modificar su estado en el csv        
-    # def modificar_estado_empleado_csv(self, path, empleado):
-    #     base = pd.read_csv(path)
-    #     base.loc[base['Legajo'] == empleado.legajo,'Estado'] = 'Inactivo'
-    #     base.to_csv(path, index=False)
-    #     return
 
     

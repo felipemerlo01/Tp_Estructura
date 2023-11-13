@@ -16,7 +16,7 @@ def validar_fecha(fecha_ingresada):
 def validar_fecha_posteriori(fecha_antes, fecha_despues):
     while (True):
         fecha_ant = datetime.strptime(fecha_antes, '%d/%m/%Y')
-        fecha_des = datetime.strptime(fecha_despues, '%d/%m/%Y')
+        fecha_des = datetime.strptime(fecha_despues, '%d/%m/%Y')       
 
         if (fecha_des > fecha_ant):
             return fecha_despues

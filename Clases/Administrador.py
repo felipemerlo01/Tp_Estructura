@@ -53,9 +53,6 @@ class Administrador(Usuario):
         else:
             print(f'El usuario asociado al legajo {legajo} no existe en el sistema.') 
             
-    # METODO DE RECAUDACION DIARIA 
-    
-    
     # METODO DE CONTROL DE INGRESO y EGRESO
     # Ni idea muy bien que pide tbh
     def control_ingresos_egresos(self, hotel):

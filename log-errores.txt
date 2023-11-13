@@ -22,3 +22,14 @@ ModuleNotFoundError: No module named 'Usuario'
 
 2. Al correr Cliente te tira error por importacion circular con Funciones_extra
     !SOLUCIONADO al separar los lectores en otro archivo y no importar clases en Funciones_extra
+
+
+--------------
+13/11
+
+  File "d:\Downloads\Estructura de datos y programacion\TP\Tp_Estructura\Clases\TESTEOS.py", line 29, in <module>
+    Cliente_ej.hacer_reserva(POO)
+  File "d:\Downloads\Estructura de datos y programacion\TP\Tp_Estructura\Clases\Cliente.py", line 53, in hacer_reserva
+    empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Administrativo')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'asignar_empleado_menos_ocupado'

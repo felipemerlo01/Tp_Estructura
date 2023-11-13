@@ -96,7 +96,11 @@ class Empleado(Usuario):
     # 2. agarrar los mails de usuario de esas reservas, guardar en una lista
     # 3. iterar por hotel.usuarios y agarrar a los usuarios que tengan algguno de estos mails
     # 4. imprimir la informacion de cada uno de esos usuarios (nombre, apellido, mail)
-    
+    def nomina_de_clientes(self,hotel):
+        for reserva in hotel.reservas:
+            if reserva.habitacion.ocupada == True:
+                pass
+
     # El empleado hace el ingreso manualmente
     def registro_ingreso(self):
         #se hace el ingreso de forma automática entre las 8-9 am 

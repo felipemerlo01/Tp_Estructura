@@ -4,7 +4,9 @@ from Funciones_extra import *
 from Hotel import Hotel
 from Funciones_lectores import leer_Usuarios, leer_Habitaciones, leer_Reservas
 from datetime import datetime
-
+from queue import LifoQueue
+from Cliente import Cliente
+from Usuario import Usuario
 
 path='Bases de datos/'
 POO = Hotel('Patagonia: Oasis y Ocio')
@@ -12,7 +14,59 @@ leer_Usuarios(path+'db_Usuarios.csv', POO)
 leer_Habitaciones(path+'db_Habitaciones.csv', POO)
 leer_Reservas(path+'db_Reservas.csv', POO)
     
-POO.crear_informe_estadistico()   
+Cliente_ej= POO.usuarios['julia.ruiz@gmail.com']
+
+cliente = Cliente(
+    nombre='Juan',
+    apellido='Pérez',
+    fecha_de_nacimiento='1990-01-15',
+    sexo='Masculino',
+    dni=123456789,
+    mail='juan@example.com',
+    contrasena='contrasena_segura'
+)
+
+for key in POO.usuarios.keys():
+    print(key)
+
+#Cliente_ej.hacer_reserva(POO)
+
+reservas_activas = Cliente_ej.buscar_reservas_activas()
+if (len(reservas_activas) > 0):
+    reserva = Cliente_ej.elegir_habitacion_activa(reservas_activas)
+    
+    opciones_comida = {
+    'Desayuno': {'Huevos con tostadas': 900, 'Sandwhich': 1200, 'Cereales': 600},
+    'Bebida': {'Agua': 600, 'Jugo': 700, 'Café': 800},
+    'Refrigerio': {'Barrita': 300, 'Fruta': 300, 'Yogur': 500, 'Galleta': 400}}
+
+    # 1) Crear pila con elecciones de buffet: tiene que elegir un desayuno, bebida, refrigerio en orden
+    elecciones_comida = LifoQueue()
+    
+    for categoria, opciones in opciones_comida.items():
+        preferencia = validar_opcion(input(f'Eliga una opcion de {categoria.lower()}: ').capitalize(), opciones)
+        eleccion = (preferencia, opciones[preferencia])
+        elecciones_comida.put(eleccion)
+    
+    # Le muestro su orden
+    orden = ', '.join([f'{elemento[0]} (${elemento[1]})' for elemento in tuple(elecciones_comida)])
+    print(f'Su orden de: {orden} fue efectuada correctamente')
+    
+    # Cobro la orden desde lo ultimo que agarro
+    gastos = 0
+    while (not elecciones_comida.empty()):
+        precio = elecciones_comida.get()
+        gastos += precio
+    
+    reserva.gastos_buffet += gastos
+    
+    # 2) asigno un empleado random de limpieza que haga limpieza en el buffet
+    admin = POO.buscar_empleado(1)
+    empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Limpieza')
+    empleado.agregar_tarea_automatica(reserva.habitacion.numero, True)
+else:
+    print('No esta permitido ir al buffet ya que no está hospedado en el hotel actualmente')
+
 
 
 '''

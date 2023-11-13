@@ -1,9 +1,11 @@
 #from ClasesUsuario import Usuario
 from Reserva import Reserva
-from datetime import datetime
+from datetime import datetime, date
 from Funciones_extra import validar_fecha, validar_fecha_posteriori, validar_si_no, validar_capacidad_min, validar_precio, validar_opcion, validar_num
 from queue import LifoQueue
 from Usuario import Usuario
+from Empleado import Empleado
+import inspect
 
 class Cliente(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str):
@@ -38,11 +40,12 @@ class Cliente(Usuario):
     
     # NUESTRO CHECK-IN 15:00, CHECK-OUT 11:00
     def hacer_reserva(self, Hotel):
-        hoy = datetime.date.today().strftime("%d/%m/%Y")
-        
+        #hoy = datetime.date.today().strftime("%d/%m/%Y")
+        hoy = datetime.now().strftime("%d/%m/%Y")
+
         # 1) Pregunto al cliente fecha check-in, fecha check-out
-        check_in = validar_fecha_posteriori(validar_fecha(input('Ingrese la fecha deseada de check-in: ')), hoy)
-        check_out = validar_fecha_posteriori(validar_fecha(input('Ingrese la fecha deseada de check-out: ')), check_in)
+        check_in = validar_fecha_posteriori(hoy,validar_fecha(input('Ingrese la fecha deseada de check-in (dd/mm/aaaa): ')))
+        check_out = validar_fecha_posteriori(check_in,validar_fecha(input('Ingrese la fecha deseada de check-out (dd/mm/aaaa): ')))
         
         # 2) Pregunto criterios de interes
         criterios_elegidos = self.recolectar_criterios_interes()
@@ -52,8 +55,27 @@ class Cliente(Usuario):
         empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Administrativo')
         
         # 4) ¡¡¡ Chequear disponibilidad y asignacion de cuarto lo hace el personal administrativo !!
-        habitacion = empleado.disponibilidad_habitacion(Hotel.habitaciones, Hotel.reservas, check_in, check_out, criterios_elegidos)
         
+        """ debugging
+        print(type(empleado))
+        print(dir(empleado))  # Imprime los atributos y métodos de la instancia
+        print(inspect.signature(empleado.disponibilidad_habitacion))
+
+        print(Hotel.habitaciones)
+        print(Hotel.reservas)
+        print(check_in)
+        print(check_out)
+        print(criterios_elegidos)
+        print(empleado)
+        if isinstance(empleado, Empleado):
+            habitacion = empleado.disponibilidad_habitacion(Hotel.habitaciones, Hotel.reservas, check_in, check_out, criterios_elegidos)
+        else:
+            print("El objeto empleado no es una instancia de la clase Empleado.")
+        """
+
+
+        habitacion = empleado.disponibilidad_habitacion(Hotel.habitaciones)#, Hotel.reservas, check_in, check_out, criterios_elegidos
+
         if (habitacion == None):
             print('No hay habitaciones disponibles en las fechas y criterios especificados')
         else:
@@ -132,9 +154,9 @@ class Cliente(Usuario):
     def buscar_reservas_activas(self):
         reservas_activas = []
         for reserva in self.reservas:
-            fecha_in = datetime.strptime(reserva.check_in, "%d/%m/%Y")
-            fecha_out = datetime.strptime(reserva.check_out, "%d/%m/%Y")
-            if (fecha_in <= datetime.date.today() <= fecha_out):
+            fecha_in = datetime.strptime(reserva.check_in + ' 11:00', "%d/%m/%Y %H_%M")
+            fecha_out = datetime.strptime(reserva.check_out + ' 11:00', "%d/%m/%Y %H:%M")
+            if (fecha_in <= datetime.today() <= fecha_out):
                 reservas_activas.append(reserva)
         return reservas_activas
     

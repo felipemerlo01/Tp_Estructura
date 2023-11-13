@@ -26,7 +26,7 @@ def leer_Usuarios(path, Hotel):
             tasks=""    #FIJARSE PORQ LO LEE COMO FLOAT
             for task in tasks:
                 nuevo_empleado.tareas.put(task)
-        elif (row["Rol"] == "Administrador"):
+        elif (row["Rol"] == "admin"):
             administrador = Administrador(row["Nombre"], row["Apellido"], row["Fecha de nacimiento"], row["Sexo"], int(row["DNI"]), row["Mail"], row["Contrasenia"], int(row['Legajo']))
             Hotel.usuarios[administrador.mail] = administrador
     

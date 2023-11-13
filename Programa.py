@@ -39,7 +39,7 @@ while (continuar):
                         usuario.ver_inventario_personal
                     elif opcion_admin == '6': # Recaudacion diaria
                         pass
-                    else:
+                    else: 
                         volver = True
             else:
                 if (usuario.rol == 'Administrativo'): # Menu para empleados administrativos
