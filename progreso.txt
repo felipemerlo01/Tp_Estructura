@@ -169,4 +169,6 @@ FALTA:
         - Cuando encaremos lo de ingresos y egresos hay que ver porque cande puso como atributo de los empleados una lista de ingreso y otra de egreso. 
                 - Hay que agregar a los csv esas columnas, agregarlo en lsa funciones de actualziar bases y en los lectores
                 - conviene tenerlo como atributo ? y si quiero que se actualice cada vez que se realice un random pero que ademas se guarden en la o objeto?
-s
+
+Funciona:
+- Hacer reserva y actualizar base reservas

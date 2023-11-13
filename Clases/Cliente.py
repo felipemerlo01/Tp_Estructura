@@ -74,12 +74,14 @@ class Cliente(Usuario):
         """
 
 
-        habitacion = empleado.disponibilidad_habitacion(Hotel.habitaciones)#, Hotel.reservas, check_in, check_out, criterios_elegidos
+        habitacion = empleado.disponibilidad_habitacion(Hotel.habitaciones, Hotel.reservas, check_in, check_out, criterios_elegidos)
 
         if (habitacion == None):
             print('No hay habitaciones disponibles en las fechas y criterios especificados')
+
         else:
-            nueva_reserva = Reserva(self.mail, habitacion, check_in, check_out, hoy)
+            nueva_reserva = Reserva(self.mail, habitacion.numero, check_in, check_out, hoy)
+            nueva_reserva.habitacion=Hotel.habitaciones[habitacion.numero]
             print(f"Reserva realizada para la habitacion {habitacion.numero} del {check_in} al {check_out}")
             
             # Agregarlo a la lista de reservas del hotel reservas

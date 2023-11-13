@@ -15,7 +15,7 @@ class Empleado(Usuario):
         self.tareas = Queue()  # Usar una cola para almacenar las tareas asignadas
         # self.presente= None
 
-    def disponibilidad_habitacion(diccionario_habitaciones, lista_reservas, check_in, check_out, criterios):
+    def disponibilidad_habitacion(self, diccionario_habitaciones, lista_reservas, check_in, check_out, criterios):
         # creo un diccionario con sets de las fechas en las que esta ocupada la habitacion
         disponibilidad_habitaciones = {}
         for key in diccionario_habitaciones:

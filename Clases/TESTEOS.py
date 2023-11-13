@@ -14,22 +14,12 @@ leer_Usuarios(path+'db_Usuarios.csv', POO)
 leer_Habitaciones(path+'db_Habitaciones.csv', POO)
 leer_Reservas(path+'db_Reservas.csv', POO)
     
-Cliente_ej= POO.usuarios['julia.ruiz@gmail.com']
-
-cliente = Cliente(
-    nombre='Juan',
-    apellido='Pérez',
-    fecha_de_nacimiento='1990-01-15',
-    sexo='Masculino',
-    dni=123456789,
-    mail='juan@example.com',
-    contrasena='contrasena_segura'
-)
-
-for key in POO.usuarios.keys():
-    print(key)
+Cliente_ej= POO.usuarios['esteban.serrano@gmail.com']
 
 #Cliente_ej.hacer_reserva(POO)
+
+#POO.actualizar_base_reservas(path+'ReservasPrueba.csv')
+
 
 reservas_activas = Cliente_ej.buscar_reservas_activas()
 if (len(reservas_activas) > 0):
@@ -64,6 +54,7 @@ if (len(reservas_activas) > 0):
     admin = POO.buscar_empleado(1)
     empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Limpieza')
     empleado.agregar_tarea_automatica(reserva.habitacion.numero, True)
+    
 else:
     print('No esta permitido ir al buffet ya que no está hospedado en el hotel actualmente')
 

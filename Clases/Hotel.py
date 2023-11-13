@@ -235,7 +235,7 @@ class Hotel:
             csv_writer.writerow(columnas)
 
             for reserva in self.reservas:
-                fila = (reserva.mail_usuario, str(reserva.habitacion), reserva.check_in, reserva.check_out, reserva.fecha_reserva, str(reserva.gastos_buffet), str(reserva.gastos_minibar))
+                fila = (reserva.mail_usuario, reserva.num_hab, reserva.check_in, reserva.check_out, reserva.fecha_reserva, str(reserva.gastos_buffet), str(reserva.gastos_minibar))
                 csv_writer.writerow(fila)
 
     # # Al dar de baja un empleado hay que modificar su estado en el csv        
