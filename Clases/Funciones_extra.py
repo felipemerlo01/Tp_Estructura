@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from re import fullmatch
 
 # Funcion de validar fechas para uso general (no me parece que vaya como metodo de la clase): --> convendria ponerlo en un archivo de validaciones sueltas, poner ahi tambien las de hotel
@@ -27,7 +27,7 @@ def validar_fecha_posteriori(fecha_antes, fecha_despues):
 def verificar_fecha_de_nacimiento(fecha_de_nacimiento):
     while (True):
         fecnac = datetime.strptime(fecha_de_nacimiento, "%d/%m/%Y")
-        hoy = datetime.date.today()
+        hoy = date.today()
         edad = hoy.year - fecnac.year - ((hoy.month, hoy.day) < (fecnac.month, fecnac.day))
 
         if edad < 18:
@@ -54,7 +54,7 @@ def verificar_sexo(sexo):
 # verifica formato mail
 def verificar_mail(mail):
     formato = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'
-    while (fullmatch(formato, mail) == False):
+    while (fullmatch(formato, mail) is None):
         mail = input('Ingrese un mail valido: ')
     return mail
 

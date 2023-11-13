@@ -158,7 +158,6 @@ Como hacer una funcion para cada uno es un laburo. conviene hacer una sola funci
 
 ---------------------------------------------------------------------------------------------------------------------
 FALTA:
-- Agregar en ir al buffet para que se visualice el menu de opciones de comida
 - Agregar en usar el minibar para que se visualice el menu de opciones del minibar
 
 - Personal Adminsitrativo --> NOMINA DE CLIENTES DEL HOTEL (falta metodo creo)
@@ -170,5 +169,24 @@ FALTA:
                 - Hay que agregar a los csv esas columnas, agregarlo en lsa funciones de actualziar bases y en los lectores
                 - conviene tenerlo como atributo ? y si quiero que se actualice cada vez que se realice un random pero que ademas se guarden en la o objeto?
 
-Funciona:
+
+
+FUNCIONA:
+- Iniciar sesion
+    - Administrador:
+        - Dar de alta
+        - Dar de baja
+        - Asignar tareas (not yet)
+        - 
+        - Inventario Personal
+        - 
+
 - Hacer reserva y actualizar base reservas
+
+Falta:
+- Control ingreso y egreso
+- Recaudacion diaria
+
+Checkear:
+- Lista enlazada?
+- Se resetean los distintos gastos con check ut?

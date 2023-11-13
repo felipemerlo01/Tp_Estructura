@@ -12,7 +12,7 @@ class Administrador(Usuario):
 
     def dar_empleado_de_alta(self, hotel):
         empleado = hotel.crear_usuario('2')
-        hotel.usuarios[empleado.mail] = empleado
+        #hotel.usuarios[empleado.mail] = empleado
         print(f"{empleado.nombre} {empleado.apellido} ha sido dado de alta como empleado.")
         
     def dar_empleado_de_baja(self, hotel):

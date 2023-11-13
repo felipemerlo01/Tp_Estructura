@@ -33,13 +33,14 @@ class Hotel:
         
         elif (opcion == '2'):
             rol = self.verificar_rol(input("Ingrese su rol: "))
-            legajo = self.crear_legajo
+            legajo = self.crear_legajo()
             
-            nuevo_usuario = Empleado(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena, int(legajo), rol)
+            nuevo_usuario = Empleado(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena, rol, int(legajo))
             self.usuarios[nuevo_usuario.mail] = nuevo_usuario
         
         print(f'Se ha creado el usuario de {nuevo_usuario.nombre} {nuevo_usuario.apellido} correctamente')
-    
+        return nuevo_usuario
+        
     # verificar si el mail ya existe
     def verificar_mail_existente(self, mail: str):
         while (mail in self.usuarios): 
@@ -56,7 +57,7 @@ class Hotel:
     def crear_legajo(self): 
         for usuario in reversed(self.usuarios.values()):
             if hasattr(usuario, 'legajo'):
-                nuevo_legajo = usuario.legajo + 1
+                nuevo_legajo = int(usuario.legajo) + 1
                 return nuevo_legajo
             
     # valido el mail y contrasena al iniciar sesión
@@ -201,13 +202,14 @@ class Hotel:
 ######################### ACTUALIZACION DE BASES DE DATOS
 
     # Actualizar todas las bases
-    def actualizar_bases_de_datos(self, path):
+    def actualizar_bases_de_datos(self, pathreservas, pathusuarios):
         try:
-            self.actualizar_base_reservas(path+'db_Reservas.csv')
-            self.actualizar_base_usuarios(path+'db_Usuarios.csv')
+            #self.actualizar_base_reservas(pathreservas)
+            self.actualizar_base_usuarios(pathusuarios)
             print('Se guardo la información correctamente')
-        except:
+        except Exception as e:
             print('Ha habido un error en el guardado.')
+            print(f"Error al escribir en el archivo CSV: {e}")
             
     # Metodo actualizar base usuarios
     def actualizar_base_usuarios(self, path):
@@ -220,8 +222,11 @@ class Hotel:
                 if (isinstance(usuario, Cliente)):
                     fila = (usuario.nombre, usuario.apellido, usuario.fecha_de_nacimiento, usuario.sexo, str(usuario.dni), usuario.mail, usuario.contrasena, '', 'Cliente', '', '')
                 elif (isinstance(usuario, Empleado)):
+                    # tareas = list(usuario.tareas.queue    ) if usuario.tareas else []
+                    # tareas_string = ', '.join(tareas) if tareas else ''
                     tareas = list(usuario.tareas.queue) if usuario.tareas else []
-                    tareas_string = ', '.join(tareas) if tareas else ''
+                    tareas_string = ', '.join(map(str, tareas)) if tareas else ''
+
                     fila = (usuario.nombre, usuario.apellido, usuario.fecha_de_nacimiento, usuario.sexo, str(usuario.dni), usuario.mail, usuario.contrasena, str(usuario.legajo), usuario.rol, usuario.estado, tareas_string)
                 else:
                     fila = (usuario.nombre, usuario.apellido, usuario.fecha_de_nacimiento, usuario.sexo, str(usuario.dni), usuario.mail, usuario.contrasena, str(usuario.legajo), 'admin', '', '')

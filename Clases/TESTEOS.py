@@ -8,57 +8,67 @@ from queue import LifoQueue
 from Cliente import Cliente
 from Usuario import Usuario
 
-path='Bases de datos/'
-POO = Hotel('Patagonia: Oasis y Ocio')
-leer_Usuarios(path+'db_Usuarios.csv', POO)
-leer_Habitaciones(path+'db_Habitaciones.csv', POO)
-leer_Reservas(path+'db_Reservas.csv', POO)
+# path='Bases de datos/'
+# POO = Hotel('Patagonia: Oasis y Ocio')
+# leer_Habitaciones(path+'db_Habitaciones.csv', POO)
+# leer_Reservas(path+'db_Reservas.csv', POO)
+# leer_Usuarios(path+'db_Usuarios.csv', POO)
+
+
     
-Cliente_ej= POO.usuarios['esteban.serrano@gmail.com']
+# Cliente_ej= POO.usuarios['esteban.serrano@gmail.com']
+
+# print(Cliente_ej.reservas)
 
 #Cliente_ej.hacer_reserva(POO)
 
 #POO.actualizar_base_reservas(path+'ReservasPrueba.csv')
 
 
-reservas_activas = Cliente_ej.buscar_reservas_activas()
-if (len(reservas_activas) > 0):
-    reserva = Cliente_ej.elegir_habitacion_activa(reservas_activas)
+# reservas_activas = Cliente_ej.buscar_reservas_activas()
+# if (len(reservas_activas) > 0):
+#     reserva = Cliente_ej.elegir_habitacion_activa(reservas_activas)
     
-    opciones_comida = {
-    'Desayuno': {'Huevos con tostadas': 900, 'Sandwhich': 1200, 'Cereales': 600},
-    'Bebida': {'Agua': 600, 'Jugo': 700, 'Café': 800},
-    'Refrigerio': {'Barrita': 300, 'Fruta': 300, 'Yogur': 500, 'Galleta': 400}}
+#     opciones_comida = {
+#     'Desayuno': {'Huevos con tostadas': 900, 'Sandwhich': 1200, 'Cereales': 600},
+#     'Bebida': {'Agua': 600, 'Jugo': 700, 'Café': 800},
+#     'Refrigerio': {'Barrita': 300, 'Fruta': 300, 'Yogur': 500, 'Galleta': 400}}
 
-    # 1) Crear pila con elecciones de buffet: tiene que elegir un desayuno, bebida, refrigerio en orden
-    elecciones_comida = LifoQueue()
+#     # 1) Crear pila con elecciones de buffet: tiene que elegir un desayuno, bebida, refrigerio en orden
+#     elecciones_comida = LifoQueue()
     
-    for categoria, opciones in opciones_comida.items():
-        preferencia = validar_opcion(input(f'Eliga una opcion de {categoria.lower()}: ').capitalize(), opciones)
-        eleccion = (preferencia, opciones[preferencia])
-        elecciones_comida.put(eleccion)
+#     for categoria, opciones in opciones_comida.items():
+#         print(f'Opciones de {categoria}:')
+#         for opcion, precio in opciones.items():
+#             print(f'{opcion}: {precio} pesos')
+        
+#         preferencia = validar_opcion(input(f'Eliga una opcion de {categoria.lower()}: ').capitalize(), opciones)
+#         eleccion = (preferencia, opciones[preferencia])
+#         elecciones_comida.put(eleccion)
     
-    # Le muestro su orden
-    orden = ', '.join([f'{elemento[0]} (${elemento[1]})' for elemento in tuple(elecciones_comida)])
-    print(f'Su orden de: {orden} fue efectuada correctamente')
+#     gastos = 0
+#     elementos_orden = []
+#     while not elecciones_comida.empty():
+#         elemento = elecciones_comida.get()
+#         elementos_orden.append(elemento)
+#         gastos += elemento[1]
+#     reserva.gastos_buffet += gastos
+#     # Le muestro su orden
+#     orden = ', '.join([f'{elemento[0]} (${elemento[1]})' for elemento in elementos_orden])
+#     print(f'Su orden de: {orden} fue efectuada correctamente')
     
-    # Cobro la orden desde lo ultimo que agarro
-    gastos = 0
-    while (not elecciones_comida.empty()):
-        precio = elecciones_comida.get()
-        gastos += precio
     
-    reserva.gastos_buffet += gastos
-    
-    # 2) asigno un empleado random de limpieza que haga limpieza en el buffet
-    admin = POO.buscar_empleado(1)
-    empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Limpieza')
-    empleado.agregar_tarea_automatica(reserva.habitacion.numero, True)
-    
-else:
-    print('No esta permitido ir al buffet ya que no está hospedado en el hotel actualmente')
+#     # 2) asigno un empleado random de limpieza que haga limpieza en el buffet
+#     admin = POO.buscar_empleado(1)
+#     empleado = admin.asignar_empleado_menos_ocupado(POO.usuarios, 'Limpieza')
+#     empleado.agregar_tarea_automatica(reserva.habitacion.numero, True)
 
+#     print(empleado.tareas)
+#     print(Cliente_ej.reservas[0].gastos_buffet)
+# else:
+#     print('No esta permitido ir al buffet ya que no está hospedado en el hotel actualmente')
 
+# print()
 
 '''
 MacBook-Air-de-Camilo:TP Grupo 5 camilobarbero$ python3 "/Users/camilobarbero/Documents/ITBA/2Q2023/Estructura de Datos y Programación/TP Grupo 5/Tp_Estructura-1/TESTEOS.py"

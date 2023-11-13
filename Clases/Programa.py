@@ -1,18 +1,20 @@
-from Clases.Hotel import Hotel
-from Clases.Funciones_extra import menu_principal, menu_registro, validar_opcion_menu, menu_Cliente, menu_Administrador, menu_Personal_Administrativo, menu_Informe_estadístico, menu_Mant_Limp
-from Clases.Funciones_lectores import leer_Usuarios, leer_Habitaciones, leer_Reservas
+from Hotel import Hotel
+from Funciones_extra import menu_principal, menu_registro, validar_opcion_menu, menu_Cliente, menu_Administrador, menu_Personal_Administrativo, menu_Informe_estadístico, menu_Mant_Limp
+from Funciones_lectores import leer_Usuarios, leer_Habitaciones, leer_Reservas
 
 # El menu en si mismo
 continuar = True
 cargado = False
-path = 'Tp_Estructura-1/Bases de datos/'
+path_habitaciones="Bases de datos\db_Habitaciones.csv"
+path_usuarios="Bases de datos\db_Usuarios.csv"
+path_reserva="Bases de datos\db_Reservas.csv"
 
 while (continuar):
     if (not cargado):
         POO = Hotel('Patagonia: Oasis y Ocio')
-        leer_Habitaciones(path+'db_Habitaciones.csv', POO)
-        leer_Reservas(path+'db_Reservas.csv', POO)
-        leer_Usuarios(path+'db_Usuarios.csv', POO)
+        leer_Habitaciones(path_habitaciones, POO)
+        leer_Reservas(path_reserva, POO)
+        leer_Usuarios(path_usuarios, POO)
         cargado = True
     
     menu_principal()
@@ -36,15 +38,15 @@ while (continuar):
                     elif opcion_admin == '4': # Control de ingreso y egreso
                         pass
                     elif opcion_admin == '5': # Ver inventario del personal
-                        usuario.ver_inventario_personal
+                        usuario.ver_inventario_personal(POO)
                     elif opcion_admin == '6': # Recaudacion diaria
                         pass
                     else: 
                         volver = True
             else:
-                if (usuario.rol == 'Administrativo'): # Menu para empleados administrativos
+                if (usuario.rol == 'Administrativo'): # Menu para empRleados administrativos
                     volver_1 = False
-                    while (not volver):
+                    while (not volver_1):
                         menu_Personal_Administrativo()
                         opcion_personal_admin = validar_opcion_menu(input("Ingrese una opción: "), 4)
                         if (opcion_personal_admin == '1'): # Historial de reservas
@@ -99,8 +101,8 @@ while (continuar):
         registro_opcion = validar_opcion_menu(input("Ingrese una opción de registro: "), 3)
         if (registro_opcion == '1'): # Registrarse como cliente
             usuario = POO.crear_usuario(registro_opcion)
-        elif (registro_opcion == '2'): # Registrarse como empleado
+        elif (registro_opcion == '2'): # Regisrautrarse como empleado
             usuario = POO.crear_usuario(registro_opcion)
     else:
-        POO.actualizar_bases_de_datos(path)
+        POO.actualizar_bases_de_datos(path_reserva,path_usuarios)
         continuar = False

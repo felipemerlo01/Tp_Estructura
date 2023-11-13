@@ -104,21 +104,25 @@ class Cliente(Usuario):
             elecciones_comida = LifoQueue()
             
             for categoria, opciones in opciones_comida.items():
+                #Imprimimos el menu
+                print(f'Opciones de {categoria}:')
+                for opcion, precio in opciones.items():
+                    print(f'{opcion}: {precio} pesos')
+
                 preferencia = validar_opcion(input(f'Eliga una opcion de {categoria.lower()}: ').capitalize(), opciones)
                 eleccion = (preferencia, opciones[preferencia])
                 elecciones_comida.put(eleccion)
-            
-            # Le muestro su orden
-            orden = ', '.join([f'{elemento[0]} (${elemento[1]})' for elemento in tuple(elecciones_comida)])
-            print(f'Su orden de: {orden} fue efectuada correctamente')
-            
-            # Cobro la orden desde lo ultimo que agarro
+
             gastos = 0
-            while (not elecciones_comida.empty()):
-                precio = elecciones_comida.get()
-                gastos += precio
-            
+            elementos_orden = []
+            while not elecciones_comida.empty():
+                elemento = elecciones_comida.get()
+                elementos_orden.append(elemento)
+                gastos += elemento[1]
             reserva.gastos_buffet += gastos
+            # Le muestro su orden
+            orden = ', '.join([f'{elemento[0]} (${elemento[1]})' for elemento in elementos_orden])
+            print(f'Su orden de: {orden} fue efectuada correctamente')
             
             # 2) asigno un empleado random de limpieza que haga limpieza en el buffet
             admin = Hotel.buscar_empleado(1)
@@ -134,6 +138,10 @@ class Cliente(Usuario):
             
             opciones_minibar = {'Coca-cola': 1000, 'Agua': 900, 'Alcohol': 2500, 'Snack': 300}
             
+            print('Opciones del minibar:')
+            for opcion, precio in opciones_minibar.items():
+                print(f'{opcion}: {precio} pesos')
+
             preferencia = validar_opcion(input(f'Eliga una de las opciones del minibar: '), opciones_minibar.keys())
             
             reserva.gastos_minibar += opciones_minibar[preferencia]
@@ -156,9 +164,9 @@ class Cliente(Usuario):
     def buscar_reservas_activas(self):
         reservas_activas = []
         for reserva in self.reservas:
-            fecha_in = datetime.strptime(reserva.check_in + ' 11:00', "%d/%m/%Y %H_%M")
+            fecha_in = datetime.strptime(reserva.check_in + ' 11:00', "%d/%m/%Y %H:%M")
             fecha_out = datetime.strptime(reserva.check_out + ' 11:00', "%d/%m/%Y %H:%M")
-            if (fecha_in <= datetime.today() <= fecha_out):
+            if (fecha_in <= datetime.today() <= fecha_out and reserva.mail_usuario == self.mail):
                 reservas_activas.append(reserva)
         return reservas_activas
     
