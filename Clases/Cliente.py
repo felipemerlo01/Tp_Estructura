@@ -1,9 +1,10 @@
-from Usuario import Usuario
+#from ClasesUsuario import Usuario
 from Reserva import Reserva
 from datetime import datetime
 from Funciones_extra import validar_fecha, validar_fecha_posteriori, validar_si_no, validar_capacidad_min, validar_precio, validar_opcion, validar_num
 from queue import LifoQueue
-    
+from Usuario import Usuario
+
 class Cliente(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str):
         super().__init__(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena)

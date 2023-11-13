@@ -43,5 +43,6 @@ def leer_Reservas(path, Hotel):
 
     for _, row in reservas.iterrows():
         nueva_reserva = Reserva(row["Mail"], int(row["Numero de habitacion"]), row["Check-in"], row["Check-out"], row['Fecha reserva'], int(row['Gastos buffet']), int(row['Gastos minibar']))
+        nueva_reserva.habitacion=Hotel.habitaciones[nueva_reserva.num_hab]
         Hotel.reservas.append(nueva_reserva)
         

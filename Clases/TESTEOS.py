@@ -1,16 +1,17 @@
-from Clases.Funciones_extra import *
-from Clases.Reserva import Reserva
-from Clases.Hotel import Hotel 
-from Clases.Funciones_lectores import leer_Usuarios, leer_Habitaciones, leer_Reservas
-from Clases.Funciones_extra import *
+import sys
+import os
+from Funciones_extra import *
+from Hotel import Hotel
+from Funciones_lectores import leer_Usuarios, leer_Habitaciones, leer_Reservas
 from datetime import datetime
 
 
-path='Tp_Estructura-1/Bases de datos/'
+path='Bases de datos/'
 POO = Hotel('Patagonia: Oasis y Ocio')
+leer_Usuarios(path+'db_Usuarios.csv', POO)
 leer_Habitaciones(path+'db_Habitaciones.csv', POO)
 leer_Reservas(path+'db_Reservas.csv', POO)
-leer_Usuarios(path+'db_Usuarios.csv', POO)
+
 
 POO.crear_informe_estadistico()
 

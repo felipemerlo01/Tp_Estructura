@@ -1,5 +1,9 @@
+# from Clases.madres.Usuario import Usuario
+# from Funciones_extra import validar_num
+
 from Usuario import Usuario
 from Funciones_extra import validar_num
+
 
 class Administrador(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str, legajo: int):
