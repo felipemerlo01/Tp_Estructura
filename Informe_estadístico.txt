@@ -16,6 +16,6 @@ Porcentajes De ocupacion por tipo de habitacion:
 Ganancia del dia: 0 
 
 Cantidad de Clientes, clasificados por nivel de inversion:
-		 Clase 1 (inversion menor a 250000): 0 
+		 Clase 1 (inversion menor a 250000): 1 
 		 Clase 2 (inversion entre 250000) y 600000): 0 
-		 Clase 1 (inversion mayor a 600000): 0 
+		 Clase 1 (inversion mayor a 600000): 1 

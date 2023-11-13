@@ -103,8 +103,6 @@ class Hotel:
     def procentaje_de_ocupacion_por_tipo_de_habitación(self):
         # Antes que nada, hay que actualizar el atributo ocupada de las habitaciones
         self.actualizar_estado_habitaciones()
-        
-        # Ahora, ya si hago lo otro
         tipos = ("Simple", "Doble", "Familiar", "Suite")
         procentaje_ocupacion_por_tipo=[]
         for tipo in tipos:
@@ -163,7 +161,8 @@ class Hotel:
                         Cant_clientes_por_cat[1]+=1
                     elif topes_de_categoria['2'] < gastos:
                         Cant_clientes_por_cat[2]+=1
-            return topes_de_categoria,Cant_clientes_por_cat
+                        
+        return topes_de_categoria,Cant_clientes_por_cat
         pass
         
     def crear_informe_estadistico(self):
