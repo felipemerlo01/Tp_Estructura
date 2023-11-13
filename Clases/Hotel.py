@@ -115,14 +115,18 @@ class Hotel:
                     capacidad_parcial += 1
                     if habitacion.ocupada == True:
                         ocupacion_del_tipo += 1
-            procentaje_ocupacion_del_tipo=round((capacidad_parcial/ocupacion_del_tipo)*100,2)
-            procentaje_ocupacion_por_tipo.append(procentaje_ocupacion_del_tipo)
+            if ocupacion_del_tipo != 0:
+                procentaje_ocupacion_del_tipo=round((capacidad_parcial/ocupacion_del_tipo)*100,2)
+                procentaje_ocupacion_por_tipo.append(procentaje_ocupacion_del_tipo)
+            else: 
+                ocupacion_del_tipo=0
+                procentaje_ocupacion_por_tipo.append(procentaje_ocupacion_del_tipo)
         return procentaje_ocupacion_por_tipo
     
     # Calculo de recaudacion diaria del hotel
     def recaudacion_diaria(self):
         ingreso_del_dia = 0
-        hoy = datetime.date.today()
+        hoy = datetime.today()
         for reserva in self.reservas:
             check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
             if (check_out_dt == hoy):
@@ -145,19 +149,33 @@ class Hotel:
     #     return topes_de_categoria,Cant_clientes_por_cat
     
     # Cantidad de clientes por tipo (NEW !!)
+
     def cantidad_de_clientes_por_tipo(self):
         # Antes que nada, hay que actualizar el atributo gastado de los clientes
         self.actualizar_gasto_clientes()
-        
-        # Ahora, ya si hago lo otro
+        topes_de_categoria = {'1':250000,'2':600000}
+        Cant_clientes_por_cat=[0,0,0]
+        hoy=datetime.today()
+        for reserva in self.reservas:
+            gastos= reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
+            print(type(reserva.check_out))
+            check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
+            if check_out_dt >= hoy:
+                if gastos <= topes_de_categoria['1']:
+                    Cant_clientes_por_cat[0]+=1
+                elif topes_de_categoria['1'] < gastos <= topes_de_categoria['2']:
+                    Cant_clientes_por_cat[1]+=1
+                elif topes_de_categoria['2'] < gastos:
+                    Cant_clientes_por_cat[2]+=1
+        return topes_de_categoria,Cant_clientes_por_cat
         # FALTA !
         pass
         
-    def crear_informe_estadístico(self):
+    def crear_informe_estadistico(self):
         fecha=datetime.today()
         procentaje_ocupacion = self.procentaje_de_ocupacion() 
         porcentajes_parciales_de_ocupacion = self.procentaje_de_ocupacion_por_tipo_de_habitación()
-        ganancia_del_dia= self.calcular_ganacia_del_dia()
+        ganancia_del_dia= self.recaudacion_diaria()
         cantidad_de_clientes_por_tipo= self.cantidad_de_clientes_por_tipo()
 
         with open('Informe_estadístico.txt','w') as informe:
