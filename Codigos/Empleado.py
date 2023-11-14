@@ -1,9 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 from queue import Queue
 from Usuario import Usuario
 from random import randint
 from Funciones_extra import verificar_mail
-from datetime import date, datetime
 
 class Empleado(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str, legajo: int, rol: str, estado = 'Activo'):

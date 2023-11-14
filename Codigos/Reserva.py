@@ -1,11 +1,9 @@
-from Habitacion import Habitacion
 from datetime import date
-
 
 class Reserva:
     def __init__(self, mail_usuario: str, num_habitacion:int, check_in: str, check_out: str, fecha_reserva = None, gastos_buffet = 0, gastos_minibar = 0):
         self.mail_usuario = mail_usuario
-        self.num_hab=num_habitacion
+        self.num_hab = num_habitacion
         self.habitacion = None
         self.check_in = check_in
         self.check_out = check_out
