@@ -1,7 +1,6 @@
 from datetime import datetime, date
 from re import fullmatch
 
-# Funcion de validar fechas para uso general (no me parece que vaya como metodo de la clase): --> convendria ponerlo en un archivo de validaciones sueltas, poner ahi tambien las de hotel
 # "Las funciones de validaciones generales pueden estar en un archivo aparte, el cuál se importará
 # cuando fuera necesario."
 

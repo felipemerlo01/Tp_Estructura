@@ -3,7 +3,8 @@ from Empleado import Empleado
 from Funciones_extra import verificar_fecha_de_nacimiento, validar_fecha, verificar_dni, verificar_sexo, verificar_mail, verificar_contrasena
 from datetime import datetime, date
 import csv
-import random
+from random import sample
+
 class Hotel:
     def __init__(self, nombre):
         self.nombre = nombre
@@ -180,7 +181,7 @@ class Hotel:
             if (hasattr(usuario, 'legajo') and usuario.legajo != 1): #Es empleado
                 empleados.append(usuario)
         
-        empleados_presentes = random.sample(empleados, 10)
+        empleados_presentes = sample(empleados, 10)
         
         for empleado in empleados_presentes:
             empleado.registro_ingreso()
