@@ -123,8 +123,8 @@ FALTA:
     podria ser un metodo del empleado que accede a info del hotel y la actualiza en vez de que sea un metodo del hotel (para mas realismo)
 - Administrador --> INVENTARIO DEL PERSONAL (por tipo)
     - Los nombres por tipo o la cantidad de empleados por tipo?
-- Personal Administrativo --> HISTORIAL DE RESERVAS (falta metodo creo)
-- Personal Adminsitrativo --> NOMINA DE CLIENTES DEL HOTEL (falta metodo creo)
+- Personal Administrativo --> HISTORIAL DE RESERVAS (falta metodo creo) COMPLETADO
+- Personal Adminsitrativo --> NOMINA DE CLIENTES DEL HOTEL (falta metodo creo) COMPLETADO
 
 ##ya está hecho esto??
 - Administrador --> VER TODO EL TEMA DE EGRESOS Y EGRESOS (que contesta bruno)
@@ -157,36 +157,22 @@ usar el minibar --> le suma un gasto a la columna Gatos minibar de la reserva en
 Como hacer una funcion para cada uno es un laburo. conviene hacer una sola funcion que reescriba todos los csv !
 
 ---------------------------------------------------------------------------------------------------------------------
-FALTA:
-- Agregar en usar el minibar para que se visualice el menu de opciones del minibar
-
-- Personal Adminsitrativo --> NOMINA DE CLIENTES DEL HOTEL (falta metodo creo)
-
-##ya está hecho esto??
-- Administrador --> VER TODO EL TEMA DE EGRESOS Y EGRESOS (que contesta bruno)
-        Se tienen que crear un csv 
-        - Cuando encaremos lo de ingresos y egresos hay que ver porque cande puso como atributo de los empleados una lista de ingreso y otra de egreso. 
-                - Hay que agregar a los csv esas columnas, agregarlo en lsa funciones de actualziar bases y en los lectores
-                - conviene tenerlo como atributo ? y si quiero que se actualice cada vez que se realice un random pero que ademas se guarden en la o objeto?
-
-
 
 FUNCIONA:
-- Iniciar sesion
+- Iniciar sesión
     - Administrador:
         - Dar de alta
         - Dar de baja
-        - Asignar tareas (not yet)
+        - Asignar tareas
         - 
         - Inventario Personal
         - 
-
+    - Cliente
+        - Todo pareceria estar bien
+    - Empleados
+        - Administrativo (todo OK)
+        
 - Hacer reserva y actualizar base reservas
 
 Falta:
 - Control ingreso y egreso
-- Recaudacion diaria
-
-Checkear:
-- Lista enlazada?
-- Se resetean los distintos gastos con check ut?

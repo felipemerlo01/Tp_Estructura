@@ -1,20 +1,27 @@
 from Hotel import Hotel
 from Funciones_extra import menu_principal, menu_registro, validar_opcion_menu, menu_Cliente, menu_Administrador, menu_Personal_Administrativo, menu_Informe_estadístico, menu_Mant_Limp
 from Funciones_lectores import leer_Usuarios, leer_Habitaciones, leer_Reservas
+from datetime import date
+import platform
+
+# Get the operating system
+operating_system = platform.system()
+
+if operating_system == 'Windows':
+    path = 'Bases de datos\\'
+elif operating_system == 'Darwin':
+    path = 'Bases de datos/'
 
 # El menu en si mismo
+
 continuar = True
 cargado = False
-path_habitaciones="Bases de datos\db_Habitaciones.csv"
-path_usuarios="Bases de datos\db_Usuarios.csv"
-path_reserva="Bases de datos\db_Reservas.csv"
-
 while (continuar):
     if (not cargado):
         POO = Hotel('Patagonia: Oasis y Ocio')
-        leer_Habitaciones(path_habitaciones, POO)
-        leer_Reservas(path_reserva, POO)
-        leer_Usuarios(path_usuarios, POO)
+        leer_Habitaciones(path+'db_Habitaciones.csv', POO)
+        leer_Reservas(path+'db_Reservas.csv', POO)
+        leer_Usuarios(path+'db_Usuarios.csv', POO)
         cargado = True
     
     menu_principal()
@@ -40,7 +47,9 @@ while (continuar):
                     elif opcion_admin == '5': # Ver inventario del personal
                         usuario.ver_inventario_personal(POO)
                     elif opcion_admin == '6': # Recaudacion diaria
-                        pass
+                        fecha_actual = date.today().strftime("%d/%m/%Y")
+                        hora_actual = date.today().strftime("%H:%M:%S")
+                        print(f"La recaudación diaria de hoy {fecha_actual} a las {hora_actual} es de ${POO.recaudacion_diaria()}")
                     else: 
                         volver = True
             else:
@@ -48,24 +57,22 @@ while (continuar):
                     volver_1 = False
                     while (not volver_1):
                         menu_Personal_Administrativo()
-                        opcion_personal_admin = validar_opcion_menu(input("Ingrese una opción: "), 4)
+                        opcion_personal_admin = validar_opcion_menu(input("Ingrese una opción: "), 6)
                         if (opcion_personal_admin == '1'): # Historial de reservas
-                            pass
+                            usuario.historial_de_reservas(POO)
+
                         elif (opcion_personal_admin == '2'): # Nomina de clientes del hotel
-                            pass
-                        elif (opcion_personal_admin == '3'): # Informes estadisticos (sub-menu)
-                            volver_2 = False
-                            while (not volver_2):
-                                menu_Informe_estadístico()
-                                opcion_informe = validar_opcion_menu(input("Ingrese una opción: "), 4)
-                                if (opcion_informe == '1'): # Porcentaje de ocupacion del hotel
-                                    pass
-                                elif (opcion_informe == '2'): # Porcentaje de ocupacion de acuerdo al tipo de habitacion
-                                    pass
-                                elif (opcion_informe == '3'): # Cantidad de clientes por tipo
-                                    pass
-                                else:
-                                    volver_2 = True
+                            usuario.nomina_de_clientes(POO)
+
+                        elif (opcion_personal_admin == '3'): # Informe estadístico
+                            POO.crear_informe_estadistico()
+
+                        elif (opcion_personal_admin == '4'): # Visualizar tareas pendientes
+                            usuario.visualizar_tareas_pendientes()     
+                        
+                        elif (opcion_personal_admin == '5'): # Realizar tarea pendiente
+                            usuario.realizar_siguiente_tarea()         
+                        
                         else:
                             volver_1 = True
                 
@@ -101,8 +108,8 @@ while (continuar):
         registro_opcion = validar_opcion_menu(input("Ingrese una opción de registro: "), 3)
         if (registro_opcion == '1'): # Registrarse como cliente
             usuario = POO.crear_usuario(registro_opcion)
-        elif (registro_opcion == '2'): # Regisrautrarse como empleado
+        elif (registro_opcion == '2'): # Registrarse como empleado
             usuario = POO.crear_usuario(registro_opcion)
     else:
-        POO.actualizar_bases_de_datos(path_reserva,path_usuarios)
+        POO.actualizar_bases_de_datos(path)
         continuar = False

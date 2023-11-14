@@ -1,5 +1,5 @@
 from Habitacion import Habitacion
-from datetime import datetime
+from datetime import date
 
 
 class Reserva:
@@ -10,7 +10,7 @@ class Reserva:
         self.check_in = check_in
         self.check_out = check_out
         if fecha_reserva is None:
-            fecha_reserva = datetime.date.today().strftime("%d/%m/%Y")
+            fecha_reserva = date.today().strftime("%d/%m/%Y")
         self.fecha_reserva = fecha_reserva
         self.gastos_ocupacion = None
         self.gastos_buffet = gastos_buffet

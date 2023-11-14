@@ -41,10 +41,6 @@ class Administrador(Usuario):
         legajo = int(validar_num(input("Legajo del empleado: ")))
         empleado = hotel.buscar_empleado(legajo)
         
-        # NOTA CAMILO: yo decia que asigne y escriba lo que le pinte en el input
-        # osea no valida nada, tipo si el empleado es de manteimiento le podes poner 'hola' o 'limpiar' qcy
-        # REVISAR si es que quieren complejizarla mas segun el rol del empleado o si solo puede asignar ciertas tareas en particular y no cualquier input
-        
         tarea = input('Ingrese la tarea a asignar: ')
         
         if (empleado != None):

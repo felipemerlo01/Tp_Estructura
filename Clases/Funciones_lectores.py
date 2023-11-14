@@ -27,7 +27,7 @@ def leer_Reservas(path, Hotel):
 
 def leer_Usuarios(path, Hotel):
     usuarios = pd.read_csv(path)
-    
+    #usuarios.fillna('', inplace=False)
     for _, row in usuarios.iterrows():
         if (row["Rol"] == "Cliente"):
             nuevo_usuario = Cliente(row["Nombre"], row["Apellido"], row["Fecha de nacimiento"], row["Sexo"], int(row["DNI"]), row["Mail"], row["Contrasenia"])
@@ -41,7 +41,8 @@ def leer_Usuarios(path, Hotel):
             #tasks = row['Tareas'].split(', ')
             tasks = str(row['Tareas']).split(', ')
             for task in tasks:
-                nuevo_empleado.tareas.put(task)
+                if task and task.lower() != 'nan':  # Verifica que la tarea no esté vacía ni sea 'nan'
+                    nuevo_empleado.tareas.put(task)
         elif (row["Rol"] == "admin"):
             administrador = Administrador(row["Nombre"], row["Apellido"], row["Fecha de nacimiento"], row["Sexo"], int(row["DNI"]), row["Mail"], row["Contrasenia"], int(row['Legajo']))
             Hotel.usuarios[administrador.mail] = administrador

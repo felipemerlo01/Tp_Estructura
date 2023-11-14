@@ -10,7 +10,6 @@ import inspect
 class Cliente(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str):
         super().__init__(nombre, apellido, fecha_de_nacimiento, sexo, dni, mail, contrasena)
-        self.gastado = 0 
         self.reservas = []
 
     def recolectar_criterios_interes(self):
@@ -40,8 +39,7 @@ class Cliente(Usuario):
     
     # NUESTRO CHECK-IN 15:00, CHECK-OUT 11:00
     def hacer_reserva(self, Hotel):
-        #hoy = datetime.date.today().strftime("%d/%m/%Y")
-        hoy = datetime.now().strftime("%d/%m/%Y")
+        hoy = date.today().strftime("%d/%m/%Y")
 
         # 1) Pregunto al cliente fecha check-in, fecha check-out
         check_in = validar_fecha_posteriori(hoy,validar_fecha(input('Ingrese la fecha deseada de check-in (dd/mm/aaaa): ')))
@@ -55,25 +53,6 @@ class Cliente(Usuario):
         empleado = admin.asignar_empleado_menos_ocupado(Hotel.usuarios, 'Administrativo')
         
         # 4) ¡¡¡ Chequear disponibilidad y asignacion de cuarto lo hace el personal administrativo !!
-        
-        """ debugging
-        print(type(empleado))
-        print(dir(empleado))  # Imprime los atributos y métodos de la instancia
-        print(inspect.signature(empleado.disponibilidad_habitacion))
-
-        print(Hotel.habitaciones)
-        print(Hotel.reservas)
-        print(check_in)
-        print(check_out)
-        print(criterios_elegidos)
-        print(empleado)
-        if isinstance(empleado, Empleado):
-            habitacion = empleado.disponibilidad_habitacion(Hotel.habitaciones, Hotel.reservas, check_in, check_out, criterios_elegidos)
-        else:
-            print("El objeto empleado no es una instancia de la clase Empleado.")
-        """
-
-
         habitacion = empleado.disponibilidad_habitacion(Hotel.habitaciones, Hotel.reservas, check_in, check_out, criterios_elegidos)
 
         if (habitacion == None):
@@ -152,33 +131,26 @@ class Cliente(Usuario):
             empleado.agregar_tarea_automatica(reserva.habitacion.numero)
         else:
             print('No esta permitido usar el minibar ya que no está hospedado en el hotel actualmente')
-    
-    def actualizar_gastado(self):
-        self.gastado = 0
-        hoy = datetime.now()
-        for reserva in self.reservas:
-            check_out_dt = datetime.strptime(reserva.check_out + ' 11:00', "%d/%m/%Y %H:%M")
-            if (check_out_dt <= hoy):
-                self.gastado += reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
                 
     def buscar_reservas_activas(self):
         reservas_activas = []
         for reserva in self.reservas:
             fecha_in = datetime.strptime(reserva.check_in + ' 11:00', "%d/%m/%Y %H:%M")
             fecha_out = datetime.strptime(reserva.check_out + ' 11:00', "%d/%m/%Y %H:%M")
-            if (fecha_in <= datetime.today() <= fecha_out and reserva.mail_usuario == self.mail):
+            if (fecha_in <= datetime.now() <= fecha_out and reserva.mail_usuario == self.mail):
                 reservas_activas.append(reserva)
         return reservas_activas
     
     def ver_reservas_activas(self):
         reservas_activas = self.buscar_reservas_activas()
-        
         for reserva in reservas_activas:
             print(f"Reserva de habitación {reserva.habitacion.numero} del {reserva.check_in} al {reserva.check_out}\n"
                   f"Gastos en el buffet: ${reserva.gastos_buffet}\n"
                   f"Gastos en el minibar: ${reserva.gastos_minibar}\n"
                   f"Costo total de la reserva: ${reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}")
             print()
+        if reservas_activas == []:
+            print("No tiene reservas activas")
             
     def elegir_habitacion_activa(self, reservas_activas):
         if (len(reservas_activas) > 1):

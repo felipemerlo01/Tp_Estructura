@@ -17,7 +17,7 @@ def validar_fecha_posteriori(fecha_antes, fecha_despues):
     while (True):
         fecha_ant = datetime.strptime(fecha_antes, '%d/%m/%Y')
         fecha_des = datetime.strptime(fecha_despues, '%d/%m/%Y')       
-
+    
         if (fecha_des > fecha_ant):
             return fecha_despues
         else:
@@ -160,10 +160,12 @@ def menu_Administrador():
     
 def menu_Personal_Administrativo():
     print('''
-1. Historial de sus reservas
+1. Historial de reservas
 2. Nomina de clientes del hotel
-3. Informes estadísticos
-4. Volver''')
+3. Elaborar Informe estadístico
+4. Visualización de las tareas pendientes
+5. Realizar tarea pendiente
+6. Volver''')
     
 def menu_Informe_estadístico(): 
     print('''

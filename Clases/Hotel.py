@@ -25,7 +25,7 @@ class Hotel:
         
         mail = self.verificar_mail_existente(verificar_mail(input("Ingrese su mail: ")))
         
-        contrasena = verificar_contrasena(input("Ingrese una nueva contraseña. Debe contener al menos 8 caracteres, con un mínimo de 2 mayúsculas y 2 numeros: "))
+        contrasena = verificar_contrasena(input("Ingrese una contraseña. Debe contener al menos 8 caracteres, con un mínimo de 2 mayúsculas y 2 numeros: "))
         
         if (opcion == '1'):
             nuevo_usuario = Cliente(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena)
@@ -123,53 +123,33 @@ class Hotel:
     # Calculo de recaudacion diaria del hotel
     def recaudacion_diaria(self):
         ingreso_del_dia = 0
-        hoy = datetime.today()
+        hoy = date.today()
         for reserva in self.reservas:
             check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
             if (check_out_dt == hoy):
                 ingreso_del_dia += (reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar)
         return ingreso_del_dia
-    
-    # Cantidad de clientes por tipo
-    # def cantidad_de_clientes_por_tipo(self):
-    #     topes_de_categoria = {'1':250000,'2':600000}
-    #     Cant_clientes_por_cat=[0,0,0]
-    #     for reserva in self.reservas:
-    #         gastos= reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
-    #         if reserva.check_out >= datetime.today():
-    #             if gastos <= topes_de_categoria['1']:
-    #                 Cant_clientes_por_cat[0]+=1
-    #             elif topes_de_categoria['1'] < gastos <= topes_de_categoria['2']:
-    #                 Cant_clientes_por_cat[1]+=1
-    #             elif topes_de_categoria['2'] < gastos:
-    #                 Cant_clientes_por_cat[2]+=1
-    #     return topes_de_categoria,Cant_clientes_por_cat
-    
-    # Cantidad de clientes por tipo (NEW !!)
 
     def cantidad_de_clientes_por_tipo(self):
-        self.actualizar_gasto_clientes()
         self.actualizar_estado_habitaciones()
         topes_de_categoria = {'1':250000,'2':600000}
         Cant_clientes_por_cat=[0,0,0]
-        hoy=datetime.today()
+        hoy = date.today()
         for reserva in self.reservas:
-            if reserva.habitacion.ocupada == True:
-                gastos= reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
-                check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
-                if check_out_dt >= hoy:
-                    if gastos <= topes_de_categoria['1']:
-                        Cant_clientes_por_cat[0]+=1
-                    elif topes_de_categoria['1'] < gastos <= topes_de_categoria['2']:
-                        Cant_clientes_por_cat[1]+=1
-                    elif topes_de_categoria['2'] < gastos:
-                        Cant_clientes_por_cat[2]+=1
+            check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
+            if (reserva.habitacion.ocupada == True and check_out_dt >= hoy):
+                gastos = reserva.gastos_ocupacion + reserva.gastos_buffet + reserva.gastos_minibar
+                if gastos <= topes_de_categoria['1']:
+                    Cant_clientes_por_cat[0]+=1
+                elif topes_de_categoria['1'] < gastos <= topes_de_categoria['2']:
+                    Cant_clientes_por_cat[1]+=1
+                elif topes_de_categoria['2'] < gastos:
+                    Cant_clientes_por_cat[2]+=1
                         
         return topes_de_categoria,Cant_clientes_por_cat
-        pass
         
     def crear_informe_estadistico(self):
-        fecha=date.today()
+        fecha = date.today()
         procentaje_ocupacion = self.procentaje_de_ocupacion() 
         porcentajes_parciales_de_ocupacion = self.procentaje_de_ocupacion_por_tipo_de_habitación()
         ganancia_del_dia= self.recaudacion_diaria()
@@ -184,28 +164,22 @@ class Hotel:
             informe.write(f"\t\tFamiliar: {porcentajes_parciales_de_ocupacion[2]}% \n")
             informe.write(f"\t\tSuite: {porcentajes_parciales_de_ocupacion[3]}% \n\n\n")
             informe.write(f"Ganancia del dia: {ganancia_del_dia} \n\n")
-            informe.write(f"Cantidad de Clientes, clasificados por nivel de inversion:\n")
+            informe.write(f"Cantidad de Clientes actuales, clasificados por nivel de inversion:\n")
             informe.write(f"\t\t Clase 1 (inversion menor a {cantidad_de_clientes_por_tipo[0]['1']}): {cantidad_de_clientes_por_tipo[1][0]} \n")
-            informe.write(f"\t\t Clase 2 (inversion entre {cantidad_de_clientes_por_tipo[0]['1']}) y {cantidad_de_clientes_por_tipo[0]['2']}): {cantidad_de_clientes_por_tipo[1][1]} \n")
-            informe.write(f"\t\t Clase 1 (inversion mayor a {cantidad_de_clientes_por_tipo[0]['2']}): {cantidad_de_clientes_por_tipo[1][2]} \n")
+            informe.write(f"\t\t Clase 2 (inversion entre {cantidad_de_clientes_por_tipo[0]['1']} y {cantidad_de_clientes_por_tipo[0]['2']}): {cantidad_de_clientes_por_tipo[1][1]} \n")
+            informe.write(f"\t\t Clase 3 (inversion mayor a {cantidad_de_clientes_por_tipo[0]['2']}): {cantidad_de_clientes_por_tipo[1][2]} \n")
     
     def actualizar_estado_habitaciones(self):
         for habitacion in self.habitaciones.values():
             habitacion.actualizar_estado_ocupacion(self.reservas)
-    
-    def actualizar_gasto_clientes(self):
-        for usuario in self.usuarios.values():
-            #Entra solo si es cliente, que no tiene el atributo legajo
-            if (not hasattr(usuario, 'legajo')):
-                usuario.actualizar_gastado()
 
 ######################### ACTUALIZACION DE BASES DE DATOS
 
     # Actualizar todas las bases
-    def actualizar_bases_de_datos(self, pathreservas, pathusuarios):
+    def actualizar_bases_de_datos(self, path):
         try:
-            #self.actualizar_base_reservas(pathreservas)
-            self.actualizar_base_usuarios(pathusuarios)
+            self.actualizar_base_reservas(path + 'db_Reservas.csv')
+            self.actualizar_base_usuarios(path + 'db_Usuarios.csv')
             print('Se guardo la información correctamente')
         except Exception as e:
             print('Ha habido un error en el guardado.')
@@ -214,7 +188,7 @@ class Hotel:
     # Metodo actualizar base usuarios
     def actualizar_base_usuarios(self, path):
         columnas = ('Nombre','Apellido','Fecha de nacimiento','Sexo','DNI','Mail','Contrasenia','Legajo','Rol','Estado','Tareas')
-        with open(path, 'w', newline='') as csv_usuarios:
+        with open(path, 'w', newline='',encoding='utf-8') as csv_usuarios:
             csv_writer = csv.writer(csv_usuarios)
             csv_writer.writerow(columnas)           
             
@@ -224,8 +198,11 @@ class Hotel:
                 elif (isinstance(usuario, Empleado)):
                     # tareas = list(usuario.tareas.queue    ) if usuario.tareas else []
                     # tareas_string = ', '.join(tareas) if tareas else ''
-                    tareas = list(usuario.tareas.queue) if usuario.tareas else []
-                    tareas_string = ', '.join(map(str, tareas)) if tareas else ''
+                    
+                    if not usuario.tareas.empty():
+                        tareas_string = ', '.join(map(str, list(usuario.tareas.queue)))
+                    else:
+                        tareas_string = ""
 
                     fila = (usuario.nombre, usuario.apellido, usuario.fecha_de_nacimiento, usuario.sexo, str(usuario.dni), usuario.mail, usuario.contrasena, str(usuario.legajo), usuario.rol, usuario.estado, tareas_string)
                 else:

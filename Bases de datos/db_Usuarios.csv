@@ -1,19 +1,19 @@
 Nombre,Apellido,Fecha de nacimiento,Sexo,DNI,Mail,Contrasenia,Legajo,Rol,Estado,Tareas
-Raul,Baul,15/10/1985,M,17232974,raulbaul@yahoo.com,PolloLoco123,1,admin,Activo,
+Raul,Baul,15/10/1985,M,17232974,raulbaul@yahoo.com,PolloLoco123,1,admin,,
 Alejandro,Pérez,23/04/1990,M,70822015,alejandro.perez@gmail.com,P@ssw0rd123,2,Administrativo,Activo,
 Sofía,González,07/12/1988,F,22316771,sofia.gonzalez@yahoo.com,SecuR3#Pass,3,Administrativo,Activo,
 Daniel,Rodríguez,30/06/1982,M,11655961,daniel.rodriguez@hotmail.com,9aBcD3fGh,4,Administrativo,Activo,
 Valentina,Martínez,19/09/1989,F,82605872,valentina.martinez@gmail.com,Qu1ck$1lver,5,Administrativo,Activo,
 Martín,López,14/03/1995,M,19105398,martin.lopez@yahoo.com,12Xyz!ab,6,Administrativo,Activo,
 Camila,Sánchez,25/11/1981,F,50678326,camila.sanchez@hotmail.com,R@1nb0w$un,7,Administrativo,Activo,
-Mateo,García,02/07/1993,M,89107617,mateo.garcia@gmail.com,P@ssw0rd2023,8,Mantenimiento,Activo,
+Mateo,García,02/07/1993,M,89107617,mateo.garcia@gmail.com,P@ssw0rd2023,8,Mantenimiento,Activo,Reponer minibar en 202
 Lucía,Fernández,10/05/1984,F,21388959,lucia.fernandez@yahoo.com,5tR0nG#P@ss,9,Mantenimiento,Activo,
 Diego,Hernández,28/01/1992,M,85882826,diego.hernandez@hotmail.com,M0n3y#M@ker,10,Mantenimiento,Activo,
 Antonella,Díaz,03/08/1987,F,90832419,antonella.diaz@gmail.com,Fr13nd$F0r3v3r,11,Mantenimiento,Activo,
 Andrés,Torres,12/09/1986,M,96453498,andres.torres@yahoo.com,C0ff33#L0v3r,12,Mantenimiento,Inactivo,
 Isabella,Vargas,20/06/1991,F,83462933,isabella.vargas@hotmail.com,7h3S@v1or$,13,Mantenimiento,Activo,
 Javier,Ramos,09/02/1984,M,32672897,javier.ramos@gmail.com,8#SnowWh1te,14,Mantenimiento,Activo,
-Valeria,Romero,27/07/1983,F,44560303,valeria.romero@yahoo.com,P@ssw0rd789,15,Limpieza,Activo,
+Valeria,Romero,27/07/1983,F,44560303,valeria.romero@yahoo.com,P@ssw0rd789,15,Limpieza,Activo,Limpieza en el buffet de 202
 Sebastián,Mendoza,18/04/1980,M,51898335,sebastian.mendoza@hotmail.com,D3lic1ous&F00d,16,Limpieza,Activo,
 Paula,Castro,06/11/1985,F,19364258,paula.castro@gmail.com,4llTh@tJ@zz,17,Limpieza,Activo,
 Lucas,Silva,08/10/1983,M,14807766,lucas.silva@yahoo.com,3n3rgy#Dr1nk,18,Limpieza,Activo,
@@ -49,3 +49,4 @@ Renata,Durán,27/06/1991,F,32739004,renata.duran@gmail.com,3l3ctr0n1cM1nd,,Clien
 Ricardo,Solís,01/10/1983,M,62429990,ricardo.solis@yahoo.com,C0ff33L0v3rs,,Cliente,,
 Ana Sofía,León,16/08/1993,F,20659349,ana.sofia.leon@hotmail.com,C@pt@1nM@rv3l,,Cliente,,
 Esteban,Serrano,05/03/1980,M,87686956,esteban.serrano@gmail.com,F@nt@st1c4Ever,,Cliente,,
+Lara,Quito,10/09/2003,F,45073002,laraquito@gmail.com,ProbandO01,,Cliente,,
