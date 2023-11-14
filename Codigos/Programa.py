@@ -1,16 +1,9 @@
 from Hotel import Hotel
 from Funciones_extra import menu_principal, menu_registro, validar_opcion_menu, menu_Cliente, menu_Administrador, menu_Personal_Administrativo, menu_Mant_Limp
-from Funciones_lectores import leer_Usuarios, leer_Habitaciones, leer_Reservas
+from Funciones_lectura_path import leer_Usuarios, leer_Habitaciones, leer_Reservas, obtener_path
 from datetime import datetime
-import platform
 
-# Busca el OS, y setea el path acorde
-operating_system = platform.system()
-
-if operating_system == 'Windows':
-    path = 'Bases de datos\\'
-elif operating_system == 'Darwin' or operating_system == 'Linux':
-    path = 'Bases de datos/'
+path = obtener_path()
 
 # El menu en si mismo
 continuar = True
