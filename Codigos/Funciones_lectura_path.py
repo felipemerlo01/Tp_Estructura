@@ -65,6 +65,7 @@ def obtener_path():
         return path
     except Exception as e:
         print(f'Se presentó el error {e} al intentar buscar el directorio')
+        return
     
 
         
