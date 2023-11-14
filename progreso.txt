@@ -121,10 +121,6 @@ FALTA:
 - Agregar en usar el minibar para que se visualice el menu de opciones del minibar
 - Fijarse porque lo de actualizar el estado de la habitacion, a pesar de hacerse de forma automatica a todas las habitaciones
     podria ser un metodo del empleado que accede a info del hotel y la actualiza en vez de que sea un metodo del hotel (para mas realismo)
-- Administrador --> INVENTARIO DEL PERSONAL (por tipo)
-    - Los nombres por tipo o la cantidad de empleados por tipo?
-- Personal Administrativo --> HISTORIAL DE RESERVAS (falta metodo creo) COMPLETADO
-- Personal Adminsitrativo --> NOMINA DE CLIENTES DEL HOTEL (falta metodo creo) COMPLETADO
 
 ##ya está hecho esto??
 - Administrador --> VER TODO EL TEMA DE EGRESOS Y EGRESOS (que contesta bruno)
@@ -139,14 +135,7 @@ FALTA:
                 - Hay que agregar a los csv esas columnas, agregarlo en lsa funciones de actualziar bases y en los lectores
                 - conviene tenerlo como atributo ? y si quiero que se actualice cada vez que se realice un random pero que ademas se guarden en la o objeto?
 
-ARREGLAR:
-- Corregir metodo de Cliente "buscar reservas activas":
-    - Esta cheqeuando que el rango de la reserva este en el dia de hoy pero hay que ver que si la reserva termina hoy y ya son pasadas las 11 no esta activa
-        - Agregar hora para solucionar eso
 
-
-COMENTARIO CAMILO (actualizar bases):
-Chicos me di cuenta que conviene reescribir todas las bases cada vez que cerras el programa porque se agregan y modifican muchas cosas:
 
 
 realizar siguiente tarea --> modifica la columna tareas del empleado en la base usuarios

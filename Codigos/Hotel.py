@@ -3,8 +3,7 @@ from Empleado import Empleado
 from Funciones_extra import verificar_fecha_de_nacimiento, validar_fecha, verificar_dni, verificar_sexo, verificar_mail, verificar_contrasena
 from datetime import datetime, date
 import csv
-import pandas as pd
-
+import random
 class Hotel:
     def __init__(self, nombre):
         self.nombre = nombre
@@ -14,10 +13,12 @@ class Hotel:
         
     def crear_usuario(self, opcion):
         nombre = input('Ingrese su nombre: ').capitalize()
+        print()
         
         apellido = input('Ingrese su apellido: ').capitalize()
+        print()
 
-        fecha_de_nacimiento = verificar_fecha_de_nacimiento(validar_fecha(input("Ingrese su fecha de nacimiento (dd/mm/aaaa): ")))
+        fecha_de_nacimiento = verificar_fecha_de_nacimiento(validar_fecha(input("Ingrese su fecha de nacimiento (dd/mm/YYYY): ")))
         
         sexo = verificar_sexo(input("Ingrese su sexo (F/M): ").upper())
         
@@ -32,13 +33,13 @@ class Hotel:
             self.usuarios[nuevo_usuario.mail] = nuevo_usuario
         
         elif (opcion == '2'):
-            rol = self.verificar_rol(input("Ingrese su rol: "))
+            rol = self.verificar_rol(input("Ingrese su rol: ").capitalize())
             legajo = self.crear_legajo()
             
-            nuevo_usuario = Empleado(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena, rol, int(legajo))
+            nuevo_usuario = Empleado(nombre, apellido, fecha_de_nacimiento, sexo, int(dni), mail, contrasena, int(legajo), rol)
             self.usuarios[nuevo_usuario.mail] = nuevo_usuario
         
-        print(f'Se ha creado el usuario de {nuevo_usuario.nombre} {nuevo_usuario.apellido} correctamente')
+        print(f'\nSe ha creado el usuario de {nuevo_usuario.nombre} {nuevo_usuario.apellido} correctamente\n')
         return nuevo_usuario
         
     # verificar si el mail ya existe
@@ -123,7 +124,7 @@ class Hotel:
     # Calculo de recaudacion diaria del hotel
     def recaudacion_diaria(self):
         ingreso_del_dia = 0
-        hoy = date.today()
+        hoy = datetime.now()
         for reserva in self.reservas:
             check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
             if (check_out_dt == hoy):
@@ -134,7 +135,7 @@ class Hotel:
         self.actualizar_estado_habitaciones()
         topes_de_categoria = {'1':250000,'2':600000}
         Cant_clientes_por_cat=[0,0,0]
-        hoy = date.today()
+        hoy = datetime.now()
         for reserva in self.reservas:
             check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
             if (reserva.habitacion.ocupada == True and check_out_dt >= hoy):
@@ -173,6 +174,21 @@ class Hotel:
         for habitacion in self.habitaciones.values():
             habitacion.actualizar_estado_ocupacion(self.reservas)
 
+    def generar_ingreso_y_egreso_aleatorio(self):
+        empleados = []
+        for usuario in self.usuarios.values():
+            if (hasattr(usuario, 'legajo') and usuario.legajo != 1): #Es empleado
+                empleados.append(usuario)
+        
+        empleados_presentes = random.sample(empleados, 10)
+        
+        for empleado in empleados_presentes:
+            empleado.registro_ingreso()
+            empleado.registro_egreso()
+        
+        return empleados_presentes
+        
+
 ######################### ACTUALIZACION DE BASES DE DATOS
 
     # Actualizar todas las bases
@@ -196,9 +212,6 @@ class Hotel:
                 if (isinstance(usuario, Cliente)):
                     fila = (usuario.nombre, usuario.apellido, usuario.fecha_de_nacimiento, usuario.sexo, str(usuario.dni), usuario.mail, usuario.contrasena, '', 'Cliente', '', '')
                 elif (isinstance(usuario, Empleado)):
-                    # tareas = list(usuario.tareas.queue    ) if usuario.tareas else []
-                    # tareas_string = ', '.join(tareas) if tareas else ''
-                    
                     if not usuario.tareas.empty():
                         tareas_string = ', '.join(map(str, list(usuario.tareas.queue)))
                     else:
@@ -219,28 +232,6 @@ class Hotel:
             for reserva in self.reservas:
                 fila = (reserva.mail_usuario, reserva.num_hab, reserva.check_in, reserva.check_out, reserva.fecha_reserva, str(reserva.gastos_buffet), str(reserva.gastos_minibar))
                 csv_writer.writerow(fila)
-
-    # # Al dar de baja un empleado hay que modificar su estado en el csv        
-    # def modificar_estado_empleado_csv(self, path, empleado):
-    #     base = pd.read_csv(path)
-    #     base.loc[base['Legajo'] == empleado.legajo,'Estado'] = 'Inactivo'
-    #     base.to_csv(path, index=False)
-    #     return
-
-    # # Actualizo el CSV de reservas con una nueva linea con la nueva reserva
-    # def actualizar_base_reservas(self, reserva, path):
-    #     info_reserva = f"{reserva.mail_usuario},{reserva.habitacion.numero},{reserva.check_in},{reserva.check_out},{reserva.fecha_reserva},{reserva.gastos_ocupacion},{reserva.gastos_buffet},{reserva.gastos_minibar}\n"
-    #     with open(path,"a",newline='') as archivo_reservas:
-    #         archivo_reservas.write(info_reserva)
-
-    # # Actualizo el CSV de usuarios con una nueva linea con el nuevo usuario
-    # def actualizar_base_usuarios(self, usuario, path):
-    #     if (hasattr(usuario, 'legajo')):
-    #         info_usuarios = f"{usuario.nombre},{usuario.apellido},{usuario.fecha_de_nacimiento},{usuario.sexo},{usuario.dni},{usuario.mail},{usuario.contrasena},{usuario.legajo},{usuario.rol},{usuario.estado},{usuario.tareas}\n"
-    #     else:
-    #         info_usuarios = f"{usuario.nombre},{usuario.apellido},{usuario.fecha_de_nacimiento},{usuario.sexo},{usuario.dni},{usuario.mail},{usuario.contrasena}\n"
-    #     with open(path,"a",newline='') as archivo_usuarios:
-    #         archivo_usuarios.write(info_usuarios)
     
 
     

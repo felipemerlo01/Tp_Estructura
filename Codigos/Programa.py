@@ -21,20 +21,21 @@ while (continuar):
         leer_Habitaciones(path+'db_Habitaciones.csv', POO)
         leer_Reservas(path+'db_Reservas.csv', POO)
         leer_Usuarios(path+'db_Usuarios.csv', POO)
+        
         cargado = True
     
     menu_principal()
     opcion = validar_opcion_menu(input('Ingrese una opción: '), 3)
     if (opcion == '1'):
         usuario = POO.iniciar_sesion()
-        print(f'Se inició sesión correctamente. Bienvenido.')
+        print(f'Se inició sesión correctamente. Bienvenido/a {usuario.nombre}.')
         
         if (hasattr(usuario, 'legajo')):
             if (usuario.legajo == 1): # Menu para el Administrador
                 volver = False
                 while (not volver):
                     menu_Administrador()
-                    opcion_admin = validar_opcion_menu(input(" Ingrese una opción: "), 7)
+                    opcion_admin = validar_opcion_menu(input("Ingrese una opción: "), 7)
                     if opcion_admin == '1': # Dar empleado de alta
                         usuario.dar_empleado_de_alta(POO) 
                     elif opcion_admin == '2': # Dar empleado de baja, NO se puede activar nuevamente
@@ -42,7 +43,7 @@ while (continuar):
                     elif opcion_admin == '3': # Asignar tarea a un empleado
                         usuario.asignar_tareas(POO)
                     elif opcion_admin == '4': # Control de ingreso y egreso
-                        pass
+                        usuario.controlar_ingresos_y_egresos(POO)
                     elif opcion_admin == '5': # Ver inventario del personal
                         usuario.ver_inventario_personal(POO)
                     elif opcion_admin == '6': # Recaudacion diaria
@@ -52,21 +53,26 @@ while (continuar):
                     else: 
                         volver = True
             else:
-                if (usuario.rol == 'Administrativo'): # Menu para empleados administrativos
+                if (usuario.rol == 'Administrativo'): # Menu para empRleados administrativos
                     volver_1 = False
                     while (not volver_1):
                         menu_Personal_Administrativo()
                         opcion_personal_admin = validar_opcion_menu(input("Ingrese una opción: "), 6)
                         if (opcion_personal_admin == '1'): # Historial de reservas
                             usuario.historial_de_reservas(POO)
+
                         elif (opcion_personal_admin == '2'): # Nomina de clientes del hotel
                             usuario.nomina_de_clientes(POO)
+
                         elif (opcion_personal_admin == '3'): # Informe estadístico
                             POO.crear_informe_estadistico()
+
                         elif (opcion_personal_admin == '4'): # Visualizar tareas pendientes
                             usuario.visualizar_tareas_pendientes()     
+                        
                         elif (opcion_personal_admin == '5'): # Realizar tarea pendiente
                             usuario.realizar_siguiente_tarea()         
+                        
                         else:
                             volver_1 = True
                 

@@ -12,7 +12,6 @@ class Administrador(Usuario):
 
     def dar_empleado_de_alta(self, hotel):
         empleado = hotel.crear_usuario('2')
-        #hotel.usuarios[empleado.mail] = empleado
         print(f"{empleado.nombre} {empleado.apellido} ha sido dado de alta como empleado.")
         
     def dar_empleado_de_baja(self, hotel):
@@ -31,7 +30,7 @@ class Administrador(Usuario):
     def asignar_empleado_menos_ocupado(self, usuarios, rol):
         lista_empleados_de_interes = []
         for usuario in usuarios.values():
-            if (hasattr(usuario, 'rol') and usuario.rol == rol):
+            if (hasattr(usuario, 'rol') and usuario.rol == rol and usuario.estado != "Inactivo"):
                 lista_empleados_de_interes.append(usuario)
                 
         trabajador_menos_ocupado = min(lista_empleados_de_interes, key=lambda trabajador: trabajador.tareas.qsize())
@@ -41,26 +40,17 @@ class Administrador(Usuario):
         legajo = int(validar_num(input("Legajo del empleado: ")))
         empleado = hotel.buscar_empleado(legajo)
         
-        tarea = input('Ingrese la tarea a asignar: ')
-        
-        if (empleado != None):
-            empleado.tareas.put(tarea)
-            print (f"La tarea fue asignada al empleado/a {empleado.nombre} {empleado.apellido} correctamente")
-        else:
-            print(f'El usuario asociado al legajo {legajo} no existe en el sistema.') 
+        if empleado.estado!="Inactivo":
+            tarea = input('Ingrese la tarea a asignar: ')
             
-    # METODO DE CONTROL DE INGRESO y EGRESO
-    # Ni idea muy bien que pide tbh
-    def control_ingresos_egresos(self, hotel):
-        ingresos = []
-        egresos = []
-        for mail, usuario in hotel.usuarios.items():
-            if hasattr(usuario,"rol"):
-                ingreso = usuario.registrar_ingreso()
-                ingresos.append(ingreso)
-                egreso = usuario.registrar_egreso()
-                egresos.append(egreso)
-
+            if (empleado != None):
+                empleado.tareas.put(tarea)
+                print (f"La tarea fue asignada al empleado/a {empleado.nombre} {empleado.apellido} correctamente")
+            else:
+                print(f'El usuario asociado al legajo {legajo} no existe en el sistema.')
+        else:
+            print(f'El usuario asociado al legajo {legajo} está inactivo.')
+            
     # METODO DE INVENTARIO DEL PERSONAL
     def ver_inventario_personal(self, hotel):
         categorias = {}
@@ -77,5 +67,8 @@ class Administrador(Usuario):
             for usuario in usuarios:
                 print(f"Nombre: {usuario.nombre} {usuario.apellido}, Mail: {usuario.mail}, Estado: {usuario.estado}")
 
-    
-    
+    # METODO PARA CONTROLAR INGRESOS Y EGRESOS
+    def controlar_ingresos_y_egresos(self, hotel):
+        empleados_presentes = hotel.generar_ingreso_y_egreso_aleatorio()
+        for usuario in empleados_presentes:
+            print(f'{usuario.nombre} {usuario.apellido}, Ingreso: {usuario.ingreso}, Egreso: {usuario.egreso}')

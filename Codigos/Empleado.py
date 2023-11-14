@@ -11,8 +11,8 @@ class Empleado(Usuario):
         self.legajo = legajo
         self.rol = rol
         self.estado = estado
-        self.registro_ingresos = []  # Lista para registrar los ingresos del empleado
-        self.registro_egresos = []  # Lista para registrar los egresos del empleado
+        self.ingreso = None
+        self.egreso = None
         self.tareas = Queue()  # Usar una cola para almacenar las tareas asignadas
 
     def disponibilidad_habitacion(self, diccionario_habitaciones, lista_reservas, check_in, check_out, criterios):
@@ -85,7 +85,7 @@ class Empleado(Usuario):
             if len(hotel.usuarios[mail_cliente].reservas) > 0:
                 print("Se listan las siguientes Reservas: ")
                 for reserva in hotel.usuarios[mail_cliente].reservas:
-                    print(f'Fecha reserva: {reserva.fecha_reserva}\n Número de Habitación: {reserva.habitacion.numero}  \n Check-in: {reserva.check_in}\n Check-out: {reserva.check_out}\n Gastos Total: {reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}  \n\n')
+                    print(f'Fecha reserva: {reserva.fecha_reserva}\n Número de Habitación: {reserva.habitacion.numero}  \n Check-in: {reserva.check_in}\n Check-out: {reserva.check_out}\n Gastos Total: {reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}')
             else:
                 print("El cliente seleccionado no tiene reservas registradas")
         else:
@@ -112,12 +112,10 @@ class Empleado(Usuario):
         #se hace el ingreso de forma automática entre las 8-9 am 
         hora_ingresada = (datetime.strptime("08:00", "%H:%M") + timedelta(minutes=randint(0,59))).strftime("%H:%M")
         hoy = date.today().strftime('%d/%m/%Y')
-        ingreso = (hoy, hora_ingresada)
-        self.registro_ingresos.append(ingreso)
+        self.ingreso = (hoy, hora_ingresada)
 
     # El empleado hace el egreso manualmente
     def registro_egreso(self):
         hora_egreso = (datetime.strptime("20:00", "%H:%M") + timedelta(minutes=randint(0,59))).strftime("%H:%M")
         hoy = date.today().strftime('%d/%m/%Y')   
-        egreso = (hoy, hora_egreso)
-        self.registro_egresos.append(egreso)
+        self.egreso = (hoy, hora_egreso)
