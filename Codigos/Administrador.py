@@ -1,5 +1,5 @@
 from Usuario import Usuario
-from Funciones_extra import validar_num
+from Funciones_extra import validar_num, imprimir_tabla
 
 class Administrador(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str, legajo: int):
@@ -51,20 +51,31 @@ class Administrador(Usuario):
     def ver_inventario_personal(self, hotel):
         categorias = {}
         #Primero agrupamos por rol
-        for mail, usuario in hotel.usuarios.items():
-            if hasattr(usuario,"rol"): # Solo entra si tiene el atributo rol, asi que no afecta a los clientes
+        for usuario in hotel.usuarios.values():
+            if (hasattr(usuario,"rol") and usuario.estado == 'Activo'): # Solo entra si tiene el atributo rol y esta activo
                 if usuario.rol in categorias:
                     categorias[usuario.rol].append(usuario)
                 else:
                     categorias[usuario.rol] = [usuario]
-        #Printeamos la información
+        
+        columnas = ['Nombre', 'Apellido', 'Mail']
+        
         for rol, usuarios in categorias.items():
-            print(f"\nInventario del personal con rol {rol}:")
+            print(f"Inventario del personal con rol {rol}:\n")
+            informacion = []
             for usuario in usuarios:
-                print(f"Nombre: {usuario.nombre} {usuario.apellido}, Mail: {usuario.mail}, Estado: {usuario.estado}")
-
+                lista_usuario = [usuario.nombre, usuario.apellido, usuario.mail]
+                informacion.append(lista_usuario)
+            imprimir_tabla(informacion, columnas)
+            
     # METODO PARA CONTROLAR INGRESOS Y EGRESOS
     def controlar_ingresos_y_egresos(self, hotel):
         empleados_presentes = hotel.generar_ingreso_y_egreso_aleatorio()
+        informacion = []
         for usuario in empleados_presentes:
-            print(f'{usuario.nombre} {usuario.apellido}, Ingreso: {usuario.ingreso}, Egreso: {usuario.egreso}')
+            lista_usuario = [usuario.nombre, usuario.apellido, usuario.ingreso, usuario.egreso]
+            informacion.append(lista_usuario)
+        
+        columnas = ['Nombre', 'Apellido', 'Ingreso', 'Egreso']
+        print('Los ingresos y egresos de los empleados de hoy son:\n')
+        imprimir_tabla(informacion, columnas)

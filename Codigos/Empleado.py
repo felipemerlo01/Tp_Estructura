@@ -2,7 +2,7 @@ from datetime import datetime, date, timedelta
 from queue import Queue
 from Usuario import Usuario
 from random import randint
-from Funciones_extra import verificar_mail
+from Funciones_extra import verificar_mail, imprimir_tabla
 
 class Empleado(Usuario):
     def __init__(self, nombre: str, apellido: str, fecha_de_nacimiento: str, sexo: str, dni: int, mail: str, contrasena: str, legajo: int, rol: str, estado = 'Activo'):
@@ -82,9 +82,16 @@ class Empleado(Usuario):
         mail_cliente = verificar_mail(input("Ingrese el mail del cliente: "))
         if mail_cliente in hotel.usuarios:
             if len(hotel.usuarios[mail_cliente].reservas) > 0:
-                print("Se listan las siguientes Reservas: ")
+                informacion = []
                 for reserva in hotel.usuarios[mail_cliente].reservas:
-                    print(f'Fecha reserva: {reserva.fecha_reserva}\n Número de Habitación: {reserva.habitacion.numero}  \n Check-in: {reserva.check_in}\n Check-out: {reserva.check_out}\n Gastos Total: {reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}')
+                    gasto_total = reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion
+                    lista_reserva = [reserva.fecha_reserva, reserva.habitacion.numero, reserva.check_in, reserva.check_out, gasto_total]
+                    informacion.append(lista_reserva)
+
+                columnas = ['Fecha reserva', 'Número de habitación', 'Check-in', 'Check-out', 'Gastos total']
+                
+                print(f"Se listan las siguientes reservas de {hotel.usuarios[mail_cliente].nombre} {hotel.usuarios[mail_cliente].apellido}:\n")
+                imprimir_tabla(informacion, columnas)
             else:
                 print("El cliente seleccionado no tiene reservas registradas")
         else:
@@ -99,10 +106,17 @@ class Empleado(Usuario):
             if (check_in_dt < hoy < check_out_dt): 
                 mails_clientes_actuales.append(reserva.mail_usuario)
         if (len(mails_clientes_actuales) > 0):
+            informacion = []
             for mail in hotel.usuarios:
                 if (mail in mails_clientes_actuales):
                     usuario = hotel.usuarios[mail]
-                    print(f'Nombre: {usuario.nombre}, Apellido: {usuario.apellido}, Mail: {usuario.mail}')
+                    lista_usuario = [usuario.nombre, usuario.apellido, usuario.mail]
+                    informacion.append(lista_usuario)
+            
+            columnas = ['Nombre', 'Apellido', 'Mail']
+            
+            print('Se listan los siguientes clientes hospedados actualmente: \n')
+            imprimir_tabla(informacion, columnas)
         else:
             print('No hay clientes hospedados actualmente en el hotel.')
 
@@ -110,11 +124,11 @@ class Empleado(Usuario):
     def registro_ingreso(self):
         #se hace el ingreso de forma automática entre las 8-9 am 
         hora_ingresada = (datetime.strptime("08:00", "%H:%M") + timedelta(minutes=randint(0,59))).strftime("%H:%M")
-        hoy = date.today().strftime('%d/%m/%Y')
-        self.ingreso = (hoy, hora_ingresada)
+        
+        self.ingreso =  hora_ingresada
 
     # El empleado hace el egreso manualmente
     def registro_egreso(self):
         hora_egreso = (datetime.strptime("20:00", "%H:%M") + timedelta(minutes=randint(0,59))).strftime("%H:%M")
-        hoy = date.today().strftime('%d/%m/%Y')   
-        self.egreso = (hoy, hora_egreso)
+       
+        self.egreso =  hora_egreso

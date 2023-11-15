@@ -22,7 +22,7 @@ if (path is not None):
         opcion = validar_opcion_menu(input('Ingrese una opción: '), 3)
         if (opcion == '1'):
             usuario = POO.iniciar_sesion()
-            print(f'Se inició sesión correctamente. Bienvenido/a {usuario.nombre}.')
+            print(f'Se inició sesión correctamente. Bienvenido/a {usuario.nombre}.\n')
             
             if (hasattr(usuario, 'legajo')):
                 if (usuario.legajo == 1): # Menu para el Administrador

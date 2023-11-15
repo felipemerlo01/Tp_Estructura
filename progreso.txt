@@ -118,7 +118,12 @@ FALTA:
 
 FALTA:
 
-- Fijarse porque lo de actualizar el estado de la habitacion, a pesar de hacerse de forma automatica a todas las habitaciones
-    podria ser un metodo del empleado que accede a info del hotel y la actualiza en vez de que sea un metodo del hotel (para mas realismo)
+EMPLEADO
+- ARREGLARLO EN NOMINA CLIENTES
+- HISTORIAL DE RESERVAS
+
+ADMINSITRADOR 
+- INVENTARIO DEL PERSONAL 
+- INGRESOS Y egresos
 
 ---------------------------------------------------------------------------------------------------------------------

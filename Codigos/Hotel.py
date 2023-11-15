@@ -3,7 +3,7 @@ from Empleado import Empleado
 from Funciones_extra import verificar_fecha_de_nacimiento, validar_fecha, verificar_dni, verificar_sexo, verificar_mail, verificar_contrasena
 from datetime import datetime, date
 import csv
-from random import sample
+from random import sample, randint
 
 class Hotel:
     def __init__(self, nombre):
@@ -47,12 +47,14 @@ class Hotel:
     def verificar_mail_existente(self, mail: str):
         while (mail in self.usuarios): 
             mail = self.verificar_mail(input('Mail ya existente. Ingrese otro mail: '))
+        print()
         return mail
     
     # verificar rol 
     def verificar_rol(self, rol: str):
         while rol not in ("Administrativo", "Mantenimiento", "Limpieza"):
             rol = input("Rol invalido. Ingrese un rol valido: ")
+        print()
         return rol
 
     # Buscar al ultimo usuario que tiene legajo y al nuevo usuario agregarle el siguiente legajo 
@@ -67,13 +69,14 @@ class Hotel:
         while (True):
             if (mail not in self.usuarios):
                 mail = verificar_mail(input('Mail no encontrado. Ingrese un mail registrado: '))
+            elif (hasattr(self.usuarios[mail], 'estado') and self.usuarios[mail].estado == 'Inactivo'):
+                mail = verificar_mail(input('Usuario inactivo. Ingrese el mail de un usuario activo: '))
             else:
-                if (hasattr(self.usuarios[mail], 'estado') and self.usuarios[mail].estado == 'Inactivo'):
-                    mail = verificar_mail(input('Usuario inactivo. Ingrese el mail de un usuario activo: '))
-                else:
-                    while (contrasena != self.usuarios[mail].contrasena):
-                            contrasena = input('Contraseña incorrecta. Ingrese nuevamente: ')
-                    return self.usuarios[mail]
+                while (contrasena != self.usuarios[mail].contrasena):
+                    contrasena = input('Contraseña incorrecta. Ingrese nuevamente: ')
+                print()
+                return self.usuarios[mail]
+            contrasena = input('Ingrese su contraseña: ')
     
     # Iniciar sesion
     def iniciar_sesion(self):
@@ -108,6 +111,8 @@ class Hotel:
     def procentaje_de_ocupacion_por_tipo_de_habitación(self):
         # Antes que nada, hay que actualizar el atributo ocupada de las habitaciones
         self.actualizar_estado_habitaciones()
+        
+        # Ahora, ya si hago lo otro
         tipos = ("Simple", "Doble", "Familiar", "Suite")
         procentaje_ocupacion_por_tipo=[]
         for tipo in tipos:
@@ -118,7 +123,7 @@ class Hotel:
                     capacidad_parcial += 1
                     if habitacion.ocupada == True:
                         ocupacion_del_tipo += 1
-            procentaje_ocupacion_del_tipo=round((ocupacion_del_tipo/capacidad_parcial)*100,2)
+            procentaje_ocupacion_del_tipo = round((ocupacion_del_tipo/capacidad_parcial)*100,2)
             procentaje_ocupacion_por_tipo.append(procentaje_ocupacion_del_tipo)
         return procentaje_ocupacion_por_tipo
     
@@ -135,7 +140,7 @@ class Hotel:
     def cantidad_de_clientes_por_tipo(self):
         self.actualizar_estado_habitaciones()
         topes_de_categoria = {'1':250000,'2':600000}
-        Cant_clientes_por_cat=[0,0,0]
+        Cant_clientes_por_cat = [0,0,0]
         hoy = datetime.now()
         for reserva in self.reservas:
             check_out_dt = datetime.strptime(reserva.check_out, '%d/%m/%Y')
@@ -154,10 +159,10 @@ class Hotel:
         fecha = date.today()
         procentaje_ocupacion = self.procentaje_de_ocupacion() 
         porcentajes_parciales_de_ocupacion = self.procentaje_de_ocupacion_por_tipo_de_habitación()
-        ganancia_del_dia= self.recaudacion_diaria()
-        cantidad_de_clientes_por_tipo= self.cantidad_de_clientes_por_tipo()
+        ganancia_del_dia = self.recaudacion_diaria()
+        cantidad_de_clientes_por_tipo = self.cantidad_de_clientes_por_tipo()
 
-        with open('Informe_estadístico.txt','w') as informe:
+        with open('Informe_estadistico.txt','w') as informe:
             informe.write(f"\t\t\t\tInforme estadistico del Hotel \n\n Fecha: \t{fecha}\n\n\n\n")
             informe.write(f"Porcentaje de ocupacion general: \t{procentaje_ocupacion}% \n\n")
             informe.write(f"Porcentajes De ocupacion por tipo de habitacion: \n")
@@ -170,6 +175,8 @@ class Hotel:
             informe.write(f"\t\t Clase 1 (inversion menor a {cantidad_de_clientes_por_tipo[0]['1']}): {cantidad_de_clientes_por_tipo[1][0]} \n")
             informe.write(f"\t\t Clase 2 (inversion entre {cantidad_de_clientes_por_tipo[0]['1']} y {cantidad_de_clientes_por_tipo[0]['2']}): {cantidad_de_clientes_por_tipo[1][1]} \n")
             informe.write(f"\t\t Clase 3 (inversion mayor a {cantidad_de_clientes_por_tipo[0]['2']}): {cantidad_de_clientes_por_tipo[1][2]} \n")
+        
+        print(f'Se creó el informe estadistico correctamente a las {datetime.strftime(datetime.now(),"%H:%M")}\n')
     
     def actualizar_estado_habitaciones(self):
         for habitacion in self.habitaciones.values():
@@ -178,10 +185,10 @@ class Hotel:
     def generar_ingreso_y_egreso_aleatorio(self):
         empleados = []
         for usuario in self.usuarios.values():
-            if (hasattr(usuario, 'legajo') and usuario.legajo != 1): #Es empleado
+            if (hasattr(usuario, 'legajo') and usuario.legajo != 1 and usuario.estado == 'Activo'): #Es empleado
                 empleados.append(usuario)
         
-        empleados_presentes = sample(empleados, 10)
+        empleados_presentes = sample(empleados, randint(3,15))
         
         for empleado in empleados_presentes:
             empleado.registro_ingreso()

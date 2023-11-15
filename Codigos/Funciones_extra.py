@@ -182,3 +182,16 @@ def menu_Mant_Limp():
 1. Visualización de las tareas pendientes
 2. Realizar tarea pendiente
 3. Volver\n''')
+
+def imprimir_tabla(filas, columnas):
+    # Encontrar el ancho maximo de las columnas
+    ancho_col_max = [max(len(str(item)) for item in column) for column in zip(columnas, *filas)]
+    
+    # Imprimir columnas
+    formato_columnas = " ".join("{{:<{}}}".format(ancho) for ancho in ancho_col_max)
+    print(formato_columnas.format(*columnas))
+
+    # Imprimir filas/reservas
+    for fila in filas:
+        print(formato_columnas.format(*fila))
+    print()
