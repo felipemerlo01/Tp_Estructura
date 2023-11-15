@@ -1,6 +1,6 @@
 from Reserva import Reserva
 from datetime import datetime, date
-from Funciones_extra import validar_fecha, validar_fecha_posteriori, validar_si_no, validar_capacidad_min, validar_precio, validar_opcion, validar_num
+from Funciones_extra import validar_fecha, validar_fecha_posteriori, validar_si_no, validar_capacidad_min, validar_precio, validar_opcion, validar_num, imprimir_tabla
 from queue import LifoQueue
 from Usuario import Usuario
 
@@ -140,14 +140,19 @@ class Cliente(Usuario):
     
     def ver_reservas_activas(self):
         reservas_activas = self.buscar_reservas_activas()
-        for reserva in reservas_activas:
-            print(f"Reserva de habitación {reserva.habitacion.numero} del {reserva.check_in} al {reserva.check_out}\n"
-                  f"Gastos en el buffet: ${reserva.gastos_buffet}\n"
-                  f"Gastos en el minibar: ${reserva.gastos_minibar}\n"
-                  f"Costo total de la reserva: ${reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion}")
-            print()
-        if reservas_activas == []:
-            print("No tiene reservas activas")
+        if (len(reservas_activas) > 0):
+            informacion = []
+            for reserva in reservas_activas:
+                costo_total = reserva.gastos_buffet + reserva.gastos_minibar + reserva.gastos_ocupacion
+                lista_reserva = [reserva.habitacion.numero, reserva.check_in,reserva.check_out, reserva.gastos_buffet, reserva.gastos_minibar, costo_total]
+                informacion.append(lista_reserva)
+                
+            columnas = ['Habitación', 'Check-in', 'Check-out', 'Gastos buffet', 'Gastos minibar', 'Gastos totales']
+            
+            print('Sus reservas activas son:\n')
+            imprimir_tabla(informacion, columnas)
+        else:
+            print("No tiene reservas activas\n")
             
     def elegir_habitacion_activa(self, reservas_activas):
         if (len(reservas_activas) > 1):

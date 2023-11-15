@@ -126,8 +126,6 @@ def validar_opcion(opcion_elegida, opciones_disponibles):
     print()
     return opcion_elegida
 
-#########################
-
 def menu_principal():
     print('''Bienvenido al menu:
 1. Iniciar sesión
@@ -148,7 +146,6 @@ def validar_opcion_menu(opcion, cantidad_opciones):
             return opcion
         except ValueError:
             opcion = input('Opcion invalida. Ingrese una de las opciones del menú: ')
-        
 
 def menu_Cliente():
     print('''Menú Cliente:
@@ -191,7 +188,7 @@ def imprimir_tabla(filas, columnas):
     formato_columnas = " ".join("{{:<{}}}".format(ancho) for ancho in ancho_col_max)
     print(formato_columnas.format(*columnas))
 
-    # Imprimir filas/reservas
+    # Imprimir filas
     for fila in filas:
         print(formato_columnas.format(*fila))
     print()

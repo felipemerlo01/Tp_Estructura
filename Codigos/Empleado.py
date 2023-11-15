@@ -1,4 +1,4 @@
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 from queue import Queue
 from Usuario import Usuario
 from random import randint
@@ -88,7 +88,7 @@ class Empleado(Usuario):
                     lista_reserva = [reserva.fecha_reserva, reserva.habitacion.numero, reserva.check_in, reserva.check_out, gasto_total]
                     informacion.append(lista_reserva)
 
-                columnas = ['Fecha reserva', 'Número de habitación', 'Check-in', 'Check-out', 'Gastos total']
+                columnas = ['Fecha reserva', 'Habitación', 'Check-in', 'Check-out', 'Gastos total']
                 
                 print(f"Se listan las siguientes reservas de {hotel.usuarios[mail_cliente].nombre} {hotel.usuarios[mail_cliente].apellido}:\n")
                 imprimir_tabla(informacion, columnas)
@@ -124,11 +124,9 @@ class Empleado(Usuario):
     def registro_ingreso(self):
         #se hace el ingreso de forma automática entre las 8-9 am 
         hora_ingresada = (datetime.strptime("08:00", "%H:%M") + timedelta(minutes=randint(0,59))).strftime("%H:%M")
-        
         self.ingreso =  hora_ingresada
 
     # El empleado hace el egreso manualmente
     def registro_egreso(self):
         hora_egreso = (datetime.strptime("20:00", "%H:%M") + timedelta(minutes=randint(0,59))).strftime("%H:%M")
-       
         self.egreso =  hora_egreso

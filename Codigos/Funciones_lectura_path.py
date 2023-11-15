@@ -28,7 +28,7 @@ def leer_Reservas(path, Hotel):
 #Lee la base de datos CSV de usuarios y crea los objetos usuarios, los agrega al diccionario de Hotel y le agrega las reservas existente a los respectivos clientes, asi como tareas a empleados
 def leer_Usuarios(path, Hotel):
     usuarios = pd.read_csv(path)
-    #usuarios.fillna('', inplace=False)
+    
     for _, row in usuarios.iterrows():
         if (row["Rol"] == "Cliente"):
             nuevo_usuario = Cliente(row["Nombre"], row["Apellido"], row["Fecha de nacimiento"], row["Sexo"], int(row["DNI"]), row["Mail"], row["Contrasenia"])
@@ -39,7 +39,6 @@ def leer_Usuarios(path, Hotel):
         elif (row["Rol"] in ("Mantenimiento", "Administrativo", "Limpieza")):
             nuevo_empleado = Empleado(row["Nombre"], row["Apellido"], row["Fecha de nacimiento"], row["Sexo"], int(row["DNI"]), row["Mail"], row["Contrasenia"], int(row["Legajo"]), row["Rol"], row["Estado"])
             Hotel.usuarios[nuevo_empleado.mail] = nuevo_empleado
-            #tasks = row['Tareas'].split(', ')
             tasks = str(row['Tareas']).split(', ')
             for task in tasks:
                 if task and task.lower() != 'nan':  # Verifica que la tarea no esté vacía ni sea 'nan'
@@ -53,15 +52,10 @@ def obtener_path():
     try:
         path_programa = os.path.abspath(__file__)
         directorio_actual = os.path.dirname(path_programa)
-
-        # Construct the path to the 'Bases de Datos' folder in the parent directory
         path = os.path.join(directorio_actual, os.pardir, 'Bases de datos')
-        # Normalize the path to handle any potential '..' components
         path = os.path.abspath(path)
-        # Ensure the path has a separator at the end
         path = os.path.join(path, '')
 
-        # print(f'The path of the file within "Bases de Datos" is: {path}')
         return path
     except Exception as e:
         print(f'Se presentó el error {e} al intentar buscar el directorio')
